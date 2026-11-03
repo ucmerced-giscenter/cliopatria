@@ -1,48 +1,31 @@
-# Cliopatria
+# Cliopatria — aligned historical polity boundaries
 
-A simple historical map of the aligned Cliopatria dataset, covering 3400 BCE–1497 CE. Plain HTML, CSS, and JavaScript with MapLibre, yearly PMTiles, and public ArcGIS services for search and downloads.
+Interactive map of the aligned Cliopatria dataset: polities, rulers' territories, peoples and events from 3400 BCE to 2024 CE, one feature per polity per panel year. Built and hosted by the GIS Center, UC Merced Library.
 
-## Run locally
+Cliopatria (Bennett, Mutch, Chalstrey et al., *Scientific Data* 2025) was machine-generated from scanned historical atlases. This release realigns the boundaries to a common coastline, resolves overlaps and duplicates, and generalizes to a 3 km tolerance so the data can be served and downloaded at practical sizes.
 
-1. Open this `final_work` folder in VS Code.
-2. Right-click `index.html` and select **Open with Live Server**.
-3. Use the local HTTP address opened by Live Server.
+**Live map:** https://<org>.github.io/cliopatria/ (in development)
+**Data:** ArcGIS Online hosted feature layer — <item https://arcg.is/1Kb5by5> · field dictionary in `docs/`
 
-No installation, build command, or custom backend is required. Use Live Server instead of opening the HTML file directly. Internet access is needed for Esri basemaps, search, feature details, and exports.
+## Status
+Development. Coverage 3400 BCE–1000 CE is reviewed and corrected; CE 1000–2024 will be appended when its review is complete. Attribute values may still change.
 
-## Folder structure
+## Stack
+- MapLibre GL JS, static site on GitHub Pages
+- Data served from an ArcGIS Online hosted feature layer (per-year GeoJSON queries); PMTiles planned
+- No build step; plain HTML/JS
 
-```text
-final_work/
-├── index.html          Map, timeline, search, and downloads
-├── about.html          Project and dataset information
-├── cite.html           Citations
-├── help.html           User instructions
-├── developer.html      Service endpoints and field dictionary
-├── favicon.svg
-├── css/
-│   └── styles.css
-├── js/
-│   ├── app.js          Main application
-│   ├── config.js       Dataset URLs and map defaults
-│   ├── basemap-key.js  Public Esri browser key
-│   ├── cite.js         Citation tools
-│   └── lib/            Map, queries, exports, and shared helpers
-├── data/
-│   ├── manifest.json   Available years and tile locations
-│   └── years/          333 yearly .pmtiles files
-├── vendor/             MapLibre, PMTiles, and their licenses
-├── .gitignore
-├── .nojekyll           Static hosting on GitHub Pages
-└── README.md
-```
+## MVP
+- [ ] Map with basemap selector
+- [ ] Year slider (269 panels)
+- [ ] Search by polity name
+- [ ] Popup with Wikipedia link
+- [ ] Fill colour from the `Color` field
+- [ ] GeoJSON download
+- [ ] Citation page and GitHub link
 
-## Data and hosting
+## License
+Code: MIT. Data: CC BY 4.0, derived from Cliopatria v0.0.1 (CC BY 4.0, https://doi.org/10.5281/zenodo.13363121).
 
-The PMTiles files total about **48.6 MiB** on disk. The map requests tiles for the selected year as needed; it does not load the entire dataset on startup. Search and downloads use the hosted ArcGIS feature layer. Exports preserve whole polygons.
-
-Use this folder's contents as the website/repository root and preserve the directory structure. There is no separate build output. Hosting must support HTTP byte-range requests (`206 Partial Content`) for PMTiles. Keep the display tiles and hosted feature layer on the same dataset release, especially if feature IDs change.
-
-The public browser key is in `js/basemap-key.js`; configure its allowed domains for the eventual host. Confirm the project's code/data licensing and final credits before public release. Third-party library licenses are included in `vendor/`. Analytics are not enabled.
-
-This folder contains the runnable website. Development tools, tests, large source files, and review reports remain in the original workspace for later review.
+## Citation
+Bennett, J. S., Mutch, E., Tollefson, A., et al. (2025). Cliopatria – A geospatial database of world-wide political entities from 3400BCE to 2024CE. *Scientific Data* 12, 247. Aligned release: GIS Center, UC Merced Library, 2026.
