@@ -1,0 +1,5693 @@
+{
+  "schemaVersion": 1,
+  "dataset": "Aligned Cliopatria",
+  "version": "1.1",
+  "sourceItemId": "8eae64c12ac047d3933d43e449c8e551",
+  "sourceURL": "https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer/0",
+  "sourceSHA256": "cc40020e36ca046f2537d8e0712bfe30afc5a430bf2239b35acbc345692699ea",
+  "generatedAt": "2026-11-03T19:04:16.517Z",
+  "sourceLayer": "polities",
+  "minZoom": 0,
+  "maxZoom": 5,
+  "defaultYear": 1497,
+  "firstYear": -3400,
+  "lastYear": 1497,
+  "featureCount": 52044,
+  "panelCount": 333,
+  "yearValues": [
+    -3400,
+    -3200,
+    -3000,
+    -2700,
+    -2500,
+    -2300,
+    -2250,
+    -2200,
+    -2100,
+    -2000,
+    -1800,
+    -1760,
+    -1750,
+    -1700,
+    -1600,
+    -1500,
+    -1400,
+    -1300,
+    -1240,
+    -1220,
+    -1200,
+    -1150,
+    -1100,
+    -1000,
+    -900,
+    -800,
+    -750,
+    -700,
+    -675,
+    -650,
+    -630,
+    -615,
+    -600,
+    -550,
+    -540,
+    -530,
+    -500,
+    -480,
+    -450,
+    -404,
+    -383,
+    -366,
+    -350,
+    -337,
+    -333,
+    -331,
+    -326,
+    -323,
+    -318,
+    -315,
+    -307,
+    -301,
+    -291,
+    -284,
+    -283,
+    -281,
+    -279,
+    -277,
+    -275,
+    -272,
+    -271,
+    -264,
+    -256,
+    -247,
+    -239,
+    -230,
+    -225,
+    -223,
+    -222,
+    -218,
+    -216,
+    -212,
+    -210,
+    -208,
+    -206,
+    -203,
+    -202,
+    -197,
+    -188,
+    -170,
+    -164,
+    -144,
+    -126,
+    -110,
+    -91,
+    -87,
+    -77,
+    -66,
+    -63,
+    -50,
+    -49,
+    -48,
+    -46,
+    -44,
+    -42,
+    -41,
+    -40,
+    -36,
+    -31,
+    -30,
+    -27,
+    -25,
+    -19,
+    -14,
+    1,
+    6,
+    9,
+    14,
+    23,
+    30,
+    43,
+    51,
+    60,
+    68,
+    78,
+    84,
+    91,
+    106,
+    114,
+    117,
+    127,
+    154,
+    161,
+    165,
+    184,
+    197,
+    207,
+    215,
+    224,
+    238,
+    247,
+    260,
+    261,
+    263,
+    265,
+    270,
+    283,
+    287,
+    299,
+    306,
+    308,
+    311,
+    313,
+    324,
+    337,
+    338,
+    347,
+    353,
+    358,
+    367,
+    371,
+    373,
+    378,
+    383,
+    387,
+    390,
+    392,
+    394,
+    395,
+    396,
+    397,
+    402,
+    407,
+    410,
+    414,
+    417,
+    426,
+    439,
+    441,
+    443,
+    451,
+    452,
+    455,
+    458,
+    459,
+    462,
+    469,
+    476,
+    480,
+    490,
+    500,
+    510,
+    523,
+    534,
+    536,
+    540,
+    546,
+    555,
+    561,
+    567,
+    569,
+    577,
+    587,
+    592,
+    602,
+    612,
+    617,
+    623,
+    626,
+    627,
+    628,
+    629,
+    630,
+    633,
+    634,
+    638,
+    641,
+    644,
+    647,
+    656,
+    661,
+    666,
+    674,
+    682,
+    692,
+    705,
+    710,
+    718,
+    724,
+    732,
+    741,
+    750,
+    751,
+    755,
+    757,
+    763,
+    768,
+    772,
+    775,
+    778,
+    783,
+    788,
+    793,
+    800,
+    806,
+    814,
+    825,
+    830,
+    840,
+    850,
+    860,
+    866,
+    870,
+    875,
+    876,
+    878,
+    880,
+    882,
+    884,
+    886,
+    887,
+    888,
+    892,
+    896,
+    898,
+    899,
+    900,
+    911,
+    922,
+    926,
+    936,
+    947,
+    960,
+    961,
+    962,
+    970,
+    980,
+    990,
+    1000,
+    1003,
+    1010,
+    1015,
+    1018,
+    1028,
+    1034,
+    1040,
+    1046,
+    1056,
+    1066,
+    1072,
+    1085,
+    1094,
+    1099,
+    1111,
+    1126,
+    1139,
+    1147,
+    1152,
+    1169,
+    1177,
+    1188,
+    1192,
+    1202,
+    1206,
+    1210,
+    1216,
+    1220,
+    1227,
+    1236,
+    1241,
+    1250,
+    1260,
+    1272,
+    1279,
+    1285,
+    1294,
+    1305,
+    1314,
+    1326,
+    1333,
+    1344,
+    1352,
+    1363,
+    1375,
+    1385,
+    1395,
+    1402,
+    1407,
+    1415,
+    1422,
+    1429,
+    1431,
+    1440,
+    1450,
+    1453,
+    1459,
+    1463,
+    1468,
+    1475,
+    1482,
+    1487,
+    1492,
+    1497
+  ],
+  "tiling": {
+    "extent": 4096,
+    "buffer": 64,
+    "tolerance": 1,
+    "nativeZoomSimplification": 0,
+    "densityDropping": false
+  },
+  "colorFallbackCount": 335,
+  "years": [
+    {
+      "year": -3400,
+      "count": 1,
+      "url": "data/years/-3400.pmtiles",
+      "bytes": 3285,
+      "bounds": [
+        44.50821,
+        30.43281,
+        47.16543,
+        32.80598
+      ],
+      "tiles": 11,
+      "nativeFeatureCount": 1,
+      "maxTileBytes": 254,
+      "rootTileBytes": 223
+    },
+    {
+      "year": -3200,
+      "count": 2,
+      "url": "data/years/-3200.pmtiles",
+      "bytes": 3842,
+      "bounds": [
+        44.15156,
+        30.43281,
+        48.82136,
+        33.41079
+      ],
+      "tiles": 11,
+      "nativeFeatureCount": 2,
+      "maxTileBytes": 324,
+      "rootTileBytes": 294
+    },
+    {
+      "year": -3000,
+      "count": 4,
+      "url": "data/years/-3000.pmtiles",
+      "bytes": 6231,
+      "bounds": [
+        29.49683,
+        23.99625,
+        68.71456,
+        33.41079
+      ],
+      "tiles": 14,
+      "nativeFeatureCount": 4,
+      "maxTileBytes": 632,
+      "rootTileBytes": 541
+    },
+    {
+      "year": -2700,
+      "count": 5,
+      "url": "data/years/-2700.pmtiles",
+      "bytes": 6252,
+      "bounds": [
+        29.49683,
+        23.99625,
+        76.48702,
+        33.41079
+      ],
+      "tiles": 14,
+      "nativeFeatureCount": 5,
+      "maxTileBytes": 645,
+      "rootTileBytes": 554
+    },
+    {
+      "year": -2500,
+      "count": 9,
+      "url": "data/years/-2500.pmtiles",
+      "bytes": 8229,
+      "bounds": [
+        29.49683,
+        22.26816,
+        76.48702,
+        35.00312
+      ],
+      "tiles": 16,
+      "nativeFeatureCount": 9,
+      "maxTileBytes": 862,
+      "rootTileBytes": 739
+    },
+    {
+      "year": -2300,
+      "count": 4,
+      "url": "data/years/-2300.pmtiles",
+      "bytes": 9388,
+      "bounds": [
+        29.49683,
+        20.69658,
+        76.89609,
+        37.7363
+      ],
+      "tiles": 18,
+      "nativeFeatureCount": 4,
+      "maxTileBytes": 973,
+      "rootTileBytes": 714
+    },
+    {
+      "year": -2250,
+      "count": 4,
+      "url": "data/years/-2250.pmtiles",
+      "bytes": 10128,
+      "bounds": [
+        29.49683,
+        20.69658,
+        76.89609,
+        37.92334
+      ],
+      "tiles": 19,
+      "nativeFeatureCount": 4,
+      "maxTileBytes": 1026,
+      "rootTileBytes": 708
+    },
+    {
+      "year": -2200,
+      "count": 5,
+      "url": "data/years/-2200.pmtiles",
+      "bytes": 9699,
+      "bounds": [
+        29.49683,
+        20.69658,
+        76.89609,
+        37.29073
+      ],
+      "tiles": 18,
+      "nativeFeatureCount": 5,
+      "maxTileBytes": 1004,
+      "rootTileBytes": 722
+    },
+    {
+      "year": -2100,
+      "count": 6,
+      "url": "data/years/-2100.pmtiles",
+      "bytes": 9995,
+      "bounds": [
+        29.49683,
+        20.69658,
+        76.89609,
+        34.0868
+      ],
+      "tiles": 18,
+      "nativeFeatureCount": 6,
+      "maxTileBytes": 1045,
+      "rootTileBytes": 808
+    },
+    {
+      "year": -2000,
+      "count": 4,
+      "url": "data/years/-2000.pmtiles",
+      "bytes": 9378,
+      "bounds": [
+        29.49683,
+        20.69658,
+        76.89609,
+        35.14939
+      ],
+      "tiles": 18,
+      "nativeFeatureCount": 4,
+      "maxTileBytes": 909,
+      "rootTileBytes": 675
+    },
+    {
+      "year": -1800,
+      "count": 7,
+      "url": "data/years/-1800.pmtiles",
+      "bytes": 12062,
+      "bounds": [
+        27.67192,
+        21.40795,
+        72.8433,
+        37.29073
+      ],
+      "tiles": 18,
+      "nativeFeatureCount": 7,
+      "maxTileBytes": 1211,
+      "rootTileBytes": 885
+    },
+    {
+      "year": -1760,
+      "count": 8,
+      "url": "data/years/-1760.pmtiles",
+      "bytes": 10881,
+      "bounds": [
+        27.67192,
+        21.40795,
+        72.8433,
+        36.61346
+      ],
+      "tiles": 18,
+      "nativeFeatureCount": 8,
+      "maxTileBytes": 1125,
+      "rootTileBytes": 845
+    },
+    {
+      "year": -1750,
+      "count": 7,
+      "url": "data/years/-1750.pmtiles",
+      "bytes": 10274,
+      "bounds": [
+        27.67192,
+        21.40795,
+        72.8433,
+        36.61346
+      ],
+      "tiles": 18,
+      "nativeFeatureCount": 7,
+      "maxTileBytes": 1065,
+      "rootTileBytes": 772
+    },
+    {
+      "year": -1700,
+      "count": 6,
+      "url": "data/years/-1700.pmtiles",
+      "bytes": 8790,
+      "bounds": [
+        27.67192,
+        21.40795,
+        52.2153,
+        36.61346
+      ],
+      "tiles": 14,
+      "nativeFeatureCount": 6,
+      "maxTileBytes": 933,
+      "rootTileBytes": 713
+    },
+    {
+      "year": -1600,
+      "count": 12,
+      "url": "data/years/-1600.pmtiles",
+      "bytes": 12698,
+      "bounds": [
+        23.52051,
+        24.07539,
+        118.48348,
+        40.307
+      ],
+      "tiles": 19,
+      "nativeFeatureCount": 12,
+      "maxTileBytes": 1334,
+      "rootTileBytes": 1117
+    },
+    {
+      "year": -1500,
+      "count": 18,
+      "url": "data/years/-1500.pmtiles",
+      "bytes": 16313,
+      "bounds": [
+        21.10929,
+        18.11956,
+        118.48348,
+        40.307
+      ],
+      "tiles": 24,
+      "nativeFeatureCount": 18,
+      "maxTileBytes": 1728,
+      "rootTileBytes": 1389
+    },
+    {
+      "year": -1400,
+      "count": 20,
+      "url": "data/years/-1400.pmtiles",
+      "bytes": 16854,
+      "bounds": [
+        21.10929,
+        18.11956,
+        118.48348,
+        40.307
+      ],
+      "tiles": 24,
+      "nativeFeatureCount": 20,
+      "maxTileBytes": 1825,
+      "rootTileBytes": 1414
+    },
+    {
+      "year": -1300,
+      "count": 20,
+      "url": "data/years/-1300.pmtiles",
+      "bytes": 17270,
+      "bounds": [
+        21.10929,
+        18.11956,
+        118.48348,
+        40.65882
+      ],
+      "tiles": 25,
+      "nativeFeatureCount": 20,
+      "maxTileBytes": 1889,
+      "rootTileBytes": 1445
+    },
+    {
+      "year": -1240,
+      "count": 25,
+      "url": "data/years/-1240.pmtiles",
+      "bytes": 19748,
+      "bounds": [
+        20.34115,
+        18.11956,
+        118.48348,
+        40.92214
+      ],
+      "tiles": 28,
+      "nativeFeatureCount": 25,
+      "maxTileBytes": 2067,
+      "rootTileBytes": 1579
+    },
+    {
+      "year": -1220,
+      "count": 23,
+      "url": "data/years/-1220.pmtiles",
+      "bytes": 18002,
+      "bounds": [
+        20.34115,
+        18.11956,
+        118.48348,
+        40.65882
+      ],
+      "tiles": 25,
+      "nativeFeatureCount": 23,
+      "maxTileBytes": 1950,
+      "rootTileBytes": 1493
+    },
+    {
+      "year": -1200,
+      "count": 25,
+      "url": "data/years/-1200.pmtiles",
+      "bytes": 19776,
+      "bounds": [
+        20.34115,
+        18.11956,
+        118.48348,
+        40.92214
+      ],
+      "tiles": 28,
+      "nativeFeatureCount": 25,
+      "maxTileBytes": 2087,
+      "rootTileBytes": 1595
+    },
+    {
+      "year": -1150,
+      "count": 15,
+      "url": "data/years/-1150.pmtiles",
+      "bytes": 15074,
+      "bounds": [
+        20.73185,
+        18.11956,
+        118.48348,
+        40.52896
+      ],
+      "tiles": 25,
+      "nativeFeatureCount": 15,
+      "maxTileBytes": 1560,
+      "rootTileBytes": 1168
+    },
+    {
+      "year": -1100,
+      "count": 15,
+      "url": "data/years/-1100.pmtiles",
+      "bytes": 15688,
+      "bounds": [
+        21.10929,
+        18.11956,
+        118.48348,
+        40.52896
+      ],
+      "tiles": 25,
+      "nativeFeatureCount": 15,
+      "maxTileBytes": 1584,
+      "rootTileBytes": 1223
+    },
+    {
+      "year": -1000,
+      "count": 19,
+      "url": "data/years/-1000.pmtiles",
+      "bytes": 17248,
+      "bounds": [
+        21.10929,
+        15.28345,
+        122.59029,
+        40.24948
+      ],
+      "tiles": 25,
+      "nativeFeatureCount": 19,
+      "maxTileBytes": 1706,
+      "rootTileBytes": 1424
+    },
+    {
+      "year": -900,
+      "count": 24,
+      "url": "data/years/-900.pmtiles",
+      "bytes": 20452,
+      "bounds": [
+        9.44646,
+        15.28345,
+        122.59029,
+        40.47305
+      ],
+      "tiles": 27,
+      "nativeFeatureCount": 24,
+      "maxTileBytes": 2066,
+      "rootTileBytes": 1738
+    },
+    {
+      "year": -800,
+      "count": 31,
+      "url": "data/years/-800.pmtiles",
+      "bytes": 24910,
+      "bounds": [
+        -6.27299,
+        15.16204,
+        122.59029,
+        40.47305
+      ],
+      "tiles": 34,
+      "nativeFeatureCount": 31,
+      "maxTileBytes": 2460,
+      "rootTileBytes": 2108
+    },
+    {
+      "year": -750,
+      "count": 61,
+      "url": "data/years/-750.pmtiles",
+      "bytes": 39889,
+      "bounds": [
+        -6.27299,
+        15.16204,
+        122.59029,
+        43.78072
+      ],
+      "tiles": 45,
+      "nativeFeatureCount": 61,
+      "maxTileBytes": 4148,
+      "rootTileBytes": 3639
+    },
+    {
+      "year": -700,
+      "count": 74,
+      "url": "data/years/-700.pmtiles",
+      "bytes": 43232,
+      "bounds": [
+        -6.27299,
+        14.63728,
+        122.59029,
+        44.45476
+      ],
+      "tiles": 45,
+      "nativeFeatureCount": 74,
+      "maxTileBytes": 4564,
+      "rootTileBytes": 3966
+    },
+    {
+      "year": -675,
+      "count": 74,
+      "url": "data/years/-675.pmtiles",
+      "bytes": 43235,
+      "bounds": [
+        -6.27299,
+        14.63728,
+        122.59029,
+        44.45476
+      ],
+      "tiles": 44,
+      "nativeFeatureCount": 74,
+      "maxTileBytes": 4581,
+      "rootTileBytes": 3971
+    },
+    {
+      "year": -650,
+      "count": 78,
+      "url": "data/years/-650.pmtiles",
+      "bytes": 48403,
+      "bounds": [
+        -96.10506,
+        14.63728,
+        122.59029,
+        44.45476
+      ],
+      "tiles": 49,
+      "nativeFeatureCount": 78,
+      "maxTileBytes": 4872,
+      "rootTileBytes": 4296
+    },
+    {
+      "year": -630,
+      "count": 76,
+      "url": "data/years/-630.pmtiles",
+      "bytes": 48257,
+      "bounds": [
+        -96.10506,
+        14.63728,
+        122.59029,
+        44.45476
+      ],
+      "tiles": 48,
+      "nativeFeatureCount": 76,
+      "maxTileBytes": 4867,
+      "rootTileBytes": 4277
+    },
+    {
+      "year": -615,
+      "count": 84,
+      "url": "data/years/-615.pmtiles",
+      "bytes": 55406,
+      "bounds": [
+        -96.10506,
+        14.63728,
+        122.59029,
+        44.45476
+      ],
+      "tiles": 55,
+      "nativeFeatureCount": 84,
+      "maxTileBytes": 5590,
+      "rootTileBytes": 4840
+    },
+    {
+      "year": -600,
+      "count": 97,
+      "url": "data/years/-600.pmtiles",
+      "bytes": 61080,
+      "bounds": [
+        -96.10506,
+        14.63728,
+        122.59029,
+        44.45476
+      ],
+      "tiles": 59,
+      "nativeFeatureCount": 97,
+      "maxTileBytes": 6363,
+      "rootTileBytes": 5597
+    },
+    {
+      "year": -550,
+      "count": 103,
+      "url": "data/years/-550.pmtiles",
+      "bytes": 65102,
+      "bounds": [
+        -96.10506,
+        14.63728,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 62,
+      "nativeFeatureCount": 103,
+      "maxTileBytes": 6741,
+      "rootTileBytes": 5872
+    },
+    {
+      "year": -540,
+      "count": 101,
+      "url": "data/years/-540.pmtiles",
+      "bytes": 65221,
+      "bounds": [
+        -96.10506,
+        14.63728,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 62,
+      "nativeFeatureCount": 101,
+      "maxTileBytes": 6735,
+      "rootTileBytes": 5873
+    },
+    {
+      "year": -530,
+      "count": 102,
+      "url": "data/years/-530.pmtiles",
+      "bytes": 63957,
+      "bounds": [
+        -96.10506,
+        14.63728,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 62,
+      "nativeFeatureCount": 102,
+      "maxTileBytes": 6616,
+      "rootTileBytes": 5779
+    },
+    {
+      "year": -500,
+      "count": 98,
+      "url": "data/years/-500.pmtiles",
+      "bytes": 65198,
+      "bounds": [
+        -97.53243,
+        14.63728,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 62,
+      "nativeFeatureCount": 98,
+      "maxTileBytes": 6531,
+      "rootTileBytes": 5730
+    },
+    {
+      "year": -480,
+      "count": 98,
+      "url": "data/years/-480.pmtiles",
+      "bytes": 65847,
+      "bounds": [
+        -97.53243,
+        14.63728,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 62,
+      "nativeFeatureCount": 98,
+      "maxTileBytes": 6535,
+      "rootTileBytes": 5788
+    },
+    {
+      "year": -450,
+      "count": 89,
+      "url": "data/years/-450.pmtiles",
+      "bytes": 66317,
+      "bounds": [
+        -97.53243,
+        14.63728,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 62,
+      "nativeFeatureCount": 89,
+      "maxTileBytes": 6386,
+      "rootTileBytes": 5483
+    },
+    {
+      "year": -404,
+      "count": 86,
+      "url": "data/years/-404.pmtiles",
+      "bytes": 68763,
+      "bounds": [
+        -97.53243,
+        14.63728,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 69,
+      "nativeFeatureCount": 86,
+      "maxTileBytes": 6365,
+      "rootTileBytes": 5409
+    },
+    {
+      "year": -383,
+      "count": 84,
+      "url": "data/years/-383.pmtiles",
+      "bytes": 68115,
+      "bounds": [
+        -97.53243,
+        14.63728,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 69,
+      "nativeFeatureCount": 84,
+      "maxTileBytes": 6303,
+      "rootTileBytes": 5380
+    },
+    {
+      "year": -366,
+      "count": 92,
+      "url": "data/years/-366.pmtiles",
+      "bytes": 71436,
+      "bounds": [
+        -97.53243,
+        14.63728,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 69,
+      "nativeFeatureCount": 92,
+      "maxTileBytes": 6692,
+      "rootTileBytes": 5689
+    },
+    {
+      "year": -350,
+      "count": 91,
+      "url": "data/years/-350.pmtiles",
+      "bytes": 76808,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 71,
+      "nativeFeatureCount": 91,
+      "maxTileBytes": 7153,
+      "rootTileBytes": 5937
+    },
+    {
+      "year": -337,
+      "count": 80,
+      "url": "data/years/-337.pmtiles",
+      "bytes": 71770,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 71,
+      "nativeFeatureCount": 80,
+      "maxTileBytes": 6554,
+      "rootTileBytes": 5393
+    },
+    {
+      "year": -333,
+      "count": 86,
+      "url": "data/years/-333.pmtiles",
+      "bytes": 75895,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 72,
+      "nativeFeatureCount": 86,
+      "maxTileBytes": 7003,
+      "rootTileBytes": 5771
+    },
+    {
+      "year": -331,
+      "count": 86,
+      "url": "data/years/-331.pmtiles",
+      "bytes": 76004,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 72,
+      "nativeFeatureCount": 86,
+      "maxTileBytes": 7022,
+      "rootTileBytes": 5796
+    },
+    {
+      "year": -326,
+      "count": 87,
+      "url": "data/years/-326.pmtiles",
+      "bytes": 76408,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 71,
+      "nativeFeatureCount": 87,
+      "maxTileBytes": 7066,
+      "rootTileBytes": 5835
+    },
+    {
+      "year": -323,
+      "count": 110,
+      "url": "data/years/-323.pmtiles",
+      "bytes": 93141,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 71,
+      "nativeFeatureCount": 110,
+      "maxTileBytes": 9135,
+      "rootTileBytes": 7580
+    },
+    {
+      "year": -318,
+      "count": 104,
+      "url": "data/years/-318.pmtiles",
+      "bytes": 91078,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 72,
+      "nativeFeatureCount": 104,
+      "maxTileBytes": 8813,
+      "rootTileBytes": 7315
+    },
+    {
+      "year": -315,
+      "count": 94,
+      "url": "data/years/-315.pmtiles",
+      "bytes": 85180,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 72,
+      "nativeFeatureCount": 94,
+      "maxTileBytes": 8045,
+      "rootTileBytes": 6635
+    },
+    {
+      "year": -307,
+      "count": 97,
+      "url": "data/years/-307.pmtiles",
+      "bytes": 84537,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 72,
+      "nativeFeatureCount": 97,
+      "maxTileBytes": 7966,
+      "rootTileBytes": 6612
+    },
+    {
+      "year": -301,
+      "count": 89,
+      "url": "data/years/-301.pmtiles",
+      "bytes": 80728,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        122.59029,
+        47.6845
+      ],
+      "tiles": 72,
+      "nativeFeatureCount": 89,
+      "maxTileBytes": 7500,
+      "rootTileBytes": 6177
+    },
+    {
+      "year": -291,
+      "count": 87,
+      "url": "data/years/-291.pmtiles",
+      "bytes": 80983,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 75,
+      "nativeFeatureCount": 87,
+      "maxTileBytes": 7417,
+      "rootTileBytes": 6108
+    },
+    {
+      "year": -284,
+      "count": 85,
+      "url": "data/years/-284.pmtiles",
+      "bytes": 80102,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 75,
+      "nativeFeatureCount": 85,
+      "maxTileBytes": 7301,
+      "rootTileBytes": 5998
+    },
+    {
+      "year": -283,
+      "count": 85,
+      "url": "data/years/-283.pmtiles",
+      "bytes": 79612,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 75,
+      "nativeFeatureCount": 85,
+      "maxTileBytes": 7275,
+      "rootTileBytes": 5986
+    },
+    {
+      "year": -281,
+      "count": 89,
+      "url": "data/years/-281.pmtiles",
+      "bytes": 81231,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 75,
+      "nativeFeatureCount": 89,
+      "maxTileBytes": 7440,
+      "rootTileBytes": 6118
+    },
+    {
+      "year": -279,
+      "count": 92,
+      "url": "data/years/-279.pmtiles",
+      "bytes": 81293,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 75,
+      "nativeFeatureCount": 92,
+      "maxTileBytes": 7486,
+      "rootTileBytes": 6179
+    },
+    {
+      "year": -277,
+      "count": 94,
+      "url": "data/years/-277.pmtiles",
+      "bytes": 83612,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 75,
+      "nativeFeatureCount": 94,
+      "maxTileBytes": 7672,
+      "rootTileBytes": 6320
+    },
+    {
+      "year": -275,
+      "count": 95,
+      "url": "data/years/-275.pmtiles",
+      "bytes": 83625,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 75,
+      "nativeFeatureCount": 95,
+      "maxTileBytes": 7701,
+      "rootTileBytes": 6347
+    },
+    {
+      "year": -272,
+      "count": 96,
+      "url": "data/years/-272.pmtiles",
+      "bytes": 84758,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 75,
+      "nativeFeatureCount": 96,
+      "maxTileBytes": 7788,
+      "rootTileBytes": 6419
+    },
+    {
+      "year": -271,
+      "count": 94,
+      "url": "data/years/-271.pmtiles",
+      "bytes": 83470,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 75,
+      "nativeFeatureCount": 94,
+      "maxTileBytes": 7698,
+      "rootTileBytes": 6363
+    },
+    {
+      "year": -264,
+      "count": 96,
+      "url": "data/years/-264.pmtiles",
+      "bytes": 83866,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 75,
+      "nativeFeatureCount": 96,
+      "maxTileBytes": 7762,
+      "rootTileBytes": 6426
+    },
+    {
+      "year": -256,
+      "count": 98,
+      "url": "data/years/-256.pmtiles",
+      "bytes": 84614,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 76,
+      "nativeFeatureCount": 98,
+      "maxTileBytes": 7817,
+      "rootTileBytes": 6431
+    },
+    {
+      "year": -247,
+      "count": 94,
+      "url": "data/years/-247.pmtiles",
+      "bytes": 85178,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 79,
+      "nativeFeatureCount": 94,
+      "maxTileBytes": 7650,
+      "rootTileBytes": 6346
+    },
+    {
+      "year": -239,
+      "count": 100,
+      "url": "data/years/-239.pmtiles",
+      "bytes": 88866,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 79,
+      "nativeFeatureCount": 100,
+      "maxTileBytes": 8100,
+      "rootTileBytes": 6761
+    },
+    {
+      "year": -230,
+      "count": 98,
+      "url": "data/years/-230.pmtiles",
+      "bytes": 88183,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 79,
+      "nativeFeatureCount": 98,
+      "maxTileBytes": 8050,
+      "rootTileBytes": 6667
+    },
+    {
+      "year": -225,
+      "count": 101,
+      "url": "data/years/-225.pmtiles",
+      "bytes": 90264,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 79,
+      "nativeFeatureCount": 101,
+      "maxTileBytes": 8244,
+      "rootTileBytes": 6861
+    },
+    {
+      "year": -223,
+      "count": 100,
+      "url": "data/years/-223.pmtiles",
+      "bytes": 88296,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 79,
+      "nativeFeatureCount": 100,
+      "maxTileBytes": 8087,
+      "rootTileBytes": 6727
+    },
+    {
+      "year": -222,
+      "count": 98,
+      "url": "data/years/-222.pmtiles",
+      "bytes": 88553,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 79,
+      "nativeFeatureCount": 98,
+      "maxTileBytes": 8158,
+      "rootTileBytes": 6667
+    },
+    {
+      "year": -218,
+      "count": 95,
+      "url": "data/years/-218.pmtiles",
+      "bytes": 88293,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 82,
+      "nativeFeatureCount": 95,
+      "maxTileBytes": 8100,
+      "rootTileBytes": 6546
+    },
+    {
+      "year": -216,
+      "count": 98,
+      "url": "data/years/-216.pmtiles",
+      "bytes": 90870,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 82,
+      "nativeFeatureCount": 98,
+      "maxTileBytes": 8327,
+      "rootTileBytes": 6694
+    },
+    {
+      "year": -212,
+      "count": 103,
+      "url": "data/years/-212.pmtiles",
+      "bytes": 91133,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 82,
+      "nativeFeatureCount": 103,
+      "maxTileBytes": 8265,
+      "rootTileBytes": 6809
+    },
+    {
+      "year": -210,
+      "count": 99,
+      "url": "data/years/-210.pmtiles",
+      "bytes": 90475,
+      "bounds": [
+        -93.39337,
+        5.91818999999998,
+        124.75337,
+        47.6845
+      ],
+      "tiles": 84,
+      "nativeFeatureCount": 99,
+      "maxTileBytes": 8106,
+      "rootTileBytes": 6642
+    },
+    {
+      "year": -208,
+      "count": 108,
+      "url": "data/years/-208.pmtiles",
+      "bytes": 99816,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        129.79324,
+        54.10349
+      ],
+      "tiles": 90,
+      "nativeFeatureCount": 108,
+      "maxTileBytes": 8967,
+      "rootTileBytes": 7463
+    },
+    {
+      "year": -206,
+      "count": 117,
+      "url": "data/years/-206.pmtiles",
+      "bytes": 105201,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        129.79324,
+        54.10349
+      ],
+      "tiles": 90,
+      "nativeFeatureCount": 117,
+      "maxTileBytes": 9692,
+      "rootTileBytes": 8067
+    },
+    {
+      "year": -203,
+      "count": 97,
+      "url": "data/years/-203.pmtiles",
+      "bytes": 96271,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        129.79324,
+        54.10349
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 97,
+      "maxTileBytes": 8502,
+      "rootTileBytes": 6981
+    },
+    {
+      "year": -202,
+      "count": 98,
+      "url": "data/years/-202.pmtiles",
+      "bytes": 95156,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        129.79324,
+        54.10349
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 98,
+      "maxTileBytes": 8365,
+      "rootTileBytes": 6907
+    },
+    {
+      "year": -197,
+      "count": 94,
+      "url": "data/years/-197.pmtiles",
+      "bytes": 96045,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        129.79324,
+        54.10349
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 94,
+      "maxTileBytes": 8487,
+      "rootTileBytes": 6960
+    },
+    {
+      "year": -188,
+      "count": 93,
+      "url": "data/years/-188.pmtiles",
+      "bytes": 97289,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        129.79324,
+        54.10349
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 93,
+      "maxTileBytes": 8599,
+      "rootTileBytes": 7010
+    },
+    {
+      "year": -170,
+      "count": 91,
+      "url": "data/years/-170.pmtiles",
+      "bytes": 96693,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        129.79324,
+        54.10349
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 91,
+      "maxTileBytes": 8541,
+      "rootTileBytes": 6925
+    },
+    {
+      "year": -164,
+      "count": 85,
+      "url": "data/years/-164.pmtiles",
+      "bytes": 95553,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        129.79324,
+        54.10349
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 85,
+      "maxTileBytes": 8392,
+      "rootTileBytes": 6753
+    },
+    {
+      "year": -144,
+      "count": 81,
+      "url": "data/years/-144.pmtiles",
+      "bytes": 94636,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        129.79324,
+        54.10349
+      ],
+      "tiles": 92,
+      "nativeFeatureCount": 81,
+      "maxTileBytes": 8249,
+      "rootTileBytes": 6633
+    },
+    {
+      "year": -126,
+      "count": 79,
+      "url": "data/years/-126.pmtiles",
+      "bytes": 93644,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        129.79324,
+        54.10349
+      ],
+      "tiles": 92,
+      "nativeFeatureCount": 79,
+      "maxTileBytes": 8217,
+      "rootTileBytes": 6542
+    },
+    {
+      "year": -110,
+      "count": 84,
+      "url": "data/years/-110.pmtiles",
+      "bytes": 97016,
+      "bounds": [
+        -97.53243,
+        5.91818999999998,
+        129.58414,
+        54.10349
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 84,
+      "maxTileBytes": 8565,
+      "rootTileBytes": 6814
+    },
+    {
+      "year": -91,
+      "count": 90,
+      "url": "data/years/-91.pmtiles",
+      "bytes": 100867,
+      "bounds": [
+        -98.37222,
+        5.91818999999998,
+        129.58414,
+        54.10349
+      ],
+      "tiles": 90,
+      "nativeFeatureCount": 90,
+      "maxTileBytes": 9003,
+      "rootTileBytes": 7144
+    },
+    {
+      "year": -87,
+      "count": 78,
+      "url": "data/years/-87.pmtiles",
+      "bytes": 95573,
+      "bounds": [
+        -98.37222,
+        5.91818999999998,
+        129.58414,
+        54.10349
+      ],
+      "tiles": 90,
+      "nativeFeatureCount": 78,
+      "maxTileBytes": 8400,
+      "rootTileBytes": 6604
+    },
+    {
+      "year": -77,
+      "count": 80,
+      "url": "data/years/-77.pmtiles",
+      "bytes": 96460,
+      "bounds": [
+        -98.37222,
+        5.91818999999998,
+        129.58414,
+        54.10349
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 80,
+      "maxTileBytes": 8486,
+      "rootTileBytes": 6707
+    },
+    {
+      "year": -66,
+      "count": 71,
+      "url": "data/years/-66.pmtiles",
+      "bytes": 91642,
+      "bounds": [
+        -98.37222,
+        5.91818999999998,
+        129.58414,
+        52.15816
+      ],
+      "tiles": 89,
+      "nativeFeatureCount": 71,
+      "maxTileBytes": 8052,
+      "rootTileBytes": 6296
+    },
+    {
+      "year": -63,
+      "count": 80,
+      "url": "data/years/-63.pmtiles",
+      "bytes": 96332,
+      "bounds": [
+        -98.37222,
+        5.91818999999998,
+        129.58414,
+        52.15816
+      ],
+      "tiles": 89,
+      "nativeFeatureCount": 80,
+      "maxTileBytes": 8631,
+      "rootTileBytes": 6816
+    },
+    {
+      "year": -50,
+      "count": 83,
+      "url": "data/years/-50.pmtiles",
+      "bytes": 100832,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        129.58414,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 83,
+      "maxTileBytes": 8978,
+      "rootTileBytes": 7148
+    },
+    {
+      "year": -49,
+      "count": 85,
+      "url": "data/years/-49.pmtiles",
+      "bytes": 102295,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        129.58414,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 85,
+      "maxTileBytes": 9114,
+      "rootTileBytes": 7288
+    },
+    {
+      "year": -48,
+      "count": 83,
+      "url": "data/years/-48.pmtiles",
+      "bytes": 101934,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        129.58414,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 83,
+      "maxTileBytes": 9063,
+      "rootTileBytes": 7236
+    },
+    {
+      "year": -46,
+      "count": 82,
+      "url": "data/years/-46.pmtiles",
+      "bytes": 100302,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        129.58414,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 82,
+      "maxTileBytes": 8884,
+      "rootTileBytes": 7103
+    },
+    {
+      "year": -44,
+      "count": 81,
+      "url": "data/years/-44.pmtiles",
+      "bytes": 99275,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        129.58414,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 81,
+      "maxTileBytes": 8802,
+      "rootTileBytes": 7010
+    },
+    {
+      "year": -42,
+      "count": 82,
+      "url": "data/years/-42.pmtiles",
+      "bytes": 101084,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        129.58414,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 82,
+      "maxTileBytes": 9003,
+      "rootTileBytes": 7197
+    },
+    {
+      "year": -41,
+      "count": 82,
+      "url": "data/years/-41.pmtiles",
+      "bytes": 100188,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        129.58414,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 82,
+      "maxTileBytes": 8924,
+      "rootTileBytes": 7133
+    },
+    {
+      "year": -40,
+      "count": 83,
+      "url": "data/years/-40.pmtiles",
+      "bytes": 100533,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        129.58414,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 83,
+      "maxTileBytes": 8981,
+      "rootTileBytes": 7166
+    },
+    {
+      "year": -36,
+      "count": 85,
+      "url": "data/years/-36.pmtiles",
+      "bytes": 102969,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        130.99431,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 85,
+      "maxTileBytes": 9160,
+      "rootTileBytes": 7309
+    },
+    {
+      "year": -31,
+      "count": 86,
+      "url": "data/years/-31.pmtiles",
+      "bytes": 105133,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        130.99431,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 86,
+      "maxTileBytes": 9342,
+      "rootTileBytes": 7449
+    },
+    {
+      "year": -30,
+      "count": 85,
+      "url": "data/years/-30.pmtiles",
+      "bytes": 104458,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        130.99431,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 85,
+      "maxTileBytes": 9279,
+      "rootTileBytes": 7385
+    },
+    {
+      "year": -27,
+      "count": 84,
+      "url": "data/years/-27.pmtiles",
+      "bytes": 103799,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        130.99431,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 84,
+      "maxTileBytes": 9235,
+      "rootTileBytes": 7330
+    },
+    {
+      "year": -25,
+      "count": 82,
+      "url": "data/years/-25.pmtiles",
+      "bytes": 102136,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        130.99431,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 82,
+      "maxTileBytes": 8978,
+      "rootTileBytes": 7160
+    },
+    {
+      "year": -19,
+      "count": 81,
+      "url": "data/years/-19.pmtiles",
+      "bytes": 101237,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        130.99431,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 81,
+      "maxTileBytes": 8908,
+      "rootTileBytes": 7090
+    },
+    {
+      "year": -14,
+      "count": 81,
+      "url": "data/years/-14.pmtiles",
+      "bytes": 101485,
+      "bounds": [
+        -99.48931,
+        5.91818999999998,
+        130.99431,
+        52.15816
+      ],
+      "tiles": 91,
+      "nativeFeatureCount": 81,
+      "maxTileBytes": 8930,
+      "rootTileBytes": 7106
+    },
+    {
+      "year": 1,
+      "count": 84,
+      "url": "data/years/1.pmtiles",
+      "bytes": 104620,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        53.46472
+      ],
+      "tiles": 92,
+      "nativeFeatureCount": 84,
+      "maxTileBytes": 9274,
+      "rootTileBytes": 7387
+    },
+    {
+      "year": 6,
+      "count": 83,
+      "url": "data/years/6.pmtiles",
+      "bytes": 103628,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        53.89347
+      ],
+      "tiles": 92,
+      "nativeFeatureCount": 83,
+      "maxTileBytes": 9261,
+      "rootTileBytes": 7376
+    },
+    {
+      "year": 9,
+      "count": 83,
+      "url": "data/years/9.pmtiles",
+      "bytes": 103109,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        52.15837
+      ],
+      "tiles": 92,
+      "nativeFeatureCount": 83,
+      "maxTileBytes": 9205,
+      "rootTileBytes": 7337
+    },
+    {
+      "year": 14,
+      "count": 82,
+      "url": "data/years/14.pmtiles",
+      "bytes": 102838,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        52.15837
+      ],
+      "tiles": 92,
+      "nativeFeatureCount": 82,
+      "maxTileBytes": 9065,
+      "rootTileBytes": 7219
+    },
+    {
+      "year": 23,
+      "count": 81,
+      "url": "data/years/23.pmtiles",
+      "bytes": 103237,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        52.15837
+      ],
+      "tiles": 92,
+      "nativeFeatureCount": 81,
+      "maxTileBytes": 9086,
+      "rootTileBytes": 7205
+    },
+    {
+      "year": 30,
+      "count": 83,
+      "url": "data/years/30.pmtiles",
+      "bytes": 103670,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        60.8211
+      ],
+      "tiles": 94,
+      "nativeFeatureCount": 83,
+      "maxTileBytes": 9123,
+      "rootTileBytes": 7245
+    },
+    {
+      "year": 43,
+      "count": 86,
+      "url": "data/years/43.pmtiles",
+      "bytes": 107003,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        60.8211
+      ],
+      "tiles": 94,
+      "nativeFeatureCount": 86,
+      "maxTileBytes": 9512,
+      "rootTileBytes": 7520
+    },
+    {
+      "year": 51,
+      "count": 86,
+      "url": "data/years/51.pmtiles",
+      "bytes": 106104,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        60.8211
+      ],
+      "tiles": 94,
+      "nativeFeatureCount": 86,
+      "maxTileBytes": 9348,
+      "rootTileBytes": 7418
+    },
+    {
+      "year": 60,
+      "count": 85,
+      "url": "data/years/60.pmtiles",
+      "bytes": 106048,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        55.24615
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 85,
+      "maxTileBytes": 9252,
+      "rootTileBytes": 7386
+    },
+    {
+      "year": 68,
+      "count": 82,
+      "url": "data/years/68.pmtiles",
+      "bytes": 103698,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        54.83499
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 82,
+      "maxTileBytes": 9139,
+      "rootTileBytes": 7272
+    },
+    {
+      "year": 78,
+      "count": 81,
+      "url": "data/years/78.pmtiles",
+      "bytes": 104460,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        54.83499
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 81,
+      "maxTileBytes": 9052,
+      "rootTileBytes": 7234
+    },
+    {
+      "year": 84,
+      "count": 84,
+      "url": "data/years/84.pmtiles",
+      "bytes": 106843,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        57.70621
+      ],
+      "tiles": 95,
+      "nativeFeatureCount": 84,
+      "maxTileBytes": 9154,
+      "rootTileBytes": 7396
+    },
+    {
+      "year": 91,
+      "count": 80,
+      "url": "data/years/91.pmtiles",
+      "bytes": 101767,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        55.31405
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 80,
+      "maxTileBytes": 8827,
+      "rootTileBytes": 7038
+    },
+    {
+      "year": 106,
+      "count": 80,
+      "url": "data/years/106.pmtiles",
+      "bytes": 100177,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        55.31405
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 80,
+      "maxTileBytes": 8714,
+      "rootTileBytes": 6980
+    },
+    {
+      "year": 114,
+      "count": 76,
+      "url": "data/years/114.pmtiles",
+      "bytes": 97496,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        55.31405
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 76,
+      "maxTileBytes": 8349,
+      "rootTileBytes": 6671
+    },
+    {
+      "year": 117,
+      "count": 76,
+      "url": "data/years/117.pmtiles",
+      "bytes": 99910,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        55.31405
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 76,
+      "maxTileBytes": 8446,
+      "rootTileBytes": 6768
+    },
+    {
+      "year": 127,
+      "count": 77,
+      "url": "data/years/127.pmtiles",
+      "bytes": 101445,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        55.31405
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 77,
+      "maxTileBytes": 8681,
+      "rootTileBytes": 6960
+    },
+    {
+      "year": 154,
+      "count": 79,
+      "url": "data/years/154.pmtiles",
+      "bytes": 103993,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        56.05601
+      ],
+      "tiles": 96,
+      "nativeFeatureCount": 79,
+      "maxTileBytes": 8809,
+      "rootTileBytes": 7109
+    },
+    {
+      "year": 161,
+      "count": 78,
+      "url": "data/years/161.pmtiles",
+      "bytes": 103712,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        56.55237
+      ],
+      "tiles": 103,
+      "nativeFeatureCount": 78,
+      "maxTileBytes": 8677,
+      "rootTileBytes": 6993
+    },
+    {
+      "year": 165,
+      "count": 80,
+      "url": "data/years/165.pmtiles",
+      "bytes": 105948,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        56.55237
+      ],
+      "tiles": 103,
+      "nativeFeatureCount": 80,
+      "maxTileBytes": 8891,
+      "rootTileBytes": 7183
+    },
+    {
+      "year": 184,
+      "count": 80,
+      "url": "data/years/184.pmtiles",
+      "bytes": 104625,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 103,
+      "nativeFeatureCount": 80,
+      "maxTileBytes": 8923,
+      "rootTileBytes": 7216
+    },
+    {
+      "year": 197,
+      "count": 91,
+      "url": "data/years/197.pmtiles",
+      "bytes": 113189,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 103,
+      "nativeFeatureCount": 91,
+      "maxTileBytes": 9909,
+      "rootTileBytes": 8033
+    },
+    {
+      "year": 207,
+      "count": 87,
+      "url": "data/years/207.pmtiles",
+      "bytes": 110060,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 105,
+      "nativeFeatureCount": 87,
+      "maxTileBytes": 9475,
+      "rootTileBytes": 7687
+    },
+    {
+      "year": 215,
+      "count": 86,
+      "url": "data/years/215.pmtiles",
+      "bytes": 108546,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 103,
+      "nativeFeatureCount": 86,
+      "maxTileBytes": 9387,
+      "rootTileBytes": 7592
+    },
+    {
+      "year": 224,
+      "count": 85,
+      "url": "data/years/224.pmtiles",
+      "bytes": 104392,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 85,
+      "maxTileBytes": 9180,
+      "rootTileBytes": 7398
+    },
+    {
+      "year": 238,
+      "count": 84,
+      "url": "data/years/238.pmtiles",
+      "bytes": 100938,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 92,
+      "nativeFeatureCount": 84,
+      "maxTileBytes": 8865,
+      "rootTileBytes": 7150
+    },
+    {
+      "year": 247,
+      "count": 83,
+      "url": "data/years/247.pmtiles",
+      "bytes": 100883,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 92,
+      "nativeFeatureCount": 83,
+      "maxTileBytes": 8845,
+      "rootTileBytes": 7138
+    },
+    {
+      "year": 260,
+      "count": 78,
+      "url": "data/years/260.pmtiles",
+      "bytes": 98189,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 78,
+      "maxTileBytes": 8557,
+      "rootTileBytes": 6834
+    },
+    {
+      "year": 261,
+      "count": 81,
+      "url": "data/years/261.pmtiles",
+      "bytes": 101842,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 81,
+      "maxTileBytes": 8909,
+      "rootTileBytes": 7124
+    },
+    {
+      "year": 263,
+      "count": 79,
+      "url": "data/years/263.pmtiles",
+      "bytes": 100771,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 79,
+      "maxTileBytes": 8786,
+      "rootTileBytes": 7025
+    },
+    {
+      "year": 265,
+      "count": 81,
+      "url": "data/years/265.pmtiles",
+      "bytes": 101865,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 81,
+      "maxTileBytes": 8873,
+      "rootTileBytes": 7099
+    },
+    {
+      "year": 270,
+      "count": 80,
+      "url": "data/years/270.pmtiles",
+      "bytes": 102240,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 80,
+      "maxTileBytes": 8811,
+      "rootTileBytes": 7048
+    },
+    {
+      "year": 283,
+      "count": 75,
+      "url": "data/years/283.pmtiles",
+      "bytes": 98146,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 75,
+      "maxTileBytes": 8429,
+      "rootTileBytes": 6727
+    },
+    {
+      "year": 287,
+      "count": 83,
+      "url": "data/years/287.pmtiles",
+      "bytes": 104810,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 83,
+      "maxTileBytes": 9067,
+      "rootTileBytes": 7260
+    },
+    {
+      "year": 299,
+      "count": 86,
+      "url": "data/years/299.pmtiles",
+      "bytes": 108626,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 86,
+      "maxTileBytes": 9324,
+      "rootTileBytes": 7545
+    },
+    {
+      "year": 306,
+      "count": 94,
+      "url": "data/years/306.pmtiles",
+      "bytes": 114071,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 94,
+      "maxTileBytes": 9970,
+      "rootTileBytes": 8091
+    },
+    {
+      "year": 308,
+      "count": 89,
+      "url": "data/years/308.pmtiles",
+      "bytes": 112152,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 89,
+      "maxTileBytes": 9752,
+      "rootTileBytes": 7909
+    },
+    {
+      "year": 311,
+      "count": 88,
+      "url": "data/years/311.pmtiles",
+      "bytes": 110664,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 88,
+      "maxTileBytes": 9642,
+      "rootTileBytes": 7790
+    },
+    {
+      "year": 313,
+      "count": 87,
+      "url": "data/years/313.pmtiles",
+      "bytes": 109179,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 87,
+      "maxTileBytes": 9481,
+      "rootTileBytes": 7672
+    },
+    {
+      "year": 324,
+      "count": 85,
+      "url": "data/years/324.pmtiles",
+      "bytes": 108425,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 85,
+      "maxTileBytes": 9421,
+      "rootTileBytes": 7615
+    },
+    {
+      "year": 337,
+      "count": 93,
+      "url": "data/years/337.pmtiles",
+      "bytes": 113750,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 93,
+      "maxTileBytes": 10040,
+      "rootTileBytes": 8144
+    },
+    {
+      "year": 338,
+      "count": 92,
+      "url": "data/years/338.pmtiles",
+      "bytes": 113090,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 92,
+      "maxTileBytes": 9955,
+      "rootTileBytes": 8066
+    },
+    {
+      "year": 347,
+      "count": 93,
+      "url": "data/years/347.pmtiles",
+      "bytes": 114258,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 93,
+      "maxTileBytes": 10000,
+      "rootTileBytes": 8055
+    },
+    {
+      "year": 353,
+      "count": 93,
+      "url": "data/years/353.pmtiles",
+      "bytes": 113895,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 93,
+      "maxTileBytes": 10001,
+      "rootTileBytes": 8039
+    },
+    {
+      "year": 358,
+      "count": 90,
+      "url": "data/years/358.pmtiles",
+      "bytes": 111721,
+      "bounds": [
+        -99.48922,
+        5.91820000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 93,
+      "nativeFeatureCount": 90,
+      "maxTileBytes": 9796,
+      "rootTileBytes": 7889
+    },
+    {
+      "year": 367,
+      "count": 93,
+      "url": "data/years/367.pmtiles",
+      "bytes": 113613,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 98,
+      "nativeFeatureCount": 93,
+      "maxTileBytes": 9961,
+      "rootTileBytes": 8044
+    },
+    {
+      "year": 371,
+      "count": 91,
+      "url": "data/years/371.pmtiles",
+      "bytes": 112150,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 98,
+      "nativeFeatureCount": 91,
+      "maxTileBytes": 9696,
+      "rootTileBytes": 7903
+    },
+    {
+      "year": 373,
+      "count": 89,
+      "url": "data/years/373.pmtiles",
+      "bytes": 112528,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 98,
+      "nativeFeatureCount": 89,
+      "maxTileBytes": 9697,
+      "rootTileBytes": 7873
+    },
+    {
+      "year": 378,
+      "count": 88,
+      "url": "data/years/378.pmtiles",
+      "bytes": 111118,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 98,
+      "nativeFeatureCount": 88,
+      "maxTileBytes": 9499,
+      "rootTileBytes": 7726
+    },
+    {
+      "year": 383,
+      "count": 86,
+      "url": "data/years/383.pmtiles",
+      "bytes": 109564,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 98,
+      "nativeFeatureCount": 86,
+      "maxTileBytes": 9450,
+      "rootTileBytes": 7608
+    },
+    {
+      "year": 387,
+      "count": 97,
+      "url": "data/years/387.pmtiles",
+      "bytes": 118140,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 99,
+      "nativeFeatureCount": 97,
+      "maxTileBytes": 10456,
+      "rootTileBytes": 8412
+    },
+    {
+      "year": 390,
+      "count": 95,
+      "url": "data/years/390.pmtiles",
+      "bytes": 118120,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 99,
+      "nativeFeatureCount": 95,
+      "maxTileBytes": 10403,
+      "rootTileBytes": 8369
+    },
+    {
+      "year": 392,
+      "count": 95,
+      "url": "data/years/392.pmtiles",
+      "bytes": 117531,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 99,
+      "nativeFeatureCount": 95,
+      "maxTileBytes": 10346,
+      "rootTileBytes": 8316
+    },
+    {
+      "year": 394,
+      "count": 89,
+      "url": "data/years/394.pmtiles",
+      "bytes": 113825,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 99,
+      "nativeFeatureCount": 89,
+      "maxTileBytes": 9887,
+      "rootTileBytes": 7958
+    },
+    {
+      "year": 395,
+      "count": 92,
+      "url": "data/years/395.pmtiles",
+      "bytes": 115046,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 99,
+      "nativeFeatureCount": 92,
+      "maxTileBytes": 10023,
+      "rootTileBytes": 8065
+    },
+    {
+      "year": 396,
+      "count": 96,
+      "url": "data/years/396.pmtiles",
+      "bytes": 116608,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 99,
+      "nativeFeatureCount": 96,
+      "maxTileBytes": 10242,
+      "rootTileBytes": 8265
+    },
+    {
+      "year": 397,
+      "count": 99,
+      "url": "data/years/397.pmtiles",
+      "bytes": 117848,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.27375
+      ],
+      "tiles": 99,
+      "nativeFeatureCount": 99,
+      "maxTileBytes": 10390,
+      "rootTileBytes": 8401
+    },
+    {
+      "year": 402,
+      "count": 103,
+      "url": "data/years/402.pmtiles",
+      "bytes": 123163,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.87852
+      ],
+      "tiles": 104,
+      "nativeFeatureCount": 103,
+      "maxTileBytes": 10833,
+      "rootTileBytes": 8765
+    },
+    {
+      "year": 407,
+      "count": 103,
+      "url": "data/years/407.pmtiles",
+      "bytes": 123632,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        130.99436,
+        61.87852
+      ],
+      "tiles": 104,
+      "nativeFeatureCount": 103,
+      "maxTileBytes": 10891,
+      "rootTileBytes": 8820
+    },
+    {
+      "year": 410,
+      "count": 99,
+      "url": "data/years/410.pmtiles",
+      "bytes": 120289,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 104,
+      "nativeFeatureCount": 99,
+      "maxTileBytes": 10529,
+      "rootTileBytes": 8498
+    },
+    {
+      "year": 414,
+      "count": 102,
+      "url": "data/years/414.pmtiles",
+      "bytes": 122226,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 104,
+      "nativeFeatureCount": 102,
+      "maxTileBytes": 10575,
+      "rootTileBytes": 8665
+    },
+    {
+      "year": 417,
+      "count": 100,
+      "url": "data/years/417.pmtiles",
+      "bytes": 120803,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 104,
+      "nativeFeatureCount": 100,
+      "maxTileBytes": 10408,
+      "rootTileBytes": 8503
+    },
+    {
+      "year": 426,
+      "count": 99,
+      "url": "data/years/426.pmtiles",
+      "bytes": 121186,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 104,
+      "nativeFeatureCount": 99,
+      "maxTileBytes": 10462,
+      "rootTileBytes": 8486
+    },
+    {
+      "year": 439,
+      "count": 98,
+      "url": "data/years/439.pmtiles",
+      "bytes": 122603,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 106,
+      "nativeFeatureCount": 98,
+      "maxTileBytes": 10204,
+      "rootTileBytes": 8513
+    },
+    {
+      "year": 441,
+      "count": 100,
+      "url": "data/years/441.pmtiles",
+      "bytes": 124770,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 106,
+      "nativeFeatureCount": 100,
+      "maxTileBytes": 10370,
+      "rootTileBytes": 8651
+    },
+    {
+      "year": 443,
+      "count": 100,
+      "url": "data/years/443.pmtiles",
+      "bytes": 126213,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 106,
+      "nativeFeatureCount": 100,
+      "maxTileBytes": 10524,
+      "rootTileBytes": 8776
+    },
+    {
+      "year": 451,
+      "count": 100,
+      "url": "data/years/451.pmtiles",
+      "bytes": 127718,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 106,
+      "nativeFeatureCount": 100,
+      "maxTileBytes": 10636,
+      "rootTileBytes": 8910
+    },
+    {
+      "year": 452,
+      "count": 100,
+      "url": "data/years/452.pmtiles",
+      "bytes": 126782,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 106,
+      "nativeFeatureCount": 100,
+      "maxTileBytes": 10553,
+      "rootTileBytes": 8819
+    },
+    {
+      "year": 455,
+      "count": 100,
+      "url": "data/years/455.pmtiles",
+      "bytes": 126427,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 106,
+      "nativeFeatureCount": 100,
+      "maxTileBytes": 10569,
+      "rootTileBytes": 8872
+    },
+    {
+      "year": 458,
+      "count": 101,
+      "url": "data/years/458.pmtiles",
+      "bytes": 127024,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 106,
+      "nativeFeatureCount": 101,
+      "maxTileBytes": 10578,
+      "rootTileBytes": 8887
+    },
+    {
+      "year": 459,
+      "count": 99,
+      "url": "data/years/459.pmtiles",
+      "bytes": 125960,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 106,
+      "nativeFeatureCount": 99,
+      "maxTileBytes": 10496,
+      "rootTileBytes": 8821
+    },
+    {
+      "year": 462,
+      "count": 102,
+      "url": "data/years/462.pmtiles",
+      "bytes": 127968,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 106,
+      "nativeFeatureCount": 102,
+      "maxTileBytes": 10747,
+      "rootTileBytes": 9038
+    },
+    {
+      "year": 469,
+      "count": 102,
+      "url": "data/years/469.pmtiles",
+      "bytes": 126581,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 104,
+      "nativeFeatureCount": 102,
+      "maxTileBytes": 10568,
+      "rootTileBytes": 8897
+    },
+    {
+      "year": 476,
+      "count": 103,
+      "url": "data/years/476.pmtiles",
+      "bytes": 125757,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 104,
+      "nativeFeatureCount": 103,
+      "maxTileBytes": 10550,
+      "rootTileBytes": 8927
+    },
+    {
+      "year": 480,
+      "count": 102,
+      "url": "data/years/480.pmtiles",
+      "bytes": 125007,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 104,
+      "nativeFeatureCount": 102,
+      "maxTileBytes": 10473,
+      "rootTileBytes": 8856
+    },
+    {
+      "year": 490,
+      "count": 102,
+      "url": "data/years/490.pmtiles",
+      "bytes": 125607,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        61.87852
+      ],
+      "tiles": 104,
+      "nativeFeatureCount": 102,
+      "maxTileBytes": 10628,
+      "rootTileBytes": 8930
+    },
+    {
+      "year": 500,
+      "count": 99,
+      "url": "data/years/500.pmtiles",
+      "bytes": 128448,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        64.6017
+      ],
+      "tiles": 105,
+      "nativeFeatureCount": 99,
+      "maxTileBytes": 10869,
+      "rootTileBytes": 9052
+    },
+    {
+      "year": 510,
+      "count": 104,
+      "url": "data/years/510.pmtiles",
+      "bytes": 126014,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        64.6017
+      ],
+      "tiles": 105,
+      "nativeFeatureCount": 104,
+      "maxTileBytes": 10628,
+      "rootTileBytes": 8917
+    },
+    {
+      "year": 523,
+      "count": 111,
+      "url": "data/years/523.pmtiles",
+      "bytes": 130095,
+      "bounds": [
+        -99.48922,
+        -6.70833000000001,
+        132.49661,
+        64.6017
+      ],
+      "tiles": 105,
+      "nativeFeatureCount": 111,
+      "maxTileBytes": 11047,
+      "rootTileBytes": 9318
+    },
+    {
+      "year": 534,
+      "count": 112,
+      "url": "data/years/534.pmtiles",
+      "bytes": 129687,
+      "bounds": [
+        -99.48922,
+        -7.67735000000001,
+        132.49661,
+        64.6017
+      ],
+      "tiles": 105,
+      "nativeFeatureCount": 112,
+      "maxTileBytes": 10940,
+      "rootTileBytes": 9238
+    },
+    {
+      "year": 536,
+      "count": 115,
+      "url": "data/years/536.pmtiles",
+      "bytes": 134613,
+      "bounds": [
+        -99.48922,
+        -7.67735000000001,
+        132.49661,
+        64.6017
+      ],
+      "tiles": 105,
+      "nativeFeatureCount": 115,
+      "maxTileBytes": 11473,
+      "rootTileBytes": 9593
+    },
+    {
+      "year": 540,
+      "count": 132,
+      "url": "data/years/540.pmtiles",
+      "bytes": 144867,
+      "bounds": [
+        -99.48922,
+        -7.67735000000001,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 109,
+      "nativeFeatureCount": 132,
+      "maxTileBytes": 12285,
+      "rootTileBytes": 10624
+    },
+    {
+      "year": 546,
+      "count": 136,
+      "url": "data/years/546.pmtiles",
+      "bytes": 147330,
+      "bounds": [
+        -99.48922,
+        -7.67735000000001,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 109,
+      "nativeFeatureCount": 136,
+      "maxTileBytes": 12508,
+      "rootTileBytes": 10834
+    },
+    {
+      "year": 555,
+      "count": 134,
+      "url": "data/years/555.pmtiles",
+      "bytes": 149751,
+      "bounds": [
+        -99.48922,
+        -7.67735000000001,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 116,
+      "nativeFeatureCount": 134,
+      "maxTileBytes": 12491,
+      "rootTileBytes": 10936
+    },
+    {
+      "year": 561,
+      "count": 126,
+      "url": "data/years/561.pmtiles",
+      "bytes": 146351,
+      "bounds": [
+        -99.48922,
+        -7.67735000000001,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 115,
+      "nativeFeatureCount": 126,
+      "maxTileBytes": 12109,
+      "rootTileBytes": 10630
+    },
+    {
+      "year": 567,
+      "count": 132,
+      "url": "data/years/567.pmtiles",
+      "bytes": 150274,
+      "bounds": [
+        -99.48922,
+        -7.67735000000001,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 115,
+      "nativeFeatureCount": 132,
+      "maxTileBytes": 12552,
+      "rootTileBytes": 11010
+    },
+    {
+      "year": 569,
+      "count": 138,
+      "url": "data/years/569.pmtiles",
+      "bytes": 153586,
+      "bounds": [
+        -99.48922,
+        -7.67735000000001,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 115,
+      "nativeFeatureCount": 138,
+      "maxTileBytes": 12890,
+      "rootTileBytes": 11281
+    },
+    {
+      "year": 577,
+      "count": 145,
+      "url": "data/years/577.pmtiles",
+      "bytes": 154835,
+      "bounds": [
+        -99.48922,
+        -7.67735000000001,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 114,
+      "nativeFeatureCount": 145,
+      "maxTileBytes": 13147,
+      "rootTileBytes": 11540
+    },
+    {
+      "year": 587,
+      "count": 140,
+      "url": "data/years/587.pmtiles",
+      "bytes": 151591,
+      "bounds": [
+        -99.48922,
+        -7.67735000000001,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 114,
+      "nativeFeatureCount": 140,
+      "maxTileBytes": 12817,
+      "rootTileBytes": 11191
+    },
+    {
+      "year": 592,
+      "count": 136,
+      "url": "data/years/592.pmtiles",
+      "bytes": 149268,
+      "bounds": [
+        -99.48922,
+        -7.67735000000001,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 114,
+      "nativeFeatureCount": 136,
+      "maxTileBytes": 12525,
+      "rootTileBytes": 11001
+    },
+    {
+      "year": 602,
+      "count": 141,
+      "url": "data/years/602.pmtiles",
+      "bytes": 149710,
+      "bounds": [
+        -99.48922,
+        -7.67735000000001,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 114,
+      "nativeFeatureCount": 141,
+      "maxTileBytes": 12710,
+      "rootTileBytes": 11168
+    },
+    {
+      "year": 612,
+      "count": 137,
+      "url": "data/years/612.pmtiles",
+      "bytes": 155669,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 115,
+      "nativeFeatureCount": 137,
+      "maxTileBytes": 13085,
+      "rootTileBytes": 11405
+    },
+    {
+      "year": 617,
+      "count": 138,
+      "url": "data/years/617.pmtiles",
+      "bytes": 153984,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 116,
+      "nativeFeatureCount": 138,
+      "maxTileBytes": 13026,
+      "rootTileBytes": 11355
+    },
+    {
+      "year": 623,
+      "count": 144,
+      "url": "data/years/623.pmtiles",
+      "bytes": 163400,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 116,
+      "nativeFeatureCount": 144,
+      "maxTileBytes": 13971,
+      "rootTileBytes": 12013
+    },
+    {
+      "year": 626,
+      "count": 142,
+      "url": "data/years/626.pmtiles",
+      "bytes": 161734,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 116,
+      "nativeFeatureCount": 142,
+      "maxTileBytes": 13709,
+      "rootTileBytes": 11802
+    },
+    {
+      "year": 627,
+      "count": 139,
+      "url": "data/years/627.pmtiles",
+      "bytes": 161375,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 116,
+      "nativeFeatureCount": 139,
+      "maxTileBytes": 13640,
+      "rootTileBytes": 11738
+    },
+    {
+      "year": 628,
+      "count": 137,
+      "url": "data/years/628.pmtiles",
+      "bytes": 159920,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 116,
+      "nativeFeatureCount": 137,
+      "maxTileBytes": 13483,
+      "rootTileBytes": 11595
+    },
+    {
+      "year": 629,
+      "count": 138,
+      "url": "data/years/629.pmtiles",
+      "bytes": 160930,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 116,
+      "nativeFeatureCount": 138,
+      "maxTileBytes": 13600,
+      "rootTileBytes": 11704
+    },
+    {
+      "year": 630,
+      "count": 139,
+      "url": "data/years/630.pmtiles",
+      "bytes": 161825,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 116,
+      "nativeFeatureCount": 139,
+      "maxTileBytes": 13663,
+      "rootTileBytes": 11775
+    },
+    {
+      "year": 633,
+      "count": 144,
+      "url": "data/years/633.pmtiles",
+      "bytes": 159854,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 117,
+      "nativeFeatureCount": 144,
+      "maxTileBytes": 13679,
+      "rootTileBytes": 11851
+    },
+    {
+      "year": 634,
+      "count": 139,
+      "url": "data/years/634.pmtiles",
+      "bytes": 157812,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 117,
+      "nativeFeatureCount": 139,
+      "maxTileBytes": 13373,
+      "rootTileBytes": 11569
+    },
+    {
+      "year": 638,
+      "count": 151,
+      "url": "data/years/638.pmtiles",
+      "bytes": 163811,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 117,
+      "nativeFeatureCount": 151,
+      "maxTileBytes": 13915,
+      "rootTileBytes": 12078
+    },
+    {
+      "year": 641,
+      "count": 147,
+      "url": "data/years/641.pmtiles",
+      "bytes": 169942,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 119,
+      "nativeFeatureCount": 147,
+      "maxTileBytes": 14300,
+      "rootTileBytes": 12323
+    },
+    {
+      "year": 644,
+      "count": 153,
+      "url": "data/years/644.pmtiles",
+      "bytes": 167912,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 118,
+      "nativeFeatureCount": 153,
+      "maxTileBytes": 14178,
+      "rootTileBytes": 12299
+    },
+    {
+      "year": 647,
+      "count": 147,
+      "url": "data/years/647.pmtiles",
+      "bytes": 155636,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 114,
+      "nativeFeatureCount": 147,
+      "maxTileBytes": 13055,
+      "rootTileBytes": 11534
+    },
+    {
+      "year": 656,
+      "count": 143,
+      "url": "data/years/656.pmtiles",
+      "bytes": 152921,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 114,
+      "nativeFeatureCount": 143,
+      "maxTileBytes": 12930,
+      "rootTileBytes": 11417
+    },
+    {
+      "year": 661,
+      "count": 143,
+      "url": "data/years/661.pmtiles",
+      "bytes": 150005,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 114,
+      "nativeFeatureCount": 143,
+      "maxTileBytes": 12753,
+      "rootTileBytes": 11321
+    },
+    {
+      "year": 666,
+      "count": 141,
+      "url": "data/years/666.pmtiles",
+      "bytes": 150359,
+      "bounds": [
+        -99.48922,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 114,
+      "nativeFeatureCount": 141,
+      "maxTileBytes": 12639,
+      "rootTileBytes": 11200
+    },
+    {
+      "year": 674,
+      "count": 151,
+      "url": "data/years/674.pmtiles",
+      "bytes": 154807,
+      "bounds": [
+        -99.48922,
+        -7.88356,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 116,
+      "nativeFeatureCount": 151,
+      "maxTileBytes": 12929,
+      "rootTileBytes": 11577
+    },
+    {
+      "year": 682,
+      "count": 153,
+      "url": "data/years/682.pmtiles",
+      "bytes": 160097,
+      "bounds": [
+        -99.48922,
+        -7.88356,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 116,
+      "nativeFeatureCount": 153,
+      "maxTileBytes": 13502,
+      "rootTileBytes": 12013
+    },
+    {
+      "year": 692,
+      "count": 162,
+      "url": "data/years/692.pmtiles",
+      "bytes": 164898,
+      "bounds": [
+        -99.48922,
+        -7.88356,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 122,
+      "nativeFeatureCount": 162,
+      "maxTileBytes": 13667,
+      "rootTileBytes": 12207
+    },
+    {
+      "year": 705,
+      "count": 163,
+      "url": "data/years/705.pmtiles",
+      "bytes": 164092,
+      "bounds": [
+        -97.40074,
+        -7.88356,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 122,
+      "nativeFeatureCount": 163,
+      "maxTileBytes": 13594,
+      "rootTileBytes": 12132
+    },
+    {
+      "year": 710,
+      "count": 159,
+      "url": "data/years/710.pmtiles",
+      "bytes": 164097,
+      "bounds": [
+        -97.40074,
+        -7.88356,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 122,
+      "nativeFeatureCount": 159,
+      "maxTileBytes": 13523,
+      "rootTileBytes": 12099
+    },
+    {
+      "year": 718,
+      "count": 169,
+      "url": "data/years/718.pmtiles",
+      "bytes": 168765,
+      "bounds": [
+        -97.40074,
+        -7.88356,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 122,
+      "nativeFeatureCount": 169,
+      "maxTileBytes": 14078,
+      "rootTileBytes": 12539
+    },
+    {
+      "year": 724,
+      "count": 166,
+      "url": "data/years/724.pmtiles",
+      "bytes": 168307,
+      "bounds": [
+        -97.40074,
+        -7.878,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 122,
+      "nativeFeatureCount": 166,
+      "maxTileBytes": 14033,
+      "rootTileBytes": 12431
+    },
+    {
+      "year": 732,
+      "count": 163,
+      "url": "data/years/732.pmtiles",
+      "bytes": 165798,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 124,
+      "nativeFeatureCount": 163,
+      "maxTileBytes": 13698,
+      "rootTileBytes": 12156
+    },
+    {
+      "year": 741,
+      "count": 171,
+      "url": "data/years/741.pmtiles",
+      "bytes": 170647,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 124,
+      "nativeFeatureCount": 171,
+      "maxTileBytes": 14191,
+      "rootTileBytes": 12665
+    },
+    {
+      "year": 750,
+      "count": 171,
+      "url": "data/years/750.pmtiles",
+      "bytes": 172296,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 122,
+      "nativeFeatureCount": 171,
+      "maxTileBytes": 14600,
+      "rootTileBytes": 12934
+    },
+    {
+      "year": 751,
+      "count": 171,
+      "url": "data/years/751.pmtiles",
+      "bytes": 174124,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 122,
+      "nativeFeatureCount": 171,
+      "maxTileBytes": 14541,
+      "rootTileBytes": 12918
+    },
+    {
+      "year": 755,
+      "count": 168,
+      "url": "data/years/755.pmtiles",
+      "bytes": 174455,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 122,
+      "nativeFeatureCount": 168,
+      "maxTileBytes": 14600,
+      "rootTileBytes": 12966
+    },
+    {
+      "year": 757,
+      "count": 168,
+      "url": "data/years/757.pmtiles",
+      "bytes": 172522,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 122,
+      "nativeFeatureCount": 168,
+      "maxTileBytes": 14363,
+      "rootTileBytes": 12809
+    },
+    {
+      "year": 763,
+      "count": 164,
+      "url": "data/years/763.pmtiles",
+      "bytes": 168387,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 119,
+      "nativeFeatureCount": 164,
+      "maxTileBytes": 13984,
+      "rootTileBytes": 12480
+    },
+    {
+      "year": 768,
+      "count": 164,
+      "url": "data/years/768.pmtiles",
+      "bytes": 169922,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 119,
+      "nativeFeatureCount": 164,
+      "maxTileBytes": 14145,
+      "rootTileBytes": 12596
+    },
+    {
+      "year": 772,
+      "count": 161,
+      "url": "data/years/772.pmtiles",
+      "bytes": 167184,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 119,
+      "nativeFeatureCount": 161,
+      "maxTileBytes": 13831,
+      "rootTileBytes": 12328
+    },
+    {
+      "year": 775,
+      "count": 161,
+      "url": "data/years/775.pmtiles",
+      "bytes": 166059,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 119,
+      "nativeFeatureCount": 161,
+      "maxTileBytes": 13709,
+      "rootTileBytes": 12261
+    },
+    {
+      "year": 778,
+      "count": 162,
+      "url": "data/years/778.pmtiles",
+      "bytes": 173736,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 121,
+      "nativeFeatureCount": 162,
+      "maxTileBytes": 14399,
+      "rootTileBytes": 12595
+    },
+    {
+      "year": 783,
+      "count": 159,
+      "url": "data/years/783.pmtiles",
+      "bytes": 173569,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 121,
+      "nativeFeatureCount": 159,
+      "maxTileBytes": 14360,
+      "rootTileBytes": 12553
+    },
+    {
+      "year": 788,
+      "count": 156,
+      "url": "data/years/788.pmtiles",
+      "bytes": 169011,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        64.6017
+      ],
+      "tiles": 121,
+      "nativeFeatureCount": 156,
+      "maxTileBytes": 13883,
+      "rootTileBytes": 12161
+    },
+    {
+      "year": 793,
+      "count": 195,
+      "url": "data/years/793.pmtiles",
+      "bytes": 186513,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        69.88585
+      ],
+      "tiles": 130,
+      "nativeFeatureCount": 195,
+      "maxTileBytes": 15721,
+      "rootTileBytes": 14000
+    },
+    {
+      "year": 800,
+      "count": 202,
+      "url": "data/years/800.pmtiles",
+      "bytes": 189093,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        69.88585
+      ],
+      "tiles": 132,
+      "nativeFeatureCount": 202,
+      "maxTileBytes": 15908,
+      "rootTileBytes": 14266
+    },
+    {
+      "year": 806,
+      "count": 196,
+      "url": "data/years/806.pmtiles",
+      "bytes": 186639,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.03067,
+        69.88585
+      ],
+      "tiles": 132,
+      "nativeFeatureCount": 196,
+      "maxTileBytes": 15603,
+      "rootTileBytes": 13986
+    },
+    {
+      "year": 814,
+      "count": 196,
+      "url": "data/years/814.pmtiles",
+      "bytes": 189202,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 132,
+      "nativeFeatureCount": 196,
+      "maxTileBytes": 15817,
+      "rootTileBytes": 14163
+    },
+    {
+      "year": 825,
+      "count": 208,
+      "url": "data/years/825.pmtiles",
+      "bytes": 195475,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 135,
+      "nativeFeatureCount": 208,
+      "maxTileBytes": 16412,
+      "rootTileBytes": 14733
+    },
+    {
+      "year": 830,
+      "count": 205,
+      "url": "data/years/830.pmtiles",
+      "bytes": 193124,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 135,
+      "nativeFeatureCount": 205,
+      "maxTileBytes": 16161,
+      "rootTileBytes": 14500
+    },
+    {
+      "year": 840,
+      "count": 211,
+      "url": "data/years/840.pmtiles",
+      "bytes": 196541,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 136,
+      "nativeFeatureCount": 211,
+      "maxTileBytes": 16285,
+      "rootTileBytes": 14732
+    },
+    {
+      "year": 850,
+      "count": 227,
+      "url": "data/years/850.pmtiles",
+      "bytes": 201876,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 137,
+      "nativeFeatureCount": 227,
+      "maxTileBytes": 16918,
+      "rootTileBytes": 15493
+    },
+    {
+      "year": 860,
+      "count": 229,
+      "url": "data/years/860.pmtiles",
+      "bytes": 207201,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 138,
+      "nativeFeatureCount": 229,
+      "maxTileBytes": 17295,
+      "rootTileBytes": 15922
+    },
+    {
+      "year": 866,
+      "count": 243,
+      "url": "data/years/866.pmtiles",
+      "bytes": 216351,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 138,
+      "nativeFeatureCount": 243,
+      "maxTileBytes": 18253,
+      "rootTileBytes": 16801
+    },
+    {
+      "year": 870,
+      "count": 239,
+      "url": "data/years/870.pmtiles",
+      "bytes": 215399,
+      "bounds": [
+        -97.40074,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 141,
+      "nativeFeatureCount": 239,
+      "maxTileBytes": 18053,
+      "rootTileBytes": 16675
+    },
+    {
+      "year": 875,
+      "count": 246,
+      "url": "data/years/875.pmtiles",
+      "bytes": 217844,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 142,
+      "nativeFeatureCount": 246,
+      "maxTileBytes": 18168,
+      "rootTileBytes": 16866
+    },
+    {
+      "year": 876,
+      "count": 247,
+      "url": "data/years/876.pmtiles",
+      "bytes": 221338,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 142,
+      "nativeFeatureCount": 247,
+      "maxTileBytes": 18525,
+      "rootTileBytes": 17142
+    },
+    {
+      "year": 878,
+      "count": 250,
+      "url": "data/years/878.pmtiles",
+      "bytes": 221085,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 142,
+      "nativeFeatureCount": 250,
+      "maxTileBytes": 18559,
+      "rootTileBytes": 17249
+    },
+    {
+      "year": 880,
+      "count": 250,
+      "url": "data/years/880.pmtiles",
+      "bytes": 224468,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 142,
+      "nativeFeatureCount": 250,
+      "maxTileBytes": 18963,
+      "rootTileBytes": 17545
+    },
+    {
+      "year": 882,
+      "count": 245,
+      "url": "data/years/882.pmtiles",
+      "bytes": 221602,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 142,
+      "nativeFeatureCount": 245,
+      "maxTileBytes": 18524,
+      "rootTileBytes": 17266
+    },
+    {
+      "year": 884,
+      "count": 240,
+      "url": "data/years/884.pmtiles",
+      "bytes": 216617,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 142,
+      "nativeFeatureCount": 240,
+      "maxTileBytes": 17923,
+      "rootTileBytes": 16852
+    },
+    {
+      "year": 886,
+      "count": 242,
+      "url": "data/years/886.pmtiles",
+      "bytes": 220621,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 142,
+      "nativeFeatureCount": 242,
+      "maxTileBytes": 18295,
+      "rootTileBytes": 17070
+    },
+    {
+      "year": 887,
+      "count": 243,
+      "url": "data/years/887.pmtiles",
+      "bytes": 222837,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 142,
+      "nativeFeatureCount": 243,
+      "maxTileBytes": 18671,
+      "rootTileBytes": 17317
+    },
+    {
+      "year": 888,
+      "count": 246,
+      "url": "data/years/888.pmtiles",
+      "bytes": 225757,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 142,
+      "nativeFeatureCount": 246,
+      "maxTileBytes": 18968,
+      "rootTileBytes": 17549
+    },
+    {
+      "year": 892,
+      "count": 257,
+      "url": "data/years/892.pmtiles",
+      "bytes": 223865,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 142,
+      "nativeFeatureCount": 257,
+      "maxTileBytes": 18779,
+      "rootTileBytes": 17662
+    },
+    {
+      "year": 896,
+      "count": 250,
+      "url": "data/years/896.pmtiles",
+      "bytes": 219369,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 142,
+      "nativeFeatureCount": 250,
+      "maxTileBytes": 18360,
+      "rootTileBytes": 17341
+    },
+    {
+      "year": 898,
+      "count": 255,
+      "url": "data/years/898.pmtiles",
+      "bytes": 222481,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 142,
+      "nativeFeatureCount": 255,
+      "maxTileBytes": 18737,
+      "rootTileBytes": 17602
+    },
+    {
+      "year": 899,
+      "count": 256,
+      "url": "data/years/899.pmtiles",
+      "bytes": 222055,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 141,
+      "nativeFeatureCount": 256,
+      "maxTileBytes": 18870,
+      "rootTileBytes": 17670
+    },
+    {
+      "year": 900,
+      "count": 252,
+      "url": "data/years/900.pmtiles",
+      "bytes": 220679,
+      "bounds": [
+        -99.4564,
+        -8.43436,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 141,
+      "nativeFeatureCount": 252,
+      "maxTileBytes": 18680,
+      "rootTileBytes": 17449
+    },
+    {
+      "year": 911,
+      "count": 264,
+      "url": "data/years/911.pmtiles",
+      "bytes": 232452,
+      "bounds": [
+        -99.4564,
+        -8.53325,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 147,
+      "nativeFeatureCount": 264,
+      "maxTileBytes": 19537,
+      "rootTileBytes": 18124
+    },
+    {
+      "year": 922,
+      "count": 261,
+      "url": "data/years/922.pmtiles",
+      "bytes": 230871,
+      "bounds": [
+        -99.4564,
+        -8.85480000000001,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 147,
+      "nativeFeatureCount": 261,
+      "maxTileBytes": 19452,
+      "rootTileBytes": 18073
+    },
+    {
+      "year": 926,
+      "count": 256,
+      "url": "data/years/926.pmtiles",
+      "bytes": 227034,
+      "bounds": [
+        -99.4564,
+        -8.85480000000001,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 147,
+      "nativeFeatureCount": 256,
+      "maxTileBytes": 18940,
+      "rootTileBytes": 17656
+    },
+    {
+      "year": 936,
+      "count": 256,
+      "url": "data/years/936.pmtiles",
+      "bytes": 232237,
+      "bounds": [
+        -99.4564,
+        -8.85480000000001,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 152,
+      "nativeFeatureCount": 256,
+      "maxTileBytes": 19555,
+      "rootTileBytes": 18064
+    },
+    {
+      "year": 947,
+      "count": 255,
+      "url": "data/years/947.pmtiles",
+      "bytes": 235513,
+      "bounds": [
+        -99.4564,
+        -8.85480000000001,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 153,
+      "nativeFeatureCount": 255,
+      "maxTileBytes": 19639,
+      "rootTileBytes": 18100
+    },
+    {
+      "year": 960,
+      "count": 254,
+      "url": "data/years/960.pmtiles",
+      "bytes": 235371,
+      "bounds": [
+        -99.4564,
+        -8.85480000000001,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 152,
+      "nativeFeatureCount": 254,
+      "maxTileBytes": 19645,
+      "rootTileBytes": 18098
+    },
+    {
+      "year": 961,
+      "count": 255,
+      "url": "data/years/961.pmtiles",
+      "bytes": 235343,
+      "bounds": [
+        -99.4564,
+        -8.85480000000001,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 152,
+      "nativeFeatureCount": 255,
+      "maxTileBytes": 19644,
+      "rootTileBytes": 18152
+    },
+    {
+      "year": 962,
+      "count": 257,
+      "url": "data/years/962.pmtiles",
+      "bytes": 233265,
+      "bounds": [
+        -99.4564,
+        -8.85480000000001,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 152,
+      "nativeFeatureCount": 257,
+      "maxTileBytes": 19631,
+      "rootTileBytes": 18210
+    },
+    {
+      "year": 970,
+      "count": 256,
+      "url": "data/years/970.pmtiles",
+      "bytes": 236380,
+      "bounds": [
+        -99.4564,
+        -8.85480000000001,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 152,
+      "nativeFeatureCount": 256,
+      "maxTileBytes": 19642,
+      "rootTileBytes": 18132
+    },
+    {
+      "year": 980,
+      "count": 245,
+      "url": "data/years/980.pmtiles",
+      "bytes": 224073,
+      "bounds": [
+        -99.4564,
+        -8.85480000000001,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 152,
+      "nativeFeatureCount": 245,
+      "maxTileBytes": 18508,
+      "rootTileBytes": 17401
+    },
+    {
+      "year": 990,
+      "count": 258,
+      "url": "data/years/990.pmtiles",
+      "bytes": 235848,
+      "bounds": [
+        -99.4564,
+        -8.85480000000001,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 152,
+      "nativeFeatureCount": 258,
+      "maxTileBytes": 19772,
+      "rootTileBytes": 18267
+    },
+    {
+      "year": 1000,
+      "count": 264,
+      "url": "data/years/1000.pmtiles",
+      "bytes": 239223,
+      "bounds": [
+        -99.4564,
+        -8.85480000000001,
+        141.51934,
+        69.88585
+      ],
+      "tiles": 156,
+      "nativeFeatureCount": 264,
+      "maxTileBytes": 19808,
+      "rootTileBytes": 18453
+    },
+    {
+      "year": 1003,
+      "count": 278,
+      "url": "data/years/1003.pmtiles",
+      "bytes": 246083,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        141.53736,
+        69.88584
+      ],
+      "tiles": 157,
+      "nativeFeatureCount": 278,
+      "maxTileBytes": 20237,
+      "rootTileBytes": 18876
+    },
+    {
+      "year": 1010,
+      "count": 283,
+      "url": "data/years/1010.pmtiles",
+      "bytes": 250990,
+      "bounds": [
+        -99.45639,
+        -8.53326000000001,
+        141.53736,
+        69.88584
+      ],
+      "tiles": 155,
+      "nativeFeatureCount": 283,
+      "maxTileBytes": 20791,
+      "rootTileBytes": 19215
+    },
+    {
+      "year": 1015,
+      "count": 294,
+      "url": "data/years/1015.pmtiles",
+      "bytes": 255886,
+      "bounds": [
+        -99.45639,
+        -8.53326000000001,
+        141.53736,
+        69.88584
+      ],
+      "tiles": 155,
+      "nativeFeatureCount": 294,
+      "maxTileBytes": 20907,
+      "rootTileBytes": 19622
+    },
+    {
+      "year": 1018,
+      "count": 289,
+      "url": "data/years/1018.pmtiles",
+      "bytes": 252387,
+      "bounds": [
+        -99.45639,
+        -8.53326000000001,
+        141.53736,
+        69.88584
+      ],
+      "tiles": 155,
+      "nativeFeatureCount": 289,
+      "maxTileBytes": 20533,
+      "rootTileBytes": 19430
+    },
+    {
+      "year": 1028,
+      "count": 294,
+      "url": "data/years/1028.pmtiles",
+      "bytes": 252394,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        141.53736,
+        69.88584
+      ],
+      "tiles": 157,
+      "nativeFeatureCount": 294,
+      "maxTileBytes": 20257,
+      "rootTileBytes": 19402
+    },
+    {
+      "year": 1034,
+      "count": 287,
+      "url": "data/years/1034.pmtiles",
+      "bytes": 250523,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        141.53736,
+        69.88584
+      ],
+      "tiles": 157,
+      "nativeFeatureCount": 287,
+      "maxTileBytes": 19979,
+      "rootTileBytes": 19203
+    },
+    {
+      "year": 1040,
+      "count": 292,
+      "url": "data/years/1040.pmtiles",
+      "bytes": 254857,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        141.53736,
+        69.88584
+      ],
+      "tiles": 158,
+      "nativeFeatureCount": 292,
+      "maxTileBytes": 20306,
+      "rootTileBytes": 19529
+    },
+    {
+      "year": 1046,
+      "count": 296,
+      "url": "data/years/1046.pmtiles",
+      "bytes": 255701,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        141.53736,
+        69.88584
+      ],
+      "tiles": 158,
+      "nativeFeatureCount": 296,
+      "maxTileBytes": 20264,
+      "rootTileBytes": 19580
+    },
+    {
+      "year": 1056,
+      "count": 300,
+      "url": "data/years/1056.pmtiles",
+      "bytes": 268987,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        141.53736,
+        69.88584
+      ],
+      "tiles": 161,
+      "nativeFeatureCount": 300,
+      "maxTileBytes": 22011,
+      "rootTileBytes": 20375
+    },
+    {
+      "year": 1066,
+      "count": 296,
+      "url": "data/years/1066.pmtiles",
+      "bytes": 269732,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        141.53736,
+        69.88584
+      ],
+      "tiles": 161,
+      "nativeFeatureCount": 296,
+      "maxTileBytes": 22012,
+      "rootTileBytes": 20239
+    },
+    {
+      "year": 1072,
+      "count": 281,
+      "url": "data/years/1072.pmtiles",
+      "bytes": 266782,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        141.53736,
+        69.88584
+      ],
+      "tiles": 164,
+      "nativeFeatureCount": 281,
+      "maxTileBytes": 22032,
+      "rootTileBytes": 19850
+    },
+    {
+      "year": 1085,
+      "count": 278,
+      "url": "data/years/1085.pmtiles",
+      "bytes": 260189,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        141.53736,
+        69.88584
+      ],
+      "tiles": 164,
+      "nativeFeatureCount": 278,
+      "maxTileBytes": 21570,
+      "rootTileBytes": 19641
+    },
+    {
+      "year": 1094,
+      "count": 275,
+      "url": "data/years/1094.pmtiles",
+      "bytes": 262462,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 164,
+      "nativeFeatureCount": 275,
+      "maxTileBytes": 22053,
+      "rootTileBytes": 19610
+    },
+    {
+      "year": 1099,
+      "count": 277,
+      "url": "data/years/1099.pmtiles",
+      "bytes": 262814,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 164,
+      "nativeFeatureCount": 277,
+      "maxTileBytes": 21959,
+      "rootTileBytes": 19711
+    },
+    {
+      "year": 1111,
+      "count": 277,
+      "url": "data/years/1111.pmtiles",
+      "bytes": 261945,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 164,
+      "nativeFeatureCount": 277,
+      "maxTileBytes": 21954,
+      "rootTileBytes": 19787
+    },
+    {
+      "year": 1126,
+      "count": 276,
+      "url": "data/years/1126.pmtiles",
+      "bytes": 266570,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 166,
+      "nativeFeatureCount": 276,
+      "maxTileBytes": 22205,
+      "rootTileBytes": 19830
+    },
+    {
+      "year": 1139,
+      "count": 277,
+      "url": "data/years/1139.pmtiles",
+      "bytes": 267498,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 166,
+      "nativeFeatureCount": 277,
+      "maxTileBytes": 22553,
+      "rootTileBytes": 19996
+    },
+    {
+      "year": 1147,
+      "count": 285,
+      "url": "data/years/1147.pmtiles",
+      "bytes": 272164,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 166,
+      "nativeFeatureCount": 285,
+      "maxTileBytes": 22373,
+      "rootTileBytes": 20267
+    },
+    {
+      "year": 1152,
+      "count": 275,
+      "url": "data/years/1152.pmtiles",
+      "bytes": 267178,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 166,
+      "nativeFeatureCount": 275,
+      "maxTileBytes": 22254,
+      "rootTileBytes": 19873
+    },
+    {
+      "year": 1169,
+      "count": 273,
+      "url": "data/years/1169.pmtiles",
+      "bytes": 265062,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 167,
+      "nativeFeatureCount": 273,
+      "maxTileBytes": 21963,
+      "rootTileBytes": 19705
+    },
+    {
+      "year": 1177,
+      "count": 268,
+      "url": "data/years/1177.pmtiles",
+      "bytes": 263097,
+      "bounds": [
+        -99.45639,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 167,
+      "nativeFeatureCount": 268,
+      "maxTileBytes": 21859,
+      "rootTileBytes": 19523
+    },
+    {
+      "year": 1188,
+      "count": 275,
+      "url": "data/years/1188.pmtiles",
+      "bytes": 265951,
+      "bounds": [
+        -97.40074,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 167,
+      "nativeFeatureCount": 275,
+      "maxTileBytes": 22267,
+      "rootTileBytes": 19788
+    },
+    {
+      "year": 1192,
+      "count": 273,
+      "url": "data/years/1192.pmtiles",
+      "bytes": 265876,
+      "bounds": [
+        -97.40074,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 167,
+      "nativeFeatureCount": 273,
+      "maxTileBytes": 22125,
+      "rootTileBytes": 19705
+    },
+    {
+      "year": 1202,
+      "count": 278,
+      "url": "data/years/1202.pmtiles",
+      "bytes": 270547,
+      "bounds": [
+        -99.30402,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 167,
+      "nativeFeatureCount": 278,
+      "maxTileBytes": 22418,
+      "rootTileBytes": 19979
+    },
+    {
+      "year": 1206,
+      "count": 298,
+      "url": "data/years/1206.pmtiles",
+      "bytes": 288687,
+      "bounds": [
+        -99.30402,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 169,
+      "nativeFeatureCount": 298,
+      "maxTileBytes": 23812,
+      "rootTileBytes": 20891
+    },
+    {
+      "year": 1210,
+      "count": 302,
+      "url": "data/years/1210.pmtiles",
+      "bytes": 290859,
+      "bounds": [
+        -99.30402,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 171,
+      "nativeFeatureCount": 302,
+      "maxTileBytes": 24036,
+      "rootTileBytes": 21005
+    },
+    {
+      "year": 1216,
+      "count": 302,
+      "url": "data/years/1216.pmtiles",
+      "bytes": 272691,
+      "bounds": [
+        -99.30195,
+        -8.83722000000001,
+        142.05652,
+        69.88167
+      ],
+      "tiles": 170,
+      "nativeFeatureCount": 302,
+      "maxTileBytes": 22844,
+      "rootTileBytes": 20184
+    },
+    {
+      "year": 1220,
+      "count": 295,
+      "url": "data/years/1220.pmtiles",
+      "bytes": 287404,
+      "bounds": [
+        -99.30402,
+        -8.85479,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 172,
+      "nativeFeatureCount": 295,
+      "maxTileBytes": 23647,
+      "rootTileBytes": 20652
+    },
+    {
+      "year": 1227,
+      "count": 292,
+      "url": "data/years/1227.pmtiles",
+      "bytes": 280138,
+      "bounds": [
+        -99.30402,
+        -8.85479,
+        142.05066,
+        69.88584
+      ],
+      "tiles": 178,
+      "nativeFeatureCount": 292,
+      "maxTileBytes": 23176,
+      "rootTileBytes": 20414
+    },
+    {
+      "year": 1236,
+      "count": 298,
+      "url": "data/years/1236.pmtiles",
+      "bytes": 281218,
+      "bounds": [
+        -99.30402,
+        -8.77743,
+        142.05066,
+        69.88584
+      ],
+      "tiles": 181,
+      "nativeFeatureCount": 298,
+      "maxTileBytes": 23410,
+      "rootTileBytes": 20430
+    },
+    {
+      "year": 1241,
+      "count": 290,
+      "url": "data/years/1241.pmtiles",
+      "bytes": 268879,
+      "bounds": [
+        -99.30402,
+        -8.77743,
+        142.05066,
+        69.88584
+      ],
+      "tiles": 180,
+      "nativeFeatureCount": 290,
+      "maxTileBytes": 22104,
+      "rootTileBytes": 19642
+    },
+    {
+      "year": 1250,
+      "count": 280,
+      "url": "data/years/1250.pmtiles",
+      "bytes": 267791,
+      "bounds": [
+        -99.30402,
+        -8.78270000000002,
+        142.06539,
+        69.88584
+      ],
+      "tiles": 181,
+      "nativeFeatureCount": 280,
+      "maxTileBytes": 21727,
+      "rootTileBytes": 19169
+    },
+    {
+      "year": 1260,
+      "count": 316,
+      "url": "data/years/1260.pmtiles",
+      "bytes": 262939,
+      "bounds": [
+        -99.30402,
+        -8.77992,
+        142.05653,
+        69.88098
+      ],
+      "tiles": 181,
+      "nativeFeatureCount": 316,
+      "maxTileBytes": 22677,
+      "rootTileBytes": 19877
+    },
+    {
+      "year": 1272,
+      "count": 307,
+      "url": "data/years/1272.pmtiles",
+      "bytes": 270969,
+      "bounds": [
+        -99.30402,
+        -8.77743,
+        142.05066,
+        69.88584
+      ],
+      "tiles": 181,
+      "nativeFeatureCount": 307,
+      "maxTileBytes": 23243,
+      "rootTileBytes": 20019
+    },
+    {
+      "year": 1279,
+      "count": 311,
+      "url": "data/years/1279.pmtiles",
+      "bytes": 266650,
+      "bounds": [
+        -99.30402,
+        -8.77742,
+        142.04967,
+        69.88584
+      ],
+      "tiles": 181,
+      "nativeFeatureCount": 311,
+      "maxTileBytes": 23480,
+      "rootTileBytes": 20226
+    },
+    {
+      "year": 1285,
+      "count": 320,
+      "url": "data/years/1285.pmtiles",
+      "bytes": 274246,
+      "bounds": [
+        -99.30402,
+        -8.85480000000001,
+        142.04967,
+        69.88584
+      ],
+      "tiles": 182,
+      "nativeFeatureCount": 320,
+      "maxTileBytes": 24301,
+      "rootTileBytes": 20791
+    },
+    {
+      "year": 1294,
+      "count": 339,
+      "url": "data/years/1294.pmtiles",
+      "bytes": 297762,
+      "bounds": [
+        -99.30402,
+        -14.07409,
+        142.06537,
+        69.88584
+      ],
+      "tiles": 182,
+      "nativeFeatureCount": 339,
+      "maxTileBytes": 26592,
+      "rootTileBytes": 22679
+    },
+    {
+      "year": 1305,
+      "count": 348,
+      "url": "data/years/1305.pmtiles",
+      "bytes": 298841,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.04967,
+        69.88584
+      ],
+      "tiles": 183,
+      "nativeFeatureCount": 348,
+      "maxTileBytes": 26876,
+      "rootTileBytes": 22971
+    },
+    {
+      "year": 1314,
+      "count": 368,
+      "url": "data/years/1314.pmtiles",
+      "bytes": 312572,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.04967,
+        71.15999
+      ],
+      "tiles": 195,
+      "nativeFeatureCount": 368,
+      "maxTileBytes": 28081,
+      "rootTileBytes": 24034
+    },
+    {
+      "year": 1326,
+      "count": 368,
+      "url": "data/years/1326.pmtiles",
+      "bytes": 313840,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.04967,
+        71.15999
+      ],
+      "tiles": 195,
+      "nativeFeatureCount": 368,
+      "maxTileBytes": 28002,
+      "rootTileBytes": 23994
+    },
+    {
+      "year": 1333,
+      "count": 379,
+      "url": "data/years/1333.pmtiles",
+      "bytes": 318559,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.04967,
+        71.15999
+      ],
+      "tiles": 195,
+      "nativeFeatureCount": 379,
+      "maxTileBytes": 28545,
+      "rootTileBytes": 24531
+    },
+    {
+      "year": 1344,
+      "count": 380,
+      "url": "data/years/1344.pmtiles",
+      "bytes": 324308,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.04967,
+        71.15999
+      ],
+      "tiles": 195,
+      "nativeFeatureCount": 380,
+      "maxTileBytes": 29139,
+      "rootTileBytes": 24972
+    },
+    {
+      "year": 1352,
+      "count": 382,
+      "url": "data/years/1352.pmtiles",
+      "bytes": 325205,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.04967,
+        71.15999
+      ],
+      "tiles": 196,
+      "nativeFeatureCount": 382,
+      "maxTileBytes": 28962,
+      "rootTileBytes": 24991
+    },
+    {
+      "year": 1363,
+      "count": 417,
+      "url": "data/years/1363.pmtiles",
+      "bytes": 356241,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.06537,
+        71.15999
+      ],
+      "tiles": 197,
+      "nativeFeatureCount": 417,
+      "maxTileBytes": 31289,
+      "rootTileBytes": 27629
+    },
+    {
+      "year": 1375,
+      "count": 422,
+      "url": "data/years/1375.pmtiles",
+      "bytes": 353773,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.06537,
+        71.15999
+      ],
+      "tiles": 189,
+      "nativeFeatureCount": 422,
+      "maxTileBytes": 31120,
+      "rootTileBytes": 27528
+    },
+    {
+      "year": 1385,
+      "count": 432,
+      "url": "data/years/1385.pmtiles",
+      "bytes": 356667,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.06537,
+        71.15999
+      ],
+      "tiles": 189,
+      "nativeFeatureCount": 432,
+      "maxTileBytes": 31446,
+      "rootTileBytes": 27747
+    },
+    {
+      "year": 1395,
+      "count": 421,
+      "url": "data/years/1395.pmtiles",
+      "bytes": 349802,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.06537,
+        71.15999
+      ],
+      "tiles": 189,
+      "nativeFeatureCount": 421,
+      "maxTileBytes": 30705,
+      "rootTileBytes": 27083
+    },
+    {
+      "year": 1402,
+      "count": 425,
+      "url": "data/years/1402.pmtiles",
+      "bytes": 340464,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.06537,
+        71.15999
+      ],
+      "tiles": 186,
+      "nativeFeatureCount": 425,
+      "maxTileBytes": 30214,
+      "rootTileBytes": 26723
+    },
+    {
+      "year": 1407,
+      "count": 407,
+      "url": "data/years/1407.pmtiles",
+      "bytes": 334249,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.06537,
+        71.15999
+      ],
+      "tiles": 185,
+      "nativeFeatureCount": 407,
+      "maxTileBytes": 30135,
+      "rootTileBytes": 26116
+    },
+    {
+      "year": 1415,
+      "count": 403,
+      "url": "data/years/1415.pmtiles",
+      "bytes": 338077,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.06537,
+        71.15999
+      ],
+      "tiles": 187,
+      "nativeFeatureCount": 403,
+      "maxTileBytes": 30137,
+      "rootTileBytes": 25938
+    },
+    {
+      "year": 1422,
+      "count": 385,
+      "url": "data/years/1422.pmtiles",
+      "bytes": 328991,
+      "bounds": [
+        -101.31024,
+        -14.07409,
+        142.06537,
+        71.15557
+      ],
+      "tiles": 188,
+      "nativeFeatureCount": 385,
+      "maxTileBytes": 28882,
+      "rootTileBytes": 24944
+    },
+    {
+      "year": 1429,
+      "count": 389,
+      "url": "data/years/1429.pmtiles",
+      "bytes": 344047,
+      "bounds": [
+        -101.32391,
+        -14.07409,
+        142.06537,
+        72.96463
+      ],
+      "tiles": 200,
+      "nativeFeatureCount": 389,
+      "maxTileBytes": 30176,
+      "rootTileBytes": 25970
+    },
+    {
+      "year": 1431,
+      "count": 393,
+      "url": "data/years/1431.pmtiles",
+      "bytes": 345497,
+      "bounds": [
+        -101.32391,
+        -14.07409,
+        142.06537,
+        72.96463
+      ],
+      "tiles": 196,
+      "nativeFeatureCount": 393,
+      "maxTileBytes": 30501,
+      "rootTileBytes": 26169
+    },
+    {
+      "year": 1440,
+      "count": 397,
+      "url": "data/years/1440.pmtiles",
+      "bytes": 349740,
+      "bounds": [
+        -103.3339,
+        -14.20856,
+        142.06537,
+        72.96463
+      ],
+      "tiles": 201,
+      "nativeFeatureCount": 397,
+      "maxTileBytes": 30665,
+      "rootTileBytes": 26358
+    },
+    {
+      "year": 1450,
+      "count": 404,
+      "url": "data/years/1450.pmtiles",
+      "bytes": 361734,
+      "bounds": [
+        -103.3339,
+        -16.33257,
+        142.06539,
+        72.96463
+      ],
+      "tiles": 204,
+      "nativeFeatureCount": 404,
+      "maxTileBytes": 30434,
+      "rootTileBytes": 26461
+    },
+    {
+      "year": 1453,
+      "count": 401,
+      "url": "data/years/1453.pmtiles",
+      "bytes": 366289,
+      "bounds": [
+        -103.3339,
+        -16.33256,
+        142.06537,
+        72.96463
+      ],
+      "tiles": 204,
+      "nativeFeatureCount": 401,
+      "maxTileBytes": 30806,
+      "rootTileBytes": 26780
+    },
+    {
+      "year": 1459,
+      "count": 397,
+      "url": "data/years/1459.pmtiles",
+      "bytes": 362401,
+      "bounds": [
+        -103.3339,
+        -16.33256,
+        142.06537,
+        72.96463
+      ],
+      "tiles": 204,
+      "nativeFeatureCount": 397,
+      "maxTileBytes": 30736,
+      "rootTileBytes": 26632
+    },
+    {
+      "year": 1463,
+      "count": 387,
+      "url": "data/years/1463.pmtiles",
+      "bytes": 358787,
+      "bounds": [
+        -103.3339,
+        -16.33256,
+        142.06537,
+        72.96463
+      ],
+      "tiles": 206,
+      "nativeFeatureCount": 387,
+      "maxTileBytes": 30068,
+      "rootTileBytes": 26081
+    },
+    {
+      "year": 1468,
+      "count": 387,
+      "url": "data/years/1468.pmtiles",
+      "bytes": 361069,
+      "bounds": [
+        -104.25261,
+        -16.33256,
+        142.06537,
+        72.96463
+      ],
+      "tiles": 206,
+      "nativeFeatureCount": 387,
+      "maxTileBytes": 30254,
+      "rootTileBytes": 26404
+    },
+    {
+      "year": 1475,
+      "count": 402,
+      "url": "data/years/1475.pmtiles",
+      "bytes": 367218,
+      "bounds": [
+        -104.25261,
+        -16.33256,
+        142.06537,
+        72.96463
+      ],
+      "tiles": 208,
+      "nativeFeatureCount": 402,
+      "maxTileBytes": 30612,
+      "rootTileBytes": 26904
+    },
+    {
+      "year": 1482,
+      "count": 400,
+      "url": "data/years/1482.pmtiles",
+      "bytes": 365274,
+      "bounds": [
+        -104.25261,
+        -16.33256,
+        142.06537,
+        72.96463
+      ],
+      "tiles": 209,
+      "nativeFeatureCount": 400,
+      "maxTileBytes": 30485,
+      "rootTileBytes": 26711
+    },
+    {
+      "year": 1487,
+      "count": 399,
+      "url": "data/years/1487.pmtiles",
+      "bytes": 363858,
+      "bounds": [
+        -104.25261,
+        -16.33256,
+        142.06537,
+        72.96463
+      ],
+      "tiles": 209,
+      "nativeFeatureCount": 399,
+      "maxTileBytes": 30420,
+      "rootTileBytes": 26591
+    },
+    {
+      "year": 1492,
+      "count": 406,
+      "url": "data/years/1492.pmtiles",
+      "bytes": 366764,
+      "bounds": [
+        -104.25261,
+        -16.33256,
+        142.06537,
+        72.96463
+      ],
+      "tiles": 209,
+      "nativeFeatureCount": 406,
+      "maxTileBytes": 30682,
+      "rootTileBytes": 26910
+    },
+    {
+      "year": 1497,
+      "count": 420,
+      "url": "data/years/1497.pmtiles",
+      "bytes": 376628,
+      "bounds": [
+        -104.25261,
+        -35.70032,
+        142.04967,
+        72.96463
+      ],
+      "tiles": 222,
+      "nativeFeatureCount": 420,
+      "maxTileBytes": 31320,
+      "rootTileBytes": 27721
+    }
+  ],
+  "totalArchiveBytes": 50971172,
+  "builtPanelCount": 333,
+  "complete": true
+}
