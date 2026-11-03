@@ -1,0 +1,2 @@
+// Public browser basemap key supplied by the project owner.
+export const basemapKey = "AAPTaa5_Hm51nV7_hX6cswjLcYQ..61ABx9CRRHqOQCbt1VripH06A059o5R1veT3aeCxc4b7CKD1JWEUbOjzw0T87TLo_hrDYz1H4ysfC13JG67RHoHYwc88huKcdbpFOyc2vOZC6iWDG5dUKcofJjBbLkYXGtQKd3YeS07hmT-H5MDVX3iJWLCBneIRVQjMBSKSd0fhLPjAp352O4xfJvDtTlmC9rCC76KuffvHvtdBoXfUgxWyBehbFkL5gtR2TW5_hrP9IR5-B5jk2xN99WM.AT1_SWU5iT6N";
