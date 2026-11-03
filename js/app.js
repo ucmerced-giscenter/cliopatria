@@ -1,6 +1,6 @@
 import { config } from './config.js';
 import { DataService, exportFile } from './lib/api.js';
-import { FORMATS, formatYear, featureName, colorHex, yearWhere, nameWhere, andWhere, idsWhere, idFilters, envelopes, mercatorEnvelope, readUrl, wikipediaUrl } from './lib/core.js';
+import { FORMATS, formatYear, featureName, featureDetails, colorHex, yearWhere, nameWhere, andWhere, idsWhere, idFilters, envelopes, mercatorEnvelope, readUrl, wikipediaUrl } from './lib/core.js';
 import { HistoryMap } from './lib/map.js';
 
 const $ = id => document.getElementById(id);
@@ -144,7 +144,7 @@ async function selectFeature(candidate, point, zoomToFeature = false) {
     $('selection-empty').hidden = true; $('feature-detail').hidden = false;
     $('feature-name').textContent = featureName(feature);
     const fields = $('feature-fields'); fields.replaceChildren();
-    for (const [label, value] of [['Year', formatYear(feature.Year)], ['Area (km²)', Number.isFinite(feature.AreaSqKM) ? feature.AreaSqKM.toLocaleString(undefined, { maximumFractionDigits: 1 }) : 'Not supplied'], ['Type', feature.Type || 'Not supplied']]) {
+    for (const [label, value] of featureDetails(feature)) {
       const term = document.createElement('dt'), definition = document.createElement('dd'); term.textContent = label; definition.textContent = value; fields.append(term, definition);
     }
     const wiki = wikipediaUrl(feature.Wikipedia); $('wikipedia-link').hidden = !wiki;

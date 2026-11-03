@@ -1,6 +1,6 @@
 import { config } from '../config.js';
 import { basemapKey } from '../basemap-key.js';
-import { featureName, formatYear } from './core.js';
+import { featureName, featureDetails, wikipediaUrl } from './core.js';
 
 const layerIds = ['polities-fill', 'polities-outline', 'search-outline', 'selection-halo', 'selection-outline', 'polities-labels'];
 const attribution = 'Aligned boundaries: Erin Mutch, UC Merced GIS Center · Source: Cliopatria; original maps by Tollefson';
@@ -95,11 +95,28 @@ export class HistoryMap {
   showPopup(properties, lngLat) {
     this.popup?.remove();
     if (!lngLat) return;
-    const content = document.createElement('div');
-    const title = document.createElement('strong'); title.textContent = featureName(properties);
-    const detail = document.createElement('p'); detail.textContent = formatYear(properties.Year);
-    content.append(title, detail);
-    this.popup = new maplibregl.Popup({ focusAfterOpen: false, maxWidth: '250px' }).setLngLat(lngLat).setDOMContent(content).addTo(this.map);
+    const content = document.createElement('div'); content.className = 'feature-popup';
+    const title = document.createElement('h3'); title.textContent = featureName(properties);
+    const details = document.createElement('dl');
+    for (const [label, value] of featureDetails(properties)) {
+      const term = document.createElement('dt'), definition = document.createElement('dd');
+      term.textContent = label; definition.textContent = value; details.append(term, definition);
+    }
+    content.append(title, details);
+    const wiki = wikipediaUrl(properties.Wikipedia);
+    if (wiki) {
+      const link = document.createElement('a'); link.href = wiki;
+      link.target = '_blank'; link.rel = 'noopener noreferrer';
+      link.textContent = 'Read on Wikipedia ↗';
+      link.setAttribute('aria-label', `Read about ${featureName(properties)} on Wikipedia (opens in a new tab)`);
+      content.append(link);
+    }
+    if (!properties.Name?.trim()) {
+      const note = document.createElement('p'); note.className = 'small';
+      note.textContent = 'Some region polygons intentionally have no name in the source dataset.';
+      content.append(note);
+    }
+    this.popup = new maplibregl.Popup({ focusAfterOpen: false, maxWidth: 'min(300px, calc(100vw - 32px))' }).setLngLat(lngLat).setDOMContent(content).addTo(this.map);
   }
   clearSelection() { this.selectedId = -1; this.popup?.remove(); this.updateHighlights(); }
   fit(extent) {

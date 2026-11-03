@@ -5,3 +5,9 @@
 .results{max-height:280px;overflow:auto;padding:3px}.document pre{overflow:auto;padding:14px;background:var(--pale)}
 #download-parts a{margin:10px 0}
 .document .citation{overflow-wrap:anywhere}
+.maplibregl-popup-content{padding:14px 44px 12px 16px}
+.maplibregl-popup-close-button{min-height:44px;min-width:44px}
+.feature-popup h3{margin:0 0 10px;font-size:1rem;overflow-wrap:anywhere}
+.feature-popup dl{margin:0;grid-template-columns:auto minmax(0,1fr);font-size:14px}
+.feature-popup a{display:inline-flex;align-items:center;min-height:44px;margin-top:4px}
+.feature-popup .small{margin:8px 0 0}
