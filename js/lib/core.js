@@ -3,6 +3,13 @@ export const FORMATS = { geojson: 'GeoJSON', csv: 'CSV', shapefile: 'Shapefile Z
 export const EMPTY = { type: 'FeatureCollection', features: [] };
 export function formatYear(year) { return `${Math.abs(year).toLocaleString('en-US')} ${year < 0 ? 'BCE' : 'CE'}`; }
 export function featureName(feature) { return feature.Name?.trim() || 'Unnamed region'; }
+export function featureDetails(feature) {
+  return [
+    ['Year', formatYear(feature.Year)],
+    ['Area (km²)', Number.isFinite(feature.AreaSqKM) ? feature.AreaSqKM.toLocaleString(undefined, { maximumFractionDigits: 1 }) : 'Not supplied'],
+    ['Type', feature.Type || 'Not supplied']
+  ];
+}
 export function colorHex(value) {
   const color = String(value ?? '').replace(/^0x/i, '#');
   return /^#[0-9a-f]{6}$/i.test(color) ? color : '#82939A';
