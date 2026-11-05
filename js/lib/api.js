@@ -1,5 +1,5 @@
 import { config } from '../config.js';
-import { FIELDS, FORMATS, envelopes, idsWhere } from './core.js';
+import { FIELDS, FORMATS, envelopes, idsWhere, andWhere } from './core.js';
 
 export async function jsonRequest(url, parameters = {}, signal, method = 'GET') {
   const body = new URLSearchParams({ f: 'json', ...parameters });
@@ -28,6 +28,11 @@ export class DataService {
     const result = await this.query({ where, outFields: FIELDS.join(','), returnGeometry: false, orderByFields: 'Name ASC,Year ASC,AreaSqKM DESC,OBJECTID ASC', resultOffset: offset, resultRecordCount: 25 }, signal);
     if (!Array.isArray(result.features)) throw new Error('Invalid search response.');
     return result.features.map(feature => feature.attributes);
+  }
+  async suggestNames(where, signal) {
+    const result = await this.query({ where: andWhere(where, "Name IS NOT NULL AND Name <> ''"), outFields: 'Name', returnGeometry: false, returnDistinctValues: true, orderByFields: 'Name ASC', resultRecordCount: 12 }, signal);
+    if (!Array.isArray(result.features)) throw new Error('Invalid name suggestions response.');
+    return [...new Set(result.features.map(feature => feature.attributes?.Name?.trim()).filter(Boolean))];
   }
   async feature(id, signal) {
     const result = await this.query({ where: idsWhere([id]), outFields: FIELDS.join(','), returnGeometry: false }, signal);

@@ -9,6 +9,7 @@ let manifest, years, year, engine, selected, querySpec, queryRows = [], queryTot
 let searchController, highlightController, selectionController, exportController;
 let searchRevision = 0, selectionRevision = 0, sliderTimer, playbackTimer, playing = false, mapError = false;
 let overlapCandidates = [], overlapPoint;
+let suggestionController, suggestionTimer, suggestionRevision = 0;
 
 function status(id, message, error = false) { $(id).textContent = message; $(id).dataset.error = String(error); }
 function updateUrl() {
@@ -61,6 +62,7 @@ function changeYear(value, { playback = false, search = true } = {}) {
   clearTimeout(sliderTimer);
   if (!playback) stopPlayback();
   year = value; mapError = false;
+  clearSuggestions();
   clearSelection(); renderYear(); engine?.setYear(year); updateUrl();
   if (querySpec && search) {
     if (!querySpec.allYears) runSearch(false);
@@ -89,6 +91,52 @@ async function updateHighlights() {
   } catch (error) { if (error.name !== 'AbortError') status('search-status', 'Results are available, but map highlighting could not be refreshed.', true); }
 }
 function searchPredicate(spec = querySpec) { return andWhere(nameWhere(spec.term), spec.allYears ? null : yearWhere(spec.year)); }
+function clearSuggestions() {
+  clearTimeout(suggestionTimer); suggestionController?.abort(); suggestionRevision++;
+  suggestionTimer = null; suggestionController = null;
+  $('suggestions-list').replaceChildren(); $('search-suggestions').hidden = true;
+  status('suggestions-status', '');
+}
+function scheduleSuggestions({ immediate = false } = {}) {
+  clearSuggestions();
+  const term = $('search-input').value.trim();
+  const allYears = $('search-years').value === 'all', requestedYear = year, revision = suggestionRevision;
+  suggestionTimer = setTimeout(() => loadSuggestions(term, allYears, requestedYear, revision), immediate ? 0 : 300);
+}
+function openSuggestions() {
+  stopPlayback();
+  if ($('search-suggestions').hidden && !suggestionTimer && !suggestionController) scheduleSuggestions({ immediate: true });
+}
+async function loadSuggestions(term, allYears, requestedYear, revision) {
+  if (revision !== suggestionRevision) return;
+  suggestionTimer = null;
+  const controller = suggestionController = new AbortController();
+  const timer = setTimeout(() => controller.abort(new DOMException('Suggestions timed out.', 'TimeoutError')), 10000);
+  const scopeLabel = allYears ? 'all years' : formatYear(requestedYear);
+  status('suggestions-status', 'Finding suggested names…');
+  try {
+    const names = await api.suggestNames(andWhere(nameWhere(term), allYears ? null : yearWhere(requestedYear)), controller.signal);
+    if (revision !== suggestionRevision) return;
+    const prefix = term.toLocaleUpperCase();
+    names.sort((a, b) => Number(b.toLocaleUpperCase().startsWith(prefix)) - Number(a.toLocaleUpperCase().startsWith(prefix)) || a.localeCompare(b));
+    const list = $('suggestions-list');
+    for (const name of names.slice(0, 6)) {
+      const item = document.createElement('li'), button = document.createElement('button');
+      button.type = 'button'; button.textContent = name;
+      button.addEventListener('click', () => {
+        $('search-input').value = name; $('search-input').focus(); stopPlayback(); runSearch();
+      });
+      item.append(button); list.append(item);
+    }
+    $('suggestions-label').textContent = `${term ? 'Suggested names' : 'Names A–Z'} · ${scopeLabel}`;
+    $('search-suggestions').hidden = !list.children.length;
+    status('suggestions-status', list.children.length
+      ? `${list.children.length} suggested name${list.children.length === 1 ? '' : 's'}. ${term ? 'Choose a name to search.' : 'Type to find more, or choose a name.'}`
+      : `No suggested names in ${scopeLabel}. ${allYears ? 'Try another spelling or press Search.' : 'Try All years or press Search.'}`);
+  } catch (error) {
+    if (revision === suggestionRevision) status('suggestions-status', 'Suggestions are unavailable. You can still press Search.');
+  } finally { clearTimeout(timer); if (revision === suggestionRevision) suggestionController = null; }
+}
 function renderResults() {
   const list = $('search-results'); list.replaceChildren();
   for (const feature of queryRows) {
@@ -106,6 +154,7 @@ function renderResults() {
   $('more-results').hidden = queryRows.length >= queryTotal;
 }
 async function runSearch(more = false) {
+  clearSuggestions();
   searchController?.abort();
   const revision = ++searchRevision;
   const controller = searchController = new AbortController();
@@ -164,10 +213,18 @@ function mapSelection(candidate, point, candidates) {
   selectFeature(candidate, point);
 }
 function updateExportControls() {
-  const timed = ['time', 'extent'].includes($('download-scope').value);
+  const scope = $('download-scope').value;
+  const timed = ['time', 'extent'].includes(scope);
   $('download-time').hidden = !timed;
   $('download-range').hidden = !timed || $('download-period').value !== 'range';
   for (const input of $('download-range').querySelectorAll('input')) input.disabled = $('download-range').hidden;
+  $('download-selection-label').textContent = selected ? 'Selected feature:' : 'No feature selected.';
+  $('download-selection-name').hidden = !selected;
+  $('download-selection-name').textContent = selected ? `${featureName(selected)} · ${formatYear(selected.Year)}` : '';
+  $('download-selection-help').textContent = !selected
+    ? 'Select a polygon or a search result to export one feature.'
+    : scope === 'selected' ? 'Only this feature will be exported.' : 'Use the button below to export only this feature.';
+  $('use-selected-feature').hidden = !selected || scope === 'selected';
 }
 function exportPeriod() {
   const period = $('download-period').value;
@@ -279,9 +336,34 @@ async function initialize() {
       try { await navigator.clipboard.writeText(location.href); $('copy-link').textContent = 'Link copied'; setTimeout(() => { $('copy-link').textContent = 'Copy map link'; }, 1800); }
       catch { status('map-status', 'Copy the address from your browser to share this map view.'); }
     });
+    $('search-input').addEventListener('input', event => { stopPlayback(); if (event.isComposing) clearSuggestions(); else scheduleSuggestions(); });
+    $('search-input').addEventListener('compositionend', scheduleSuggestions);
+    $('search-input').addEventListener('focus', openSuggestions);
+    $('search-input').addEventListener('click', openSuggestions);
+    $('search-years').addEventListener('change', () => scheduleSuggestions({ immediate: true }));
+    $('search-input').addEventListener('keydown', event => {
+      if (event.key === 'ArrowDown' && $('suggestions-list').firstElementChild) {
+        event.preventDefault(); $('suggestions-list').querySelector('button').focus();
+      }
+    });
+    $('suggestions-list').addEventListener('keydown', event => {
+      if (!['ArrowUp', 'ArrowDown'].includes(event.key)) return;
+      const buttons = [...$('suggestions-list').querySelectorAll('button')], index = buttons.indexOf(event.target);
+      if (index < 0) return;
+      event.preventDefault();
+      const next = index + (event.key === 'ArrowDown' ? 1 : -1);
+      if (next < 0) $('search-input').focus(); else buttons[Math.min(next, buttons.length - 1)].focus();
+    });
+    $('search-form').addEventListener('keydown', event => {
+      if (event.key === 'Escape' && (event.target === $('search-input') || $('suggestions-list').contains(event.target))) {
+        event.preventDefault(); $('search-input').focus(); clearSuggestions();
+      }
+    });
+    $('search-form').addEventListener('focusout', event => { if (!$('search-form').contains(event.relatedTarget)) clearSuggestions(); });
     $('search-form').addEventListener('submit', event => { event.preventDefault(); stopPlayback(); runSearch(); });
     $('more-results').addEventListener('click', () => runSearch(true));
     $('clear-search').addEventListener('click', () => {
+      clearSuggestions();
       searchController?.abort(); highlightController?.abort(); searchRevision++;
       querySpec = null; queryRows = []; queryTotal = 0; $('search-input').value = ''; engine?.highlight([]); renderResults(); updateScopeOptions(); updateUrl();
       $('search-button').disabled = false; status('search-status', 'Search cleared. Leave the name blank to browse features.');
@@ -289,6 +371,9 @@ async function initialize() {
     $('clear-selection').addEventListener('click', clearSelection);
     $('overlap-select').addEventListener('change', () => { const feature = overlapCandidates.find(item => item.OBJECTID === Number($('overlap-select').value)); if (feature) selectFeature(feature, overlapPoint); });
     $('download-scope').addEventListener('change', updateExportControls); $('download-period').addEventListener('change', updateExportControls);
+    $('use-selected-feature').addEventListener('click', () => {
+      $('download-scope').value = 'selected'; updateExportControls(); $('download-scope').focus();
+    });
     $('download-form').addEventListener('submit', prepareDownload); $('cancel-download').addEventListener('click', () => exportController?.abort());
     updateScopeOptions(); updateUrl();
     if (view.q) runSearch();

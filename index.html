@@ -1,69 +1,315 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Explore aligned Cliopatria historical polity boundaries, 3400 BCE–1497 CE. Search, browse time panels, and download research data.">
-  <title>Cliopatria · Historical boundaries</title>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="vendor/maplibre-gl.css"><link rel="stylesheet" href="css/styles.css">
-  <script defer src="vendor/maplibre-gl.js"></script><script defer src="vendor/pmtiles.js"></script>
-  <script type="module" src="js/app.js"></script>
-  <!-- Privacy-friendly analytics by Plausible -->
-<script async src="https://plausible.io/js/pa-k2fIw6Y3uFP5c2Wy8r8wN.js"></script>
-<script>
-  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-  plausible.init()
-</script>
-
-</head>
-<body class="map-page">
-  <a class="skip-link" href="#controls">Skip to map controls</a><a class="skip-link" href="#search-results">Skip to results</a>
-  <header class="site-header"><a class="brand" href="index.html">Cliopatria <span>Historical boundaries</span></a>
-    <nav aria-label="Main navigation"><a href="index.html" aria-current="page">Map</a><a href="about.html">About</a><a href="cite.html">Cite</a><a href="help.html">Help</a><a href="https://github.com/ucmerced-giscenter/cliopatria" title="Project repository; currently private">GitHub</a></nav>
-  </header>
-  <section class="timeline" aria-label="Time navigation">
-    <div class="time-actions"><label for="year-select">Year</label><select id="year-select" disabled><option>Loading years…</option></select>
-      <button id="previous" type="button" aria-label="Previous available year" disabled>Previous</button><button id="play" type="button" aria-pressed="false" disabled>Play</button><button id="next" type="button" aria-label="Next available year" disabled>Next</button>
-      <button id="copy-link" type="button">Copy map link</button><span id="panel-count" class="subtle"></span>
-    </div>
-    <div class="slider-row"><span id="first-year">3400 BCE</span><input type="range" id="year-slider" min="0" max="0" value="0" aria-label="Snapshot year" disabled><span id="last-year">1497 CE</span></div>
-  </section>
-  <main class="workspace">
-    <aside class="controls" id="controls" tabindex="-1" aria-label="Search, display, and downloads">
-      <section class="control-section"><h1 class="section-heading">Explore historical polities</h1>
-        <p class="small">One snapshot at a time. Boundaries are generalized; the basemap shows modern geography.</p>
-        <div class="display-options"><label for="basemap">Basemap</label><select id="basemap"><option value="gray">Esri light gray</option><option value="topographic">Esri topographic</option><option value="imagery">Esri imagery</option><option value="plain">Plain background</option></select></div>
-        <div class="inline-controls"><label><input id="labels" type="checkbox" checked> Show polity names</label><button id="reset-view" type="button">Reset view</button></div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Explore aligned Cliopatria historical polity boundaries, 3400 BCE–1497 CE. Search, browse time panels, and download research data."
+    />
+    <title>Cliopatria · Historical boundaries</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="vendor/maplibre-gl.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script defer src="vendor/maplibre-gl.js"></script>
+    <script defer src="vendor/pmtiles.js"></script>
+    <script type="module" src="js/app.js"></script>
+    <!-- Privacy-friendly analytics by Plausible -->
+    <script
+      async
+      src="https://plausible.io/js/pa-k2fIw6Y3uFP5c2Wy8r8wN.js"
+    ></script>
+    <script>
+      ((window.plausible =
+        window.plausible ||
+        function () {
+          (plausible.q = plausible.q || []).push(arguments);
+        }),
+        (plausible.init =
+          plausible.init ||
+          function (i) {
+            plausible.o = i || {};
+          }));
+      plausible.init();
+    </script>
+  </head>
+  <body class="map-page">
+    <a class="skip-link" href="#controls">Skip to map controls</a
+    ><a class="skip-link" href="#search-results">Skip to results</a>
+    <header class="site-header">
+      <a class="brand" href="index.html"
+        >Cliopatria <span>Historical boundaries</span></a
+      >
+      <nav aria-label="Main navigation">
+        <a href="index.html" aria-current="page">Map</a
+        ><a href="about.html">About</a><a href="cite.html">Cite</a
+        ><a href="help.html">Help</a
+        ><a
+          href="https://github.com/ucmerced-giscenter/cliopatria"
+          title="Project repository; currently private"
+          >GitHub</a
+        >
+      </nav>
+    </header>
+    <section class="timeline" aria-label="Time navigation">
+      <div class="time-actions">
+        <label for="year-select">Year</label
+        ><select id="year-select" disabled>
+          <option>Loading years…</option>
+        </select>
+        <button
+          id="previous"
+          type="button"
+          aria-label="Previous available year"
+          disabled
+        >
+          Previous</button
+        ><button id="play" type="button" aria-pressed="false" disabled>
+          Play</button
+        ><button
+          id="next"
+          type="button"
+          aria-label="Next available year"
+          disabled
+        >
+          Next
+        </button>
+        <button id="copy-link" type="button">Copy map link</button>
+        <a class="timeline-help small" href="help.html#timeline-instructions">Timeline instructions</a>
+        <span id="panel-count" class="subtle"></span>
+      </div>
+      <div class="slider-row">
+        <span id="first-year">3400 BCE</span
+        ><input
+          type="range"
+          id="year-slider"
+          min="0"
+          max="0"
+          value="0"
+          aria-label="Snapshot year"
+          disabled
+        /><span id="last-year">1497 CE</span>
+      </div>
+    </section>
+    <main class="workspace">
+      <aside
+        class="controls"
+        id="controls"
+        tabindex="-1"
+        aria-label="Search, display, and downloads"
+      >
+        <section class="control-section">
+          <h1 class="section-heading">Explore historical polities</h1>
+          <p class="small">
+            One snapshot at a time. Boundaries are generalized; the basemap
+            shows modern geography.
+          </p>
+          <div class="display-options">
+            <label for="basemap">Basemap</label
+            ><select id="basemap">
+              <option value="gray">Esri light gray</option>
+              <option value="topographic">Esri topographic</option>
+              <option value="imagery">Esri imagery</option>
+              <option value="plain">Plain background</option>
+            </select>
+          </div>
+          <div class="inline-controls">
+            <label
+              ><input id="labels" type="checkbox" checked /> Show polity
+              names</label
+            ><button id="reset-view" type="button">Reset view</button>
+          </div>
+        </section>
+        <section class="control-section" aria-labelledby="search-title">
+          <h2 id="search-title" tabindex="-1">Search by name</h2>
+          <form id="search-form">
+            <label for="search-input" class="sr-only">Polity name</label
+            ><input
+              id="search-input"
+              type="search"
+              placeholder="For example, Roman"
+              maxlength="120"
+              autocomplete="off"
+              aria-describedby="search-hint"
+            />
+            <p id="search-hint" class="small">Click to browse names, or type to narrow suggestions.</p>
+            <div id="search-suggestions" hidden>
+              <p id="suggestions-label" class="small">Suggested names</p>
+              <ul id="suggestions-list" class="name-suggestions" aria-labelledby="suggestions-label"></ul>
+            </div>
+            <p id="suggestions-status" class="small" role="status"></p>
+            <label for="search-years">Search within</label
+            ><select id="search-years">
+              <option value="current">Map year</option>
+              <option value="all">All years</option>
+            </select>
+            <div class="button-row">
+              <button type="submit" id="search-button">Search</button
+              ><button type="button" id="clear-search">Clear</button>
+            </div>
+          </form>
+          <p class="small"><a href="help.html#search-instructions">Search instructions</a></p>
+          <p id="search-status" class="small" role="status">
+            Search results are also available without using the map.
+          </p>
+          <ul
+            id="search-results"
+            class="results"
+            tabindex="-1"
+            aria-label="Search results"
+          ></ul>
+          <button id="more-results" type="button" hidden>
+            Show more results
+          </button>
+        </section>
+        <section class="control-section" aria-labelledby="feature-title">
+          <h2 id="feature-title">Selected feature</h2>
+          <p id="selection-empty" class="small">
+            Select a polygon on the map or a search result.
+          </p>
+          <div id="feature-detail" hidden>
+            <h3 id="feature-name"></h3>
+            <dl id="feature-fields"></dl>
+            <a
+              id="wikipedia-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              hidden
+              >Read on Wikipedia ↗</a
+            >
+            <p id="feature-note" class="small"></p>
+            <button id="clear-selection" type="button">Clear selection</button>
+          </div>
+          <p id="selection-status" class="small" role="status"></p>
+          <div id="overlap-options" hidden>
+            <label for="overlap-select">Overlapping features here</label
+            ><select id="overlap-select"></select>
+          </div>
+        </section>
+        <section class="control-section" aria-labelledby="download-title">
+          <h2 id="download-title" tabindex="-1">Download data</h2>
+          <form id="download-form">
+            <label for="download-scope">Features to export</label
+            ><select id="download-scope" aria-describedby="download-selection-summary">
+              <option value="time">Year or year range</option>
+              <option value="search" disabled>Current search results</option>
+              <option value="extent">Visible map extent</option>
+              <option value="selected" disabled>Selected feature</option>
+              <option value="all">Entire dataset</option>
+            </select>
+            <div class="download-selection">
+              <p id="download-selection-summary" class="small" role="status" aria-atomic="true">
+                <span id="download-selection-label">No feature selected.</span>
+                <strong id="download-selection-name" hidden></strong>
+                <span id="download-selection-help">Select a polygon or a search result to export one feature.</span>
+              </p>
+              <button id="use-selected-feature" type="button" hidden>Use selected feature</button>
+            </div>
+            <div id="download-time">
+              <label for="download-period">Time coverage</label
+              ><select id="download-period">
+                <option value="current">Map year</option>
+                <option value="range">Custom year range</option>
+                <option value="all">All years</option>
+              </select>
+              <div id="download-range" hidden>
+                <div class="range-fields">
+                  <label
+                    >From year<input
+                      id="range-start"
+                      type="number"
+                      value="-3400"
+                      step="1"
+                      aria-describedby="range-help" /></label
+                  ><label
+                    >Through year<input
+                      id="range-end"
+                      type="number"
+                      value="1497"
+                      step="1"
+                      aria-describedby="range-help"
+                  /></label>
+                </div>
+                <p id="range-help" class="small">
+                  Use negative numbers for BCE. There is no year zero.
+                </p>
+              </div>
+            </div>
+            <label for="download-format">File format</label
+            ><select id="download-format">
+              <option value="geojson">GeoJSON</option>
+              <option value="csv">CSV (attributes)</option>
+              <option value="kml">KMZ (Google Earth)</option>
+              <option value="shapefile">Shapefile (ZIP)</option>
+            </select>
+            <p class="small">
+              Exports contain whole polygons. Extent exports include
+              intersecting polygons without clipping. Large exports can take a
+              minute or longer.
+            </p>
+            <div class="button-row">
+              <button type="submit" id="generate-download">
+                Prepare download</button
+              ><button type="button" id="cancel-download" hidden>
+                Stop waiting
+              </button>
+            </div>
+          </form>
+          <div aria-live="polite">
+            <p id="download-status" class="small"></p>
+            <a
+              id="download-link"
+              class="button-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              hidden
+              >Download file ↗</a
+            >
+            <div id="download-parts"></div>
+          </div>
+          <p class="small"><a href="help.html#download-instructions">Download instructions</a> · <a href="cite.html">Cite the data</a></p>
+        </section>
+        <section class="control-section legend">
+          <h2>Map key</h2>
+          <p class="small">
+            Fill colors follow the source dataset. A blue outline marks search
+            matches; a white and dark outline marks your selection. Unnamed
+            regions retain their source colors.
+          </p>
+          <p class="small">
+            <a href="cite.html">Aligned Cliopatria v1.1</a> ·
+            <a
+              href="https://ucmerced.maps.arcgis.com/home/item.html?id=8eae64c12ac047d3933d43e449c8e551"
+              >Source item</a
+            >
+          </p>
+        </section>
+      </aside>
+      <section class="map-region" aria-label="Historical boundary map">
+        <div
+          id="map"
+          role="region"
+          aria-label="Interactive map; use search results as a text alternative"
+        ></div>
+        <p id="map-status" class="map-status" role="status">
+          Loading historical boundaries…
+        </p>
+        <div id="map-failure" class="map-failure" hidden>
+          <p>
+            The map is unavailable. You can still use search and download data.
+          </p>
+        </div>
       </section>
-      <section class="control-section" aria-labelledby="search-title"><h2 id="search-title">Search by name</h2>
-        <form id="search-form"><label for="search-input" class="sr-only">Polity name</label><input id="search-input" type="search" placeholder="For example, Roman" maxlength="120" autocomplete="off">
-          <label for="search-years">Search within</label><select id="search-years"><option value="current">Map year</option><option value="all">All years</option></select>
-          <div class="button-row"><button type="submit" id="search-button">Search</button><button type="button" id="clear-search">Clear</button></div>
-        </form>
-        <p id="search-status" class="small" role="status">Search results are also available without using the map.</p>
-        <ul id="search-results" class="results" tabindex="-1" aria-label="Search results"></ul>
-        <button id="more-results" type="button" hidden>Show more results</button>
-      </section>
-      <section class="control-section" aria-labelledby="feature-title"><h2 id="feature-title">Selected feature</h2>
-        <p id="selection-empty" class="small">Select a polygon on the map or a search result.</p>
-        <div id="feature-detail" hidden><h3 id="feature-name"></h3><dl id="feature-fields"></dl><a id="wikipedia-link" target="_blank" rel="noopener noreferrer" hidden>Read on Wikipedia ↗</a><p id="feature-note" class="small"></p>
-          <button id="clear-selection" type="button">Clear selection</button></div>
-        <p id="selection-status" class="small" role="status"></p>
-        <div id="overlap-options" hidden><label for="overlap-select">Overlapping features here</label><select id="overlap-select"></select></div>
-      </section>
-      <section class="control-section" aria-labelledby="download-title"><h2 id="download-title">Download data</h2>
-        <form id="download-form"><label for="download-scope">Features to export</label><select id="download-scope"><option value="time">Year or year range</option><option value="search" disabled>Current search results</option><option value="extent">Visible map extent</option><option value="selected" disabled>Selected feature</option><option value="all">Entire dataset</option></select>
-          <div id="download-time"><label for="download-period">Time coverage</label><select id="download-period"><option value="current">Map year</option><option value="range">Custom year range</option><option value="all">All years</option></select>
-            <div id="download-range" hidden><div class="range-fields"><label>From year<input id="range-start" type="number" value="-3400" step="1" aria-describedby="range-help"></label><label>Through year<input id="range-end" type="number" value="1497" step="1" aria-describedby="range-help"></label></div><p id="range-help" class="small">Use negative numbers for BCE. There is no year zero.</p></div></div>
-          <label for="download-format">File format</label><select id="download-format"><option value="geojson">GeoJSON</option><option value="csv">CSV (attributes)</option><option value="kml">KMZ (Google Earth)</option><option value="shapefile">Shapefile (ZIP)</option></select>
-          <p class="small">Exports contain whole polygons. Extent exports include intersecting polygons without clipping. Large exports can take a minute or longer.</p>
-          <div class="button-row"><button type="submit" id="generate-download">Prepare download</button><button type="button" id="cancel-download" hidden>Stop waiting</button></div>
-        </form>
-        <div aria-live="polite"><p id="download-status" class="small"></p><a id="download-link" class="button-link" target="_blank" rel="noopener noreferrer" hidden>Download file ↗</a><div id="download-parts"></div></div>
-      </section>
-      <section class="control-section legend"><h2>Map key</h2><p class="small">Fill colors follow the source dataset. A blue outline marks search matches; a white and dark outline marks your selection. Unnamed regions retain their source colors.</p><p class="small"><a href="cite.html">Aligned Cliopatria v1.1</a> · <a href="https://ucmerced.maps.arcgis.com/home/item.html?id=8eae64c12ac047d3933d43e449c8e551">Source item</a></p></section>
-    </aside>
-    <section class="map-region" aria-label="Historical boundary map"><div id="map" role="region" aria-label="Interactive map; use search results as a text alternative"></div><p id="map-status" class="map-status" role="status">Loading historical boundaries…</p><div id="map-failure" class="map-failure" hidden><p>The map is unavailable. You can still use search and download data.</p></div></section>
-  </main>
-  <noscript><p class="notice">JavaScript is required for the interactive map. <a href="https://ucmerced.maps.arcgis.com/home/item.html?id=8eae64c12ac047d3933d43e449c8e551">Open the source dataset</a> or read the <a href="help.html">user guide</a>.</p></noscript>
-</body></html>
+    </main>
+    <noscript
+      ><p class="notice">
+        JavaScript is required for the interactive map.
+        <a
+          href="https://ucmerced.maps.arcgis.com/home/item.html?id=8eae64c12ac047d3933d43e449c8e551"
+          >Open the source dataset</a
+        >
+        or read the <a href="help.html">user guide</a>.
+      </p></noscript
+    >
+  </body>
+</html>

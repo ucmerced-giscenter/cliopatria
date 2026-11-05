@@ -1,9 +1,180 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Developer documentation · Cliopatria</title><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="css/styles.css"></head><body><a class="skip-link" href="#main">Skip to content</a><header class="site-header"><a class="brand" href="index.html">Cliopatria <span>Historical boundaries</span></a><nav aria-label="Main navigation"><a href="index.html">Map</a><a href="about.html">About</a><a href="cite.html">Cite</a><a href="help.html">Help</a><a href="https://github.com/ucmerced-giscenter/cliopatria">GitHub</a></nav></header>
-<main class="document" id="main"><h1>Developer documentation</h1><p>The app is plain HTML, CSS, and JavaScript with locally vendored MapLibre GL JS 5.6.1 and PMTiles 4.3.0. Static per-year tiles provide display geometry. Anonymous ArcGIS queries provide search and attributes; ArcGIS prepares download files. No application backend or runtime build step is required.</p>
-<h2>Service endpoints</h2><p><a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer?f=pjson">Feature service metadata</a> · <a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer/0?f=pjson">Layer 0 metadata</a> · <a href="data/manifest.json">Local display manifest</a></p><p>Append <code>/0/query</code> to the service URL for queries and <code>/createReplica</code> for asynchronous exports. Use <code>outSR=4326</code> for geographic GeoJSON and <code>replicaSR=4326</code> for exports. Numeric Year filters support BCE; the live service currently has no <code>timeInfo</code>.</p>
-<h2>Field dictionary</h2><table><thead><tr><th>Field</th><th>Type</th><th>Meaning</th></tr></thead><tbody><tr><td>OBJECTID</td><td>OID</td><td>Release-specific record ID; may be renumbered.</td></tr><tr><td>Year</td><td>Small integer</td><td>Panel year. Negative is BCE; no zero; snapshots are not validity intervals.</td></tr><tr><td>AreaSqKM</td><td>Single precision</td><td>Publisher-calculated geodesic area in km².</td></tr><tr><td>Name</td><td>String</td><td>Entity name. Some region names are intentionally blank.</td></tr><tr><td>Color</td><td>String</td><td>Source 0xRRGGBB color, normalized to #RRGGBB in tiles; null fallback #82939A.</td></tr><tr><td>Type</td><td>String</td><td>POLITY, LEADER, GROUP, ARMY, EVENT, or missing.</td></tr><tr><td>Wikipedia</td><td>String</td><td>Article title; converted to an encoded Wikipedia link.</td></tr></tbody></table><p>Shape__Area and Shape__Length are service system fields, not substitutes for AreaSqKM. Dedicated alternate-name and region fields are absent.</p>
-<h2>Sample queries</h2><p><a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer/0/query?f=pjson&amp;where=Year%20%3D%20-3400&amp;returnCountOnly=true">Count the 3400 BCE panel</a> · <a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer/0/query?f=geojson&amp;where=Year%20%3D%20-3400&amp;outFields=OBJECTID,Year,Name,AreaSqKM,Color,Type,Wikipedia&amp;outSR=4326&amp;returnGeometry=true">Get that panel as GeoJSON</a></p><p>For a range, use <code>Year &gt;= 1000 AND Year &lt;= 1497</code>. For search, use <code>UPPER(Name) LIKE '%ROMAN%'</code>. Escape apostrophes as doubled apostrophes and validate numeric IDs/years. Use form-encoded POST requests for long filters.</p><p>The service advertises a 2,000-record query limit. Paginate attribute queries with a stable order, or query IDs. The app uses 25-row search pages and requests no geometry for search results. This limit is not a full-extraction file limit.</p>
-<h2>Exports and hosting</h2><p>Filtered exports use <code>layerQueries</code> with <code>queryOption: 'useFilter'</code>, <code>useGeometry: true</code>, and the numeric/ID predicate. Full exports omit layerQueries. For an ordinary extent, count intersecting IDs, then send its envelope in native Web Mercator coordinates with inSR=3857. Keep replicaSR=4326 for the output. The spatial filter selects whole polygons without clipping. Use <code>syncModel=none</code>, <code>async=true</code>, and <code>returnAttachments=false</code>. Poll the returned status URL and link directly to the completed file.</p><p>See Esri's <a href="https://developers.arcgis.com/rest/services-reference/enterprise/create-replica/">Create Replica reference</a>. A permanent ArcGIS content item or visitor login is not required by the tested public extraction route.</p><p>PMTiles hosting needs byte-range responses (<code>206</code>) with correct Content-Range. Separate tile hosting also needs CORS. Do not gzip whole PMTiles files at the HTTP layer. See <a href="https://docs.protomaps.com/pmtiles/cloud-storage">PMTiles hosting documentation</a>. For local testing, open index.html with Live Server. The website requires no build step or application backend.</p><p>Match the tile manifest and full feature service to the same release. Rebuild after source revisions, especially OBJECTID renumbering. This folder contains the runnable website; data preparation scripts and review reports are maintained separately.</p>
-<p>Antimeridian-crossing views use deduplicated ID filters, reduced to exact consecutive-ID ranges and short IN lists. If necessary, the app prepares numbered parts; all parts together contain the selection. If the extent includes every feature in the period, its time predicate is sufficient. A WGS84 filter envelope returned an empty KMZ in validation; native Web Mercator coordinates fixed this, including a 35,741-feature regional export.</p>
-<footer><a href="help.html">User documentation</a> · <a href="https://github.com/ucmerced-giscenter/cliopatria">Project repository (currently private)</a></footer></main></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Cliopatria API requirements, ArcGIS query and export workflow, field dictionary, and hosting requirements.">
+  <title>Developer documentation · Cliopatria</title>
+  <link rel="icon" href="favicon.svg">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html">Cliopatria <span>Historical boundaries</span></a>
+    <nav aria-label="Main navigation"><a href="index.html">Map</a><a href="about.html">About</a><a href="cite.html">Cite</a><a href="help.html">Help</a><a href="https://github.com/ucmerced-giscenter/cliopatria">GitHub</a></nav>
+  </header>
+  <main class="document" id="main">
+<p class="doc-return"><a href="index.html">← Return to map</a></p>
+
+    <h1>Developer documentation</h1>
+    <p>The app is plain HTML, CSS, and JavaScript with locally vendored MapLibre GL JS 5.6.1 and PMTiles 4.3.0. Static per-year tiles provide display geometry. Anonymous ArcGIS queries provide search and attributes; ArcGIS prepares download files. No application backend or runtime build step is required.</p>
+    <nav class="page-toc" id="developer-contents" aria-label="On this page">
+  <p><strong>On this page</strong></p>
+  <ul><li><a href="#service-endpoints">Service endpoints</a></li><li><a href="#api-requirements">API requirements</a></li><li><a href="#field-dictionary">Field dictionary</a></li><li><a href="#sample-queries">Sample queries</a></li><li><a href="#hosting">Hosting</a></li><li><a href="#implementation">Code reference</a></li></ul>
+</nav>
+
+    <section aria-labelledby="service-endpoints">
+      <h2 id="service-endpoints">Service endpoints</h2>
+      <p>Configured in <a href="js/config.js">js/config.js</a>, using layer <code>0</code>:</p>
+      <p><code>https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer</code></p>
+      <p><a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer?f=pjson">Feature service metadata</a> · <a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer/0?f=pjson">Layer 0 metadata</a> · <a href="data/manifest.json">Local display manifest</a></p>
+    </section>
+
+    <section aria-labelledby="api-requirements">
+      <h2 id="api-requirements">API requirements</h2>
+      <p>This section defines the services, parameters, responses, and failure behavior required by the current website. The browser talks directly to the public ArcGIS feature service. Map display uses PMTiles; research exports use the source feature service and retain whole polygons.</p>
+
+      <h3>Access and service capabilities</h3>
+      <ul>
+        <li>The feature service and layer 0 must allow anonymous queries and extraction over HTTPS, with CORS permitting requests from the website. Data requests use <code>credentials: 'omit'</code> and do not send an ArcGIS account token.</li>
+        <li>The app requires <code>Query</code> and <code>Extract</code>, distinct Name queries for suggestions, ordered and paginated attribute queries, and the seven fields below. Before each export, it checks <code>Extract</code> and the requested format in <code>supportedExportFormats</code>.</li>
+        <li>Extraction uses <code>syncModel=none</code>. Editing and attachments are not required. The public Esri basemap key is a separate dependency; it is not used to authorize feature queries or downloads.</li>
+      </ul>
+      <p class="small">Metadata checked November 4, 2026: the service advertises Query and Extract, all four requested formats, and a 2,000-record query limit. Layer 0 supports pagination and ordering, has no attachments, and reports no timeInfo. Recheck these settings when replacing or republishing the source.</p>
+
+      <h3>Requests and responses</h3>
+      <p>Here, <code>serviceUrl</code> means the <a href="#service-endpoints">FeatureServer URL</a>. ArcGIS metadata, query, and job requests include <code>f=json</code>. POST bodies are form-encoded with <code>URLSearchParams</code>; JSON-valued fields such as <code>layerQueries</code> are serialized inside that form body.</p>
+      <table>
+        <caption>Requests made by the application</caption>
+        <thead><tr><th scope="col">Request</th><th scope="col">Purpose and required response</th></tr></thead>
+        <tbody>
+          <tr><td><code>GET data/manifest.json</code></td><td>Available years, tile paths, counts, and release metadata. The manifest must be complete and contain available years.</td></tr>
+          <tr><td><code>GET data/years/{year}.pmtiles</code><br>with a Range header</td><td>Tile bytes needed for the selected year and view; the entire research dataset is not loaded for map display.</td></tr>
+          <tr><td><code>GET serviceUrl?f=json</code></td><td><code>capabilities</code> and <code>supportedExportFormats</code>, checked before extraction.</td></tr>
+          <tr><td><code>POST serviceUrl/0/query</code></td><td>Count: <code>{count}</code>. IDs: <code>{objectIds}</code>. Search or selected record: <code>{features: [{attributes}]}</code>. Zoom-to-feature: <code>{extent}</code>.</td></tr>
+          <tr><td><code>POST serviceUrl/createReplica</code></td><td>Start an export. Expect a <code>statusUrl</code> for an asynchronous job, or a completed file URL.</td></tr>
+          <tr><td><code>GET returned statusUrl</code></td><td>Read <code>status</code> until <code>Completed</code>, then obtain <code>resultUrl</code>. The client also accepts <code>URL</code> or <code>url</code> for a completed response.</td></tr>
+          <tr><td><code>GET returned file URL</code></td><td>The visitor follows the Download link directly to Esri. Application JavaScript does not fetch and assemble the export file in memory.</td></tr>
+        </tbody>
+      </table>
+      <p>Search uses <code>returnGeometry=false</code>, the seven fields, <code>resultRecordCount=25</code>, and a changing <code>resultOffset</code>. Stable ordering is <code>Name ASC,Year ASC,AreaSqKM DESC,OBJECTID ASC</code>. Counts and IDs use <code>returnCountOnly=true</code> and <code>returnIdsOnly=true</code>. Feature extents use <code>returnExtentOnly=true</code> and <code>outSR=4326</code>. See the <a href="https://developers.arcgis.com/rest/services-reference/enterprise/query-feature-service-layer/">Esri Query reference</a>.</p>
+
+      <p>Name suggestions use the same <code>/0/query</code> endpoint with <code>outFields=Name</code>, <code>returnGeometry=false</code>, <code>returnDistinctValues=true</code>, <code>orderByFields=Name ASC</code>, and <code>resultRecordCount=12</code>. Focusing or clicking the field requests names for the selected search scope, including an empty field. Null and empty names are excluded. The default list displays at most six names alphabetically. Typing updates matches after a 300 ms pause, with no minimum length; names starting with the input are preferred among the returned candidates. Superseded requests are aborted; suggestion requests time out after ten seconds. Choosing a suggestion runs the ordinary partial-name search. See <a href="help.html#search-instructions">Search instructions</a>.</p>
+
+      <h3>Selection and time rules</h3>
+      <table>
+        <caption>How each export scope becomes a filter</caption>
+        <thead><tr><th scope="col">Scope</th><th scope="col">Selection rule</th></tr></thead>
+        <tbody>
+          <tr><td>Selected feature</td><td>Filter by the selected <code>OBJECTID</code>. Export one record, even when others share its Name and Year.</td></tr>
+          <tr><td>Current search results</td><td>Use the submitted Name predicate and time scope. Include all matches, beyond the loaded search page.</td></tr>
+          <tr><td>Year or year range</td><td>Use <code>Year = 117</code> or inclusive bounds such as <code>Year &gt;= -3400 AND Year &lt;= -1</code>. Include available snapshots within those bounds.</td></tr>
+          <tr><td>Visible map extent</td><td>Combine the time predicate with intersection against the map rectangle captured when Prepare download is pressed. Keep each intersecting polygon whole.</td></tr>
+          <tr><td>Entire dataset</td><td>Use <code>1=1</code> for the count. Omit <code>layerQueries</code> and spatial filters from extraction.</td></tr>
+        </tbody>
+      </table>
+      <p>Year is a snapshot field, not a start/end validity interval. Negative values mean BCE; there is no year zero. The app rejects zero endpoints, noninteger years, reversed ranges, and ranges outside the manifest. It does not interpolate geometry or use ArcGIS's <code>time</code> parameter. A range crossing BCE and CE includes existing panels on both sides.</p>
+      <p>For ordinary extents, the app first queries intersecting IDs using WGS84 envelopes and <code>spatialRel=esriSpatialRelIntersects</code>. Extraction then uses a native Web Mercator envelope with <code>inSR=3857</code>, keeping <code>replicaSR=4326</code> for output. Native coordinates are necessary for this service's tested KMZ route; a WGS84 export filter produced an empty KMZ during validation. The filter selects whole polygons without clipping.</p>
+      <p>Antimeridian-crossing views use two ID queries and deduplicate results. Exact ID ranges and short IN lists describe that selection; oversized filters become numbered export parts. If every feature in the period intersects the view, the time predicate alone is sufficient. Later map movement does not alter an export already submitted.</p>
+
+      <h3 id="download-workflow">How a download is prepared</h3>
+      <ol>
+        <li><strong>Capture and count the selection.</strong> <code>prepareDownload()</code> captures the scope, format, period, and selected feature or map bounds. It counts matches and reports an empty selection before starting a job.</li>
+        <li><strong>Check the service.</strong> <code>exportFile()</code> reads metadata and verifies extraction and format support.</li>
+        <li><strong>Submit the job.</strong> POST to <code>/createReplica</code> with the parameters below. Filtered exports include <code>layerQueries</code>; full-dataset exports omit it.</li>
+        <li><strong>Wait for completion.</strong> Follow the returned <code>statusUrl</code>, waiting two seconds between pending responses. The map remains usable.</li>
+        <li><strong>Display the file link.</strong> Validate the returned URL and assign it to the Download link. Numbered parts each receive a link when splitting was necessary.</li>
+        <li><strong>Download the file.</strong> Prepare download creates the link; the visitor then clicks Download. Generate it again if the temporary link expires.</li>
+      </ol>
+      <p>This example requests all BCE panels as GeoJSON. These values become a <code>URLSearchParams</code> form body, not a raw JSON body. <code>f=json</code> controls the API response; <code>dataFormat=geojson</code> controls the downloadable file.</p>
+      <pre tabindex="0" aria-label="Example export request parameters"><code>const parameters = {
+  f: 'json',
+  replicaName: 'cliopatria_export',
+  layers: 0,
+  syncModel: 'none',
+  returnAttachments: false,
+  replicaSR: 4326,
+  dataFormat: 'geojson',
+  transportType: 'esriTransportTypeUrl',
+  async: true,
+  layerQueries: JSON.stringify({
+    '0': {
+      where: 'Year &gt;= -3400 AND Year &lt;= -1',
+      queryOption: 'useFilter',
+      useGeometry: true
+    }
+  })
+};</code></pre>
+      <p>The initial response supplies a <code>statusUrl</code>. A completed job supplies <code>status: 'Completed'</code> and a <code>resultUrl</code>. Use the returned URLs; do not construct job or file paths. The tested public route requires no visitor login and creates no separate permanent ArcGIS Online content item. See the <a href="https://developers.arcgis.com/rest/services-reference/enterprise/create-replica/">Esri Create Replica reference</a>.</p>
+      <table tabindex="0">
+        <caption>Download format parameter values</caption>
+        <thead><tr><th scope="col">Interface option</th><th scope="col">dataFormat</th><th scope="col">Contents</th></tr></thead>
+        <tbody>
+          <tr><td>GeoJSON</td><td><code>geojson</code></td><td>Geometry and attributes in WGS84 longitude/latitude.</td></tr>
+          <tr><td>CSV</td><td><code>csv</code></td><td>Attributes, without polygon geometry.</td></tr>
+          <tr><td>KMZ</td><td><code>kml</code></td><td>Compressed KML for Google Earth.</td></tr>
+          <tr><td>Shapefile</td><td><code>shapefile</code></td><td>ZIP containing Shapefile components.</td></tr>
+        </tbody>
+      </table>
+      <p>See the <a href="help.html">user documentation</a> for tested format limitations, including KMZ styling and source OBJECTID preservation. The 2,000-record query limit does not define the record count allowed in an extraction file.</p>
+
+      <h3>Errors and operational limits</h3>
+      <ul>
+        <li>Check HTTP success and any ArcGIS <code>error</code> object inside the JSON response. HTTP 200 alone does not mean success.</li>
+        <li>Export statuses <code>Failed</code>, <code>CompletedWithErrors</code>, <code>Cancelled</code>, and <code>Canceled</code> stop the wait and display an error. A completed response without a URL is also an error. Status and file URLs must use HTTPS and a hostname ending in <code>.arcgis.com</code>.</li>
+        <li>Search and feature lookups have 30-second client timeouts; export preparation has a 15-minute client timeout. Stop waiting aborts browser requests and polling, but does not cancel the Esri job.</li>
+        <li>Job duration varies; the polling delay is not a completion estimate. Errors require manual retry. The app does not automatically resubmit jobs or retain job history across reloads. Completed parts remain available if a later part fails.</li>
+      </ul>
+      <p>Production checks should verify anonymous requests and CORS from the deployed origin, each format and scope, byte-range delivery, mobile behavior, and capacity under expected traffic. These requirements do not establish a high-traffic performance guarantee. A future queue, durable job history, or download-serving audit would require additional infrastructure.</p>
+    </section>
+
+    <section aria-labelledby="field-dictionary">
+      <h2 id="field-dictionary">Field dictionary</h2>
+      <table>
+        <caption>Source attributes used by the app</caption>
+        <thead><tr><th scope="col">Field</th><th scope="col">Type</th><th scope="col">Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>OBJECTID</td><td>OID</td><td>Release-specific record ID; may be renumbered.</td></tr>
+          <tr><td>Year</td><td>Small integer</td><td>Panel year. Negative is BCE; no zero; snapshots are not validity intervals.</td></tr>
+          <tr><td>AreaSqKM</td><td>Single precision</td><td>Publisher-calculated geodesic area in km².</td></tr>
+          <tr><td>Name</td><td>String</td><td>Entity name. Some region names are intentionally blank.</td></tr>
+          <tr><td>Color</td><td>String</td><td>Source 0xRRGGBB color, normalized to #RRGGBB in tiles; null fallback #82939A.</td></tr>
+          <tr><td>Type</td><td>String</td><td>POLITY, LEADER, GROUP, ARMY, EVENT, or missing.</td></tr>
+          <tr><td>Wikipedia</td><td>String</td><td>Article title; converted to an encoded Wikipedia link.</td></tr>
+        </tbody>
+      </table>
+      <p>Shape__Area and Shape__Length are service system fields, not substitutes for AreaSqKM. Dedicated alternate-name and region fields are absent. Name + Year is not a unique record key: several polygons can share both values.</p>
+    </section>
+
+    <section aria-labelledby="sample-queries">
+      <h2 id="sample-queries">Sample queries</h2>
+      <p><a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer/0/query?f=pjson&amp;where=Year%20%3D%20-3400&amp;returnCountOnly=true">Count the 3400 BCE panel</a> · <a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer/0/query?f=geojson&amp;where=Year%20%3D%20-3400&amp;outFields=OBJECTID,Year,Name,AreaSqKM,Color,Type,Wikipedia&amp;outSR=4326&amp;returnGeometry=true">Get that panel as GeoJSON</a></p>
+      <p>For a range, use <code>Year &gt;= 1000 AND Year &lt;= 1497</code>. For search, use <code>UPPER(Name) LIKE '%ROMAN%'</code>. Escape apostrophes as doubled apostrophes and validate numeric IDs and years. The current Name filter retains SQL LIKE wildcards <code>%</code> and <code>_</code>. The helpers in <a href="js/lib/core.js">js/lib/core.js</a> build these predicates.</p>
+      <p>These direct query examples inspect a panel. For large downloads, use extraction. Paginate feature queries with a stable order, or query IDs; do not assume a single feature-set response contains every match.</p>
+    </section>
+
+    <section aria-labelledby="hosting">
+      <h2 id="hosting">Hosting and data releases</h2>
+      <p>PMTiles hosting needs byte-range responses (<code>206 Partial Content</code>) with correct <code>Content-Range</code>. Separate tile hosting also needs CORS. Do not gzip whole PMTiles files at the HTTP layer. See <a href="https://docs.protomaps.com/pmtiles/cloud-storage">PMTiles hosting documentation</a>. For local testing, open index.html with Live Server.</p>
+      <p>Match the tile manifest and feature service to the same release. Rebuild after source revisions, especially OBJECTID renumbering. The selected record's year check cannot detect every source change. This folder contains the runnable website; preparation scripts and review reports are maintained separately.</p>
+    </section>
+
+    <section aria-labelledby="implementation">
+      <h2 id="implementation">Code reference</h2>
+      <table>
+        <caption>Where to inspect or change API behavior</caption>
+        <thead><tr><th scope="col">File</th><th scope="col">Responsibility</th></tr></thead>
+        <tbody>
+          <tr><td><a href="js/config.js">js/config.js</a></td><td>Service URL, layer ID, manifest path, and display settings.</td></tr>
+          <tr><td><a href="js/lib/api.js">js/lib/api.js</a></td><td><code>jsonRequest()</code>: fetch and response checks. <code>DataService</code>: counts, name suggestions, search, feature details, and extent queries. <code>exportFile()</code>: createReplica POST, status polling, and returned file URL.</td></tr>
+          <tr><td><a href="js/lib/core.js">js/lib/core.js</a></td><td>Year, Name, and ID predicates; format mapping; extent splitting and coordinate conversion.</td></tr>
+          <tr><td><a href="js/app.js">js/app.js</a></td><td><code>prepareDownload()</code>: capture the selection, count records, manage waiting and parts, call exportFile(), and set the Download link's href.</td></tr>
+          <tr><td><a href="js/lib/map.js">js/lib/map.js</a></td><td>PMTiles display, basemap styles, selection, and view bounds.</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <footer class="doc-footer"><a href="index.html">Return to map</a><a href="help.html">User documentation</a><a href="https://github.com/ucmerced-giscenter/cliopatria">Project repository</a></footer>
+  </main>
+</body>
+</html>
