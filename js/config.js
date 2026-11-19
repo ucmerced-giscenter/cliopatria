@@ -12,5 +12,12 @@ export const config = {
   defaultZoom: 1.5,
   animationInterval: 2000,
   // The user-supplied public basemap key is in basemap-key.js. Restrict it to deployment origins.
-  basemaps: { gray: 'arcgis/light-gray', topographic: 'arcgis/topographic', imagery: 'arcgis/imagery', plain: null }
+  basemaps: {
+    gray: 'arcgis/light-gray',
+    topographic: 'arcgis/topographic',
+    imagery: 'arcgis/imagery',
+    osm: 'open/osm-style',
+    'osm-relief': 'open/osm-style-relief',
+    plain: null
+  }
 };

@@ -8,7 +8,7 @@
       content="Explore aligned Cliopatria historical polity boundaries, 3400 BCE–1497 CE. Search, browse time panels, and download research data."
     />
     <title>Cliopatria · Historical boundaries</title>
-    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="vendor/maplibre-gl.css" />
     <link rel="stylesheet" href="css/styles.css" />
     <script defer src="vendor/maplibre-gl.js"></script>
@@ -34,7 +34,7 @@
     </script>
   </head>
   <body class="map-page">
-    <a class="skip-link" href="#controls">Skip to map controls</a
+    <a class="skip-link" href="#search-title">Skip to search</a
     ><a class="skip-link" href="#search-results">Skip to results</a>
     <header class="site-header">
       <a class="brand" href="index.html"
@@ -92,34 +92,13 @@
       </div>
     </section>
     <main class="workspace">
+      <h1 class="sr-only">Explore historical polities</h1>
       <aside
         class="controls"
         id="controls"
         tabindex="-1"
-        aria-label="Search, display, and downloads"
+        aria-label="Search, selection, and downloads"
       >
-        <section class="control-section">
-          <h1 class="section-heading">Explore historical polities</h1>
-          <p class="small">
-            One snapshot at a time. Boundaries are generalized; the basemap
-            shows modern geography.
-          </p>
-          <div class="display-options">
-            <label for="basemap">Basemap</label
-            ><select id="basemap">
-              <option value="gray">Esri light gray</option>
-              <option value="topographic">Esri topographic</option>
-              <option value="imagery">Esri imagery</option>
-              <option value="plain">Plain background</option>
-            </select>
-          </div>
-          <div class="inline-controls">
-            <label
-              ><input id="labels" type="checkbox" checked /> Show polity
-              names</label
-            ><button id="reset-view" type="button">Reset view</button>
-          </div>
-        </section>
         <section class="control-section" aria-labelledby="search-title">
           <h2 id="search-title" tabindex="-1">Search by name</h2>
           <form id="search-form">
@@ -269,21 +248,6 @@
           </div>
           <p class="small"><a href="help.html#download-instructions">Download instructions</a> · <a href="cite.html">Cite the data</a></p>
         </section>
-        <section class="control-section legend">
-          <h2>Map key</h2>
-          <p class="small">
-            Fill colors follow the source dataset. A blue outline marks search
-            matches; a white and dark outline marks your selection. Unnamed
-            regions retain their source colors.
-          </p>
-          <p class="small">
-            <a href="cite.html">Aligned Cliopatria v1.1</a> ·
-            <a
-              href="https://ucmerced.maps.arcgis.com/home/item.html?id=8eae64c12ac047d3933d43e449c8e551"
-              >Source item</a
-            >
-          </p>
-        </section>
       </aside>
       <section class="map-region" aria-label="Historical boundary map">
         <div
@@ -291,9 +255,44 @@
           role="region"
           aria-label="Interactive map; use search results as a text alternative"
         ></div>
-        <p id="map-status" class="map-status" role="status">
-          Loading historical boundaries…
-        </p>
+        <div id="basemap-control" class="maplibregl-ctrl maplibregl-ctrl-group basemap-control" hidden>
+          <img src="assets/icons/basemap.svg" width="24" height="24" alt="" />
+          <select id="basemap" aria-label="Basemap" title="Change basemap">
+            <option value="gray">Esri light gray</option>
+            <option value="topographic">Esri topographic</option>
+            <option value="imagery">Esri imagery</option>
+            <option value="osm">OpenStreetMap</option>
+            <option value="osm-relief">OpenStreetMap with relief</option>
+            <option value="plain">Plain background</option>
+          </select>
+        </div>
+        <details id="legend-control" class="maplibregl-ctrl maplibregl-ctrl-group map-legend" hidden>
+          <summary>Legend</summary>
+          <div class="legend-content">
+            <ul>
+              <li><span class="legend-swatch" role="img" aria-label="Filled polygon"></span>Polity boundary</li>
+              <li><span class="legend-swatch search-match" role="img" aria-label="Blue outline"></span>Search match</li>
+              <li><span class="legend-swatch selected-feature" role="img" aria-label="Dark outline with a white halo"></span>Selected feature</li>
+            </ul>
+            <p>The basemap shows modern geography beneath the generalized historical boundaries.</p>
+            <p>Fill colors come from the source dataset, including for unnamed regions.</p>
+            <p><a href="cite.html">Aligned Cliopatria v1.1</a> · <a href="https://ucmerced.maps.arcgis.com/home/item.html?id=8eae64c12ac047d3933d43e449c8e551">Source item</a></p>
+          </div>
+        </details>
+        <div class="map-overlay">
+          <p id="map-status" class="map-status" role="status">Loading historical boundaries…</p>
+          <div id="view-controls" role="group" aria-label="Map display" hidden>
+            <div class="view-actions">
+              <label><input id="labels" type="checkbox" checked />Show polity names</label>
+              <button id="reset-view" type="button">Reset view</button>
+            </div>
+            <fieldset id="projection-control">
+              <legend class="sr-only">Map projection</legend>
+              <label><input class="sr-only" type="radio" name="projection" value="mercator" checked /><span>Flat</span></label>
+              <label><input class="sr-only" type="radio" name="projection" value="globe" /><span>Globe</span></label>
+            </fieldset>
+          </div>
+        </div>
         <div id="map-failure" class="map-failure" hidden>
           <p>
             The map is unavailable. You can still use search and download data.

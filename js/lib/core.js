@@ -1,7 +1,7 @@
 export const FIELDS = ['OBJECTID', 'Year', 'AreaSqKM', 'Name', 'Color', 'Type', 'Wikipedia'];
 export const FORMATS = { geojson: 'GeoJSON', csv: 'CSV', shapefile: 'Shapefile ZIP', kml: 'KMZ' };
 export const EMPTY = { type: 'FeatureCollection', features: [] };
-export function formatYear(year) { return `${Math.abs(year).toLocaleString('en-US')} ${year < 0 ? 'BCE' : 'CE'}`; }
+export function formatYear(year) { return `${Math.abs(year)} ${year < 0 ? 'BCE' : 'CE'}`; }
 export function featureName(feature) { return feature.Name?.trim() || 'Unnamed region'; }
 export function featureDetails(feature) {
   return [
@@ -58,7 +58,8 @@ export function readUrl(search, years, defaults) {
   const value = key => params.has(key) ? Number(params.get(key)) : NaN;
   const year = nearestYear(years, value('year'));
   const longitude = value('lng'), latitude = value('lat'), zoom = value('zoom');
-  return { year, center: Number.isFinite(longitude) && Number.isFinite(latitude) && Math.abs(latitude) <= 85 ? [((longitude + 180) % 360 + 360) % 360 - 180, latitude] : defaults.center,
+  const projection = params.get('projection') === 'globe' ? 'globe' : 'mercator';
+  return { year, projection, center: Number.isFinite(longitude) && Number.isFinite(latitude) && Math.abs(latitude) <= (projection === 'globe' ? 90 : 85) ? [((longitude + 180) % 360 + 360) % 360 - 180, latitude] : defaults.center,
     zoom: Number.isFinite(zoom) ? Math.max(0, Math.min(10, zoom)) : defaults.zoom,
     basemap: Object.hasOwn(defaults.basemaps, params.get('basemap')) ? params.get('basemap') : 'gray',
     q: (params.get('q') || '').slice(0, 120), allYears: params.get('search') === 'all', labels: params.get('labels') !== 'off' };

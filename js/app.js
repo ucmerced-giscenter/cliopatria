@@ -19,6 +19,7 @@ function updateUrl() {
   if (engine) {
     const view = engine.view();
     params.set('lng', view.longitude.toFixed(4)); params.set('lat', view.latitude.toFixed(4)); params.set('zoom', view.zoom.toFixed(2));
+    if (engine.projection === 'globe') params.set('projection', 'globe');
   }
   if ($('basemap').value !== 'gray') params.set('basemap', $('basemap').value);
   if (!$('labels').checked) params.set('labels', 'off');
@@ -304,6 +305,7 @@ async function initialize() {
     $('first-year').textContent = formatYear(years[0]); $('last-year').textContent = formatYear(years.at(-1));
     for (const id of ['range-start', 'range-end']) { $(id).min = years[0]; $(id).max = years.at(-1); }
     $('basemap').value = view.basemap; $('labels').checked = view.labels; $('search-input').value = view.q; $('search-years').value = view.allYears ? 'all' : 'current';
+    $('projection-control').querySelector(`input[value="${view.projection}"]`).checked = true;
     renderYear();
     try {
       engine = new HistoryMap(manifest, view, { selected: mapSelection, moved: updateUrl, loaded: () => {
@@ -311,6 +313,7 @@ async function initialize() {
       },
         error: message => { mapError = true; stopPlayback(); status('map-status', message, true); },
         basemapFallback: () => { $('basemap').value = 'plain'; mapError = false; } });
+      $('view-controls').hidden = false;
     } catch (error) { $('map-failure').hidden = false; status('map-status', error.message, true); }
     $('year-slider').addEventListener('input', () => {
       stopPlayback(); clearTimeout(sliderTimer);
@@ -331,6 +334,10 @@ async function initialize() {
     $('basemap').addEventListener('change', () => { mapError = false; engine?.setBasemap($('basemap').value); updateUrl(); });
     $('labels').addEventListener('change', () => { engine?.setLabels($('labels').checked); updateUrl(); });
     $('reset-view').addEventListener('click', () => engine?.reset());
+    $('projection-control').addEventListener('change', event => {
+      engine.setProjection(event.target.value);
+      updateUrl();
+    });
     $('copy-link').addEventListener('click', async () => {
       updateUrl();
       try { await navigator.clipboard.writeText(location.href); $('copy-link').textContent = 'Link copied'; setTimeout(() => { $('copy-link').textContent = 'Copy map link'; }, 1800); }

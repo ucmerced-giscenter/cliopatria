@@ -18,6 +18,7 @@ export class HistoryMap {
     this.searchIds = [];
     this.selectedId = -1;
     this.basemap = view.basemap;
+    this.projection = view.projection;
     this.styleReady = false;
     this.protocol = new pmtiles.Protocol();
     maplibregl.addProtocol('pmtiles', this.protocol.tile);
@@ -26,9 +27,31 @@ export class HistoryMap {
       canvasContextAttributes: { antialias: false }, renderWorldCopies: true });
     this.map.touchZoomRotate.disableRotation();
     this.map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+    for (const id of ['basemap-control', 'legend-control']) {
+      const control = document.getElementById(id);
+      this.map.addControl({
+        onAdd() { control.hidden = false; return control; },
+        onRemove() { control.remove(); }
+      }, 'top-right');
+    }
     this.map.addControl(new maplibregl.ScaleControl({ maxWidth: 120 }), 'bottom-left');
     this.map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: attribution }), 'bottom-right');
-    this.map.on('style.load', () => { this.styleReady = true; this.install(); });
+    this.map.on('style.load', () => {
+      this.styleReady = true;
+      this.map.setProjection({ type: this.projection });
+      this.install();
+    });
+    if (view.projection === 'globe') {
+      // Restore the shared camera after the flat startup constraints are lifted,
+      // unless the user has already moved the map.
+      const center = this.map.getCenter(), zoom = this.map.getZoom();
+      this.map.once('style.load', () => {
+        const current = this.map.getCenter();
+        if (this.projection === 'globe' && current.lat === center.lat && current.lng === center.lng && this.map.getZoom() === zoom) {
+          this.map.jumpTo({ center: view.center, zoom: view.zoom });
+        }
+      });
+    }
     this.map.on('idle', () => callbacks.loaded?.());
     this.map.on('moveend', () => callbacks.moved?.());
     this.map.on('error', event => {
@@ -83,6 +106,10 @@ export class HistoryMap {
     // A complete style reload reliably emits style.load so historical layers
     // are restored after changing providers with different source definitions.
     this.map.setStyle(baseStyle(name), { diff: false });
+  }
+  setProjection(type) {
+    this.projection = type;
+    if (this.styleReady) this.map.setProjection({ type });
   }
   setLabels(enabled) { this.labels = enabled; if (this.map.getLayer('polities-labels')) this.map.setLayoutProperty('polities-labels', 'visibility', enabled ? 'visible' : 'none'); }
   highlight(ids) { this.searchIds = ids; this.updateHighlights(); }
