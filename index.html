@@ -239,7 +239,6 @@
           </div>
         </details>
         <div class="map-overlay">
-          <p id="map-status" class="map-status" role="status">Loading historical boundaries…</p>
           <div id="view-controls" role="group" aria-label="Map display" hidden>
             <div class="view-actions">
               <label><input id="labels" type="checkbox" checked />Show polity names</label>
@@ -247,8 +246,8 @@
             </div>
             <fieldset id="projection-control">
               <legend class="sr-only">Map projection</legend>
-              <label><input class="sr-only" type="radio" name="projection" value="mercator" checked /><span>Flat</span></label>
-              <label><input class="sr-only" type="radio" name="projection" value="globe" /><span>Globe</span></label>
+              <label><input class="sr-only" type="radio" name="projection" value="mercator" checked /><span><svg width="18" height="18" aria-hidden="true" focusable="false"><use href="assets/icons/projections.svg#flat"></use></svg>Flat</span></label>
+              <label><input class="sr-only" type="radio" name="projection" value="globe" /><span><svg width="18" height="18" aria-hidden="true" focusable="false"><use href="assets/icons/projections.svg#globe"></use></svg>Globe</span></label>
             </fieldset>
           </div>
         </div>
@@ -277,7 +276,11 @@
             <button type="button" role="slider" id="through-handle" aria-label="Range end" disabled></button>
             <button type="button" role="slider" id="year-slider" aria-label="Map snapshot" disabled></button>
           </div>
-          <div class="axis-labels" aria-hidden="true"><span id="axis-start"></span><span id="axis-end"></span></div>
+          <div class="axis-labels">
+            <span id="axis-start" aria-hidden="true"></span>
+            <span id="timeline-coverage" role="status"></span>
+            <span id="axis-end" aria-hidden="true"></span>
+          </div>
           <div class="timeline-summary">
             <div class="time-actions" role="group" aria-label="Snapshot playback">
               <button id="previous" type="button" title="Previous snapshot" disabled><img src="assets/icons/step.svg" width="20" height="20" alt="Previous snapshot"></button>
@@ -286,6 +289,7 @@
             </div>
             <button type="button" id="copy-link">Copy map link</button>
           </div>
+          <p id="map-status" role="status">Loading historical boundaries…</p>
         </section>
       </section>
     </main>

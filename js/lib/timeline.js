@@ -7,8 +7,9 @@ const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const $ = id => document.getElementById(id);
 
 export class Timeline {
-  constructor(years, { start, end, singleYear }, onRange, onYear) {
+  constructor(years, { start, end, singleYear, snapshots }, onRange, onYear) {
     this.years = years;
+    this.snapshots = snapshots;
     this.singleYear = singleYear;
     this.first = years[0];
     this.last = years.at(-1);
@@ -159,6 +160,7 @@ export class Timeline {
     if (id === 'year-slider') {
       $('year-picker').style.setProperty('--playhead', handle.style.left);
       $('year-entry').value = formatYear(year);
+      if (this.singleYear) this.summarizePeriod(year, year);
     }
     handle.setAttribute('aria-valuenow', year);
     handle.setAttribute('aria-valuemin', min);
@@ -168,6 +170,7 @@ export class Timeline {
     handle.disabled = false;
   }
   paintRange(start, end) {
+    if (!this.singleYear) this.summarizePeriod(start, end);
     $('range-start').value = start;
     $('range-end').value = end;
     $('range-start').setCustomValidity('');
@@ -176,6 +179,14 @@ export class Timeline {
     this.place('through-handle', end, start, this.last);
     $('range-band').style.left = this.percent(start);
     $('range-band').style.right = `calc(100% - ${this.percent(end)})`;
+  }
+  summarizePeriod(start, end) {
+    const total = this.snapshots.reduce((sum, { year, count }) =>
+      year >= start && year <= end ? sum + count : sum, 0);
+    const period = start === end ? formatYear(start) : `From ${formatYear(start)} through ${formatYear(end)}`;
+    const summary = `${period} · ${total.toLocaleString()}\u00a0feature${total === 1 ? '' : 's'}`;
+    const output = $('timeline-coverage');
+    if (output.textContent !== summary) output.textContent = summary;
   }
   renderRange(onExtend) {
     $('time-coverage').querySelector(`input[value="${this.singleYear ? 'year' : 'range'}"]`).checked = true;

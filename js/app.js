@@ -48,11 +48,6 @@ function clearSelection() {
   updateScopeOptions();
   for (const button of $('search-results').querySelectorAll('button')) button.setAttribute('aria-pressed', 'false');
 }
-function renderYear() {
-  timeline.renderYear(year);
-  const entry = manifest.years.find(item => item.year === year);
-  status('map-status', entry ? `${formatYear(year)} · ${entry.count.toLocaleString()} feature${entry.count === 1 ? '' : 's'}` : 'No snapshots in this range.');
-}
 function extendTo(value) {
   if (timeline.singleYear) changeYear(value);
   else applyRange(Math.min(timeline.start, value), Math.max(timeline.end, value), value);
@@ -60,9 +55,10 @@ function extendTo(value) {
 function showYear(value) {
   if (value !== year) {
     year = value; mapError = false;
+    if (engine) status('map-status', '');
     clearSelection(); engine?.setYear(year);
   }
-  renderYear();
+  timeline.renderYear(year);
 }
 function refreshCoverage() {
   $('outside-title').textContent = timeline.singleYear ? 'Found in other years' : 'Found outside your range';
@@ -386,7 +382,7 @@ async function initialize() {
     if (!years.length || !manifest.complete) throw new Error('The map data build is not complete.');
     const view = readUrl(location.search, years, { center: config.defaultCenter, zoom: config.defaultZoom, basemaps: config.basemaps });
     year = view.year;
-    timeline = new Timeline(years, view, applyRange, changeYear);
+    timeline = new Timeline(years, { ...view, snapshots: manifest.years }, applyRange, changeYear);
     $('time-coverage').addEventListener('change', event => {
       applyRange(timeline.start, timeline.end, year, event.target.value === 'year');
     });
@@ -395,11 +391,11 @@ async function initialize() {
     timeline.renderRange(extendTo);
     $('basemap').value = view.basemap; $('labels').checked = view.labels; $('search-input').value = view.q;
     $('projection-control').querySelector(`input[value="${view.projection}"]`).checked = true;
-    renderYear();
+    timeline.renderYear(year);
+    status('map-status', '');
     try {
-      engine = new HistoryMap(manifest, view, { selected: mapSelection, moved: updateUrl, loaded: () => {
-        if (!mapError && year != null) { const count = manifest.years[years.indexOf(year)].count; status('map-status', `${formatYear(year)} · ${count.toLocaleString()} feature${count === 1 ? '' : 's'}`); }
-      },
+      engine = new HistoryMap(manifest, view, { selected: mapSelection, moved: updateUrl,
+        loaded: () => { if (!mapError && $('map-status').textContent) status('map-status', ''); },
         error: message => { mapError = true; stopPlayback(); status('map-status', message, true); },
         basemapFallback: () => { $('basemap').value = 'plain'; mapError = false; } });
       $('view-controls').hidden = false;
