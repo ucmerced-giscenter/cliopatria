@@ -17,23 +17,23 @@
 </nav>
 <section aria-labelledby="timeline-instructions">
   <h2 id="timeline-instructions">Timeline instructions</h2>
-  <p>The timeline covers 333 recorded snapshots from 3400 BCE to 1497 CE. Choose <strong>Range</strong> or <strong>Single year</strong> in <strong>Time coverage</strong> above the slider. Range limits playback, search, and downloads to the selected period. In Single year, move through any recorded snapshot. Search and downloads follow the displayed year. Switching back to Range restores your endpoints.</p>
+  <p>The timeline covers 333 recorded snapshots from 3400 BCE to 1497 CE. Choose <strong>Range</strong> or <strong>Single year</strong> in the sidebar’s <strong>Time filter</strong>. Range limits playback, search, and downloads to the selected period. In Single year, move through any recorded snapshot. Search and downloads follow the displayed year. Switching back to Range restores your endpoints.</p>
   <h3>Set the range and map year</h3>
   <p>Drag the two lower handles, or enter whole years in <strong>From</strong> and <strong>Through</strong> and choose <strong>Apply range</strong>. Use negative numbers for BCE and positive numbers for CE. There is no year zero. <strong>Reset range</strong> restores the full period.</p>
-  <p>Drag the upper marker, choose a <strong>Map year</strong>, or use <strong>Previous</strong> and <strong>Next</strong>. Play advances through the recorded snapshots in your range at about two-second intervals and stops at the last one. Pressing Play there starts again from the first snapshot.</p>
+  <p>Drag the upper marker, type a recorded year above it and press Enter, or open the year menu beside it. You can enter <strong>42 BCE</strong> or <strong>−42</strong> for a BCE snapshot. The previous and next buttons step through the available snapshots. Play advances through the recorded snapshots in your range at about two-second intervals and stops at the last one. Pressing Play there starts again from the first snapshot.</p>
   <p>Range endpoints can fall between snapshots. For example, 118–126 CE contains no recorded snapshot. The map clears the historical boundaries and offers buttons to include 117 CE or 127 CE. <a href="index.html?from=118&amp;to=126">Try this range</a>.</p>
   <h3>Keyboard, touch, and sharing</h3>
   <p>Tab to either range handle and use the arrow keys to adjust it by one year. Arrow keys on the upper marker move by one recorded snapshot. The number fields and Map year menu also work without dragging.</p>
   <p>The map opens in Flat view by default. Choose Globe in the map controls to see the world on a sphere. Zoom out to see its curvature.</p>
   <p>Copy map link copies the coverage mode, range, displayed snapshot, map location, zoom, projection, basemap, label setting, and submitted search. It does not preserve a selected feature or download settings. Open the link to return to that map view.</p>
-<p class="section-links"><a href="index.html#year-select">Open timeline controls</a><a href="#help-contents">Back to contents</a></p>
+<p class="section-links"><a href="index.html#year-entry">Open timeline controls</a><a href="#help-contents">Back to contents</a></p>
 </section>
 <section aria-labelledby="search-instructions">
   <h2 id="search-instructions">Search instructions</h2>
   <p>Use Search by name to find a polity or another named feature in the source dataset. Search is case-insensitive and matches part of a name: “Roman” can find Roman Empire and other names containing that word.</p>
   <h3>Search with suggested names</h3>
   <ol>
-    <li>The dates shown beside Search follow the timeline’s Time coverage setting. Click, tap, or Tab into the name field to see up to six suggested names from that period.</li>
+    <li>Search uses the Time filter above the name field. Click, tap, or Tab into the name field to see up to six suggested names from that period.</li>
     <li>Type to narrow the suggestions from the first character. Matching names update after a short pause. Delete the text to return to the alphabetical list.</li>
     <li>Choose a suggested name to fill the field and run the search. You can also keep typing and press Enter or Search. Suggestions are optional and are not the complete result list.</li>
     <li>Select a result to show its details and outline its polygon. Selecting a dated result shows its snapshot on the map. A named search also lists matches in other years. Choose “Extend range to … and view” in Range mode or “View …” in Single year mode.</li>
@@ -58,7 +58,7 @@
 <p class="section-links"><a href="index.html#search-title">Open search controls</a><a href="#help-contents">Back to contents</a></p>
 </section>
 <section aria-labelledby="download-instructions">
-<h2 id="download-instructions">Download instructions</h2><ol><li>Choose All features in period, Current search results, Visible map extent, Selected feature, or Entire dataset.</li><li>Set Time coverage on the timeline. Choose Range for a period or Single year for the displayed snapshot. The download summary shows the chosen dates. Preparing a download captures the selection at that moment.</li><li>Choose GeoJSON, CSV, KMZ, or Shapefile, then Prepare download.</li><li>When the file is ready, use the Download link. No ArcGIS account is required for this public layer.</li></ol>
+<h2 id="download-instructions">Download instructions</h2><ol><li>Choose All features in period, Current search results, Visible map extent, Selected feature, or Entire dataset.</li><li>Set the Time filter above Search. Choose Range for a period or Single year for the displayed snapshot. The download summary shows which scope will be used. Preparing a download captures the selection at that moment.</li><li>Choose GeoJSON, CSV, KMZ, or Shapefile, then Prepare download.</li><li>When the file is ready, use the Download link. No ArcGIS account is required for this public layer.</li></ol>
 <p><strong>Visible extent uses the map rectangle when you press Prepare download.</strong> It includes every polygon intersecting that rectangle in the chosen period, keeping each polygon whole. It does not clip borders or export a picture of the map. Panning afterward does not change the pending export.</p>
 <p>Search exports include <strong>all matching results in the selected time coverage</strong>, including results beyond the first page. Entire dataset exports contain all years, irrespective of the displayed year. Polygons from different snapshots can overlap in a multi-year export; use Year when analyzing them.</p>
 <p>ArcGIS prepares the file and supplies a temporary download link. Large exports may take a minute or longer. Keep the page open while it prepares. Stop waiting stops this page's progress checks; it does not cancel the server job. Generate the file again if its link expires. The browser saves the file without the app reading it all into memory.</p>
@@ -68,7 +68,7 @@
 <p class="section-links"><a href="index.html#download-title">Open download controls</a><a href="#help-contents">Back to contents</a></p>
 </section>
 <section aria-labelledby="accessibility">
-<h2 id="accessibility">Keyboard and mobile access</h2><p>Use Tab to move between controls and Enter or Space to activate buttons. Arrow keys adjust the focused year slider. The year menu is an alternative to dragging. Search results provide a text route to selection, details, and downloads without clicking a polygon. Use the arrow at the left edge of the map to hide or show the sidebar. On small screens, tap <strong>Search, selection and downloads</strong> below the map to open or close the panel.</p><p>The map needs a WebGL-capable browser and an internet connection for basemaps, search, and exports. If the map cannot render, search and downloads remain available. The Plain background option reduces basemap traffic. Labels appear as you zoom in.</p>
+<h2 id="accessibility">Keyboard and mobile access</h2><p>Use Tab to move between controls and Enter or Space to activate buttons. Arrow keys adjust the focused year slider. The year menu is an alternative to dragging. Search results provide a text route to selection, details, and downloads without clicking a polygon. Use the arrow at the left edge of the map to hide or show the sidebar. On small screens, use the sidebar button below the map to open or close the panel.</p><p>The map needs a WebGL-capable browser and an internet connection for basemaps, search, and exports. If the map cannot render, search and downloads remain available. The Plain background option reduces basemap traffic. Labels appear as you zoom in.</p>
 </section>
 <section aria-labelledby="privacy">
 <h2 id="privacy">Privacy and service availability</h2><p>The map page includes Plausible analytics and download-link click tracking. A click does not confirm that a file finished downloading. No account sign-in is required, and the app does not keep a persistent dataset cache. Requests for basemaps, searches, and downloads go to Esri's services. Normal browser and map-library caches may be used.</p>

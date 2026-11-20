@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { readUrl } from '../js/lib/core.js';
+import { parseYearInput, readUrl } from '../js/lib/core.js';
 
 const years = [-14, -1, 1, 117, 127, 1497];
 const defaults = { center: [20, 28], zoom: 1.5, basemaps: { plain: null } };
@@ -8,6 +8,12 @@ function time(query) {
   const { start, end, year } = readUrl(query, years, defaults);
   return [start, end, year];
 }
+
+test('the editable map year accepts calendar labels and signed BCE years', () => {
+  for (const text of ['42 BCE', '42bc', '-42', '−42']) assert.equal(parseYearInput(text), -42);
+  for (const text of ['117', ' 117 ce ', '117 AD']) assert.equal(parseYearInput(text), 117);
+  for (const text of ['', '0', '0 BCE', '-42 CE', '1.5', '117xyz']) assert.equal(parseYearInput(text), null);
+});
 
 test('range endpoints keep calendar-year precision and only recorded snapshots can be displayed', () => {
   assert.deepEqual(time(''), [-14, 1497, 1497]);

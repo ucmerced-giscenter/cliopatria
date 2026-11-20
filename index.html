@@ -55,26 +55,17 @@
       </nav>
     </header>
     <section class="timeline" aria-label="Time navigation">
-      <div class="timeline-tools">
-        <div id="time-coverage" role="radiogroup" aria-labelledby="coverage-label">
-          <span id="coverage-label">Time coverage</span>
-          <div class="coverage-options">
-            <label><input class="sr-only" type="radio" name="coverage" value="range" checked><span>Range</span></label>
-            <label><input class="sr-only" type="radio" name="coverage" value="year"><span>Single year</span></label>
+      <div class="year-anchor">
+        <div id="year-picker">
+          <label class="sr-only" for="year-entry">Map year</label>
+          <input id="year-entry" type="text" autocomplete="off" spellcheck="false"
+            aria-describedby="year-entry-hint" placeholder="No snapshot" disabled>
+          <span class="sr-only" id="year-entry-hint">Type a recorded year, such as 117 CE or 42 BCE, and press Enter.</span>
+          <div class="year-menu">
+            <select id="year-select" aria-label="Choose a recorded map year" title="Choose a recorded map year" disabled>
+              <option>Loading…</option>
+            </select>
           </div>
-        </div>
-        <form id="range-form" aria-label="Timeline range">
-          <label>From <input id="range-start" type="number" step="1" required aria-describedby="range-help"></label>
-          <label>Through <input id="range-end" type="number" step="1" required aria-describedby="range-help"></label>
-          <button type="submit">Apply range</button>
-          <span id="range-help" class="small">Use negative years for BCE.</span>
-        </form>
-        <div class="time-actions">
-          <label for="year-select">Map year</label>
-          <select id="year-select" disabled><option>Loading…</option></select>
-          <button id="previous" type="button" aria-label="Previous snapshot" disabled>Previous</button>
-          <button id="play" type="button" aria-pressed="false" disabled>Play</button>
-          <button id="next" type="button" aria-label="Next snapshot" disabled>Next</button>
         </div>
       </div>
       <div id="timeline-track" role="group" aria-label="Timeline range and map year">
@@ -85,27 +76,48 @@
       </div>
       <div class="axis-labels" aria-hidden="true"><span id="axis-start"></span><span id="axis-end"></span></div>
       <div class="timeline-summary">
-        <span id="range-summary"></span>
-        <div id="nearby-years"></div>
-        <button type="button" id="full-range" hidden>Reset range</button>
+        <div class="time-actions" role="group" aria-label="Snapshot playback">
+          <button id="previous" type="button" title="Previous snapshot" disabled><img src="assets/icons/step.svg" width="20" height="20" alt="Previous snapshot"></button>
+          <button id="play" type="button" title="Play snapshots" disabled><img src="assets/icons/play.svg" width="20" height="20" alt="Play snapshots"></button>
+          <button id="next" type="button" title="Next snapshot" disabled><img src="assets/icons/step.svg" width="20" height="20" alt="Next snapshot"></button>
+        </div>
         <button type="button" id="copy-link">Copy map link</button>
       </div>
     </section>
     <main class="workspace">
       <h1 class="sr-only">Explore historical polities</h1>
       <button id="sidebar-toggle" type="button" aria-controls="controls" aria-expanded="true"
-        aria-label="Search, selection and downloads" title="Hide sidebar" hidden>
-        <span>Search, selection and downloads</span>
+        aria-label="Time filter, search, selection and downloads" title="Hide sidebar" hidden>
+        <span>Time filter, search, selection and downloads</span>
       </button>
       <aside
         class="controls"
         id="controls"
         tabindex="-1"
-        aria-label="Search, selection, and downloads"
+        aria-label="Time filter, search, selection and downloads"
       >
+        <section class="control-section" aria-labelledby="coverage-label">
+          <h2 id="coverage-label">Time filter</h2>
+          <div id="time-coverage" role="radiogroup" aria-labelledby="coverage-label">
+            <div class="coverage-options">
+              <label><input class="sr-only" type="radio" name="coverage" value="range" checked><span>Range</span></label>
+              <label><input class="sr-only" type="radio" name="coverage" value="year"><span>Single year</span></label>
+            </div>
+          </div>
+          <form id="range-form" aria-label="Filter years">
+            <label>From <input id="range-start" type="number" step="1" required aria-describedby="range-help"></label>
+            <label>Through <input id="range-end" type="number" step="1" required aria-describedby="range-help"></label>
+            <span id="range-help" class="small">Use negative years for BCE.</span>
+            <div class="button-row">
+              <button type="submit">Apply range</button>
+              <button type="button" id="full-range" hidden>Reset range</button>
+            </div>
+          </form>
+          <p id="range-summary" class="small"></p>
+          <div id="nearby-years"></div>
+        </section>
         <section class="control-section" aria-labelledby="search-title">
           <h2 id="search-title" tabindex="-1">Search by name</h2>
-          <p id="search-range" class="scope-note"></p>
           <form id="search-form">
             <label for="search-input" class="sr-only">Polity name</label
             ><input

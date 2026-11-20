@@ -82,8 +82,7 @@
 .legend-swatch.search-match{border:3px solid #005fcc}
 .legend-swatch.selected-feature{border:3px solid #101c16;box-shadow:0 0 0 2px white,0 0 0 3px #899c90}
 
-.timeline-tools,.timeline-summary,#range-form,#nearby-years{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
-.timeline-tools{justify-content:space-between;gap:8px 20px}
+.timeline-summary,#nearby-years{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
 #time-coverage,.coverage-options{display:flex;align-items:center}
 #time-coverage{gap:8px;font-size:.9rem;font-weight:550}
 .coverage-options{border:1px solid #899c90;border-radius:5px;background:white}
@@ -92,9 +91,18 @@
 .coverage-options input:checked + span{background:var(--ink);color:white;font-weight:650}
 .coverage-options input:focus-visible + span{outline:3px solid #006ab4;outline-offset:2px}
 @media(forced-colors:active){.coverage-options input:checked + span{outline:2px solid Highlight;outline-offset:-3px}}
-#range-form label{display:flex;align-items:center;gap:6px;margin:0}
-#range-form input{width:6em;font-variant-numeric:tabular-nums}
-.timeline .time-actions select{min-width:100px}
+#range-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 10px;margin-top:10px}
+#range-form label{margin:0}
+#range-form input{display:block;margin-top:3px;font-variant-numeric:tabular-nums}
+#range-help,#range-form .button-row{grid-column:1/-1}
+#range-form .button-row{margin-top:2px}
+.year-anchor{margin:0 22px}
+#year-picker{--picker-width:9.7rem;position:relative;left:clamp(0px,calc(var(--playhead,50%) - var(--picker-width) / 2),calc(100% - var(--picker-width)));width:var(--picker-width);display:flex;align-items:stretch;background:white;border:1px solid #899c90;border-radius:5px}
+#year-entry{width:0;min-width:0;flex:1;border:0;border-radius:5px 0 0 5px;padding:6px 0 6px 9px;color:var(--ink);font-size:1.15rem;font-weight:650;font-variant-numeric:tabular-nums}
+.year-menu{position:relative;width:36px;border-left:1px solid var(--line);display:grid;place-items:center}
+.year-menu::before{content:'';width:7px;height:7px;border:solid var(--ink);border-width:0 2px 2px 0;transform:translateY(-2px) rotate(45deg)}
+.year-menu select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.year-menu:focus-within{outline:3px solid #006ab4;border-radius:3px}
 #timeline-track{position:relative;height:46px;margin:0 22px;touch-action:none;cursor:pointer}
 .time-rail{position:absolute;top:50%;left:0;right:0;height:4px;background:#a3ada4;border-radius:3px;pointer-events:none}
 #range-band{position:absolute;inset:0;background:#244c37}
@@ -108,12 +116,13 @@
 #timeline-track #year-slider::after{width:12px;height:16px;top:auto;bottom:0;left:50%;transform:translateX(-50%);background:#244c37;clip-path:polygon(0 0,100% 0,100% 62%,50% 100%,0 62%)}
 .timeline-summary{font-size:.86rem;gap:4px 12px}
 .axis-labels{display:flex;justify-content:space-between;margin:0 12px;color:var(--muted);font-size:.75rem;font-variant-numeric:tabular-nums}
-#range-summary{font-weight:600}
-.timeline-summary button{min-height:28px;padding:3px 2px;border:0;background:transparent;text-decoration:underline;text-underline-offset:3px}
-#copy-link{margin-left:auto}
+#range-summary{margin:8px 0 0}
+#nearby-years:not(:empty){margin-top:6px}
+.timeline-summary .time-actions{gap:4px}
+.time-actions button{display:grid;place-items:center;width:44px;height:44px;padding:0}
+#previous img{transform:rotate(180deg)}
+#copy-link{margin-left:auto;min-height:32px;padding:3px 2px;border:0;background:transparent;text-decoration:underline;text-underline-offset:3px}
 .scope-note{margin:8px 0;color:var(--ink);font-weight:600;font-size:.9rem}
 #outside-group{margin-top:16px;border-top:1px solid var(--line);padding-top:8px}
 #outside-title,#outside-results .result-button span{color:var(--muted)}
 #outside-results .result-button{background:#f6f7f5}
-@media(max-width:600px){#range-form{gap:4px 8px}#range-help{width:100%}.timeline-tools{gap:4px}.timeline .time-actions{gap:4px}.timeline .time-actions select{min-width:0}.timeline-summary{gap:2px 8px}}
-@media(max-width:600px){#range-form input{width:4.8em}#range-form button{padding:7px 9px}}

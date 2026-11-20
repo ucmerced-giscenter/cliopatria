@@ -65,8 +65,6 @@ function showYear(value) {
   renderYear();
 }
 function refreshCoverage() {
-  const { label } = timeline.coverage(year);
-  $('search-range').textContent = timeline.singleYear ? `Search in ${label}` : `Search within ${label}`;
   $('outside-title').textContent = timeline.singleYear ? 'Found in other years' : 'Found outside your range';
   $('more-outside').textContent = timeline.singleYear ? 'Show more from other years' : 'Show more outside this range';
   clearSuggestions();
@@ -84,9 +82,16 @@ function applyRange(start, end, preferred = year, singleYear = timeline.singleYe
   showYear(next);
   if (changed) refreshCoverage();
 }
+function setPlaying(active) {
+  if (active === playing) return;
+  playing = active;
+  const button = $('play'), icon = button.querySelector('img');
+  button.title = icon.alt = active ? 'Pause playback' : 'Play snapshots';
+  icon.src = active ? 'assets/icons/pause.svg' : 'assets/icons/play.svg';
+}
 function stopPlayback() {
-  playing = false; clearTimeout(playbackTimer);
-  $('play').textContent = 'Play'; $('play').setAttribute('aria-pressed', 'false');
+  clearTimeout(playbackTimer);
+  setPlaying(false);
 }
 function changeYear(value, { playback = false } = {}) {
   if (!playback) stopPlayback();
@@ -147,7 +152,8 @@ async function loadSuggestions(term, revision) {
   suggestionTimer = null;
   const controller = suggestionController = new AbortController();
   const timer = setTimeout(() => controller.abort(new DOMException('Suggestions timed out.', 'TimeoutError')), 10000);
-  const { start, end, label: scopeLabel } = timeline.coverage(year);
+  const { start, end } = timeline.coverage(year);
+  const scopeLabel = timeline.singleYear ? 'this year' : 'this range';
   status('suggestions-status', 'Finding suggested names…');
   try {
     const names = await api.suggestNames(andWhere(nameWhere(term), yearWhere(start, end)), controller.signal);
@@ -219,10 +225,10 @@ async function loadResults(group, more = false) {
   const controller = group.request = new AbortController();
   const timer = setTimeout(() => controller.abort(new DOMException('Search timed out. Please try again.', 'TimeoutError')), 30000);
   const where = searchPredicate(group);
-  const { label } = timeline.coverage(year);
+  const insideLabel = timeline.singleYear ? 'in this year' : 'in this range';
   const outsideLabel = timeline.singleYear ? 'in other years' : 'outside your range';
   $(group.more).disabled = true;
-  status(group.status, group === inside ? `Searching ${label}…` : `Looking for matches ${outsideLabel}…`);
+  status(group.status, group === inside ? `Searching ${insideLabel}…` : `Looking for matches ${outsideLabel}…`);
   try {
     const [rows, count] = group === inside && !timeline.available.length ? [[], 0] : await Promise.all([
       api.search(where, group.rows.length, controller.signal), more ? group.total : api.count(where, controller.signal)
@@ -231,7 +237,7 @@ async function loadResults(group, more = false) {
     group.rows.push(...rows); group.total = count;
     renderResults(group);
     if (group === outside) $('outside-group').hidden = !count;
-    const scope = group === inside ? `in ${label}` : outsideLabel;
+    const scope = group === inside ? insideLabel : outsideLabel;
     status(group.status, count ? `${group.rows.length.toLocaleString()} of ${count.toLocaleString()} results ${scope}.` : `No matches ${scope}.`);
   } catch (error) {
     if (group.request === controller && error.name !== 'AbortError') {
@@ -281,11 +287,11 @@ function mapSelection(candidate, point, candidates) {
 }
 function updateExportControls() {
   const scope = $('download-scope').value;
-  const { label, countLabel } = timeline.coverage(year);
-  let coverage = `${label} · ${countLabel}`;
+  const { countLabel } = timeline.coverage(year);
+  let coverage = `Time filter · ${countLabel}`;
   if (scope === 'all') coverage = 'Entire dataset · all years';
   else if (scope === 'selected' && selected) coverage = `Selected feature · ${formatYear(selected.Year)}`;
-  else if (scope === 'search') coverage = `Search matches within ${coverage}`;
+  else if (scope === 'search') coverage = `Filtered search matches · ${countLabel}`;
   $('download-range-summary').textContent = coverage;
   $('generate-download').disabled = !!exportController || (scope !== 'all' && !timeline.available.length);
   $('download-selection-label').textContent = selected ? 'Selected feature:' : 'No feature selected.';
@@ -398,13 +404,13 @@ async function initialize() {
         basemapFallback: () => { $('basemap').value = 'plain'; mapError = false; } });
       $('view-controls').hidden = false;
     } catch (error) { $('map-failure').hidden = false; status('map-status', error.message, true); }
-    $('year-select').addEventListener('change', () => changeYear(Number($('year-select').value)));
+    $('year-picker').addEventListener('focusin', stopPlayback);
     $('previous').addEventListener('click', () => changeYear(timeline.available[timeline.available.indexOf(year) - 1]));
     $('next').addEventListener('click', () => changeYear(timeline.available[timeline.available.indexOf(year) + 1]));
     $('play').addEventListener('click', () => {
       if (playing) { stopPlayback(); return; }
       if (year === timeline.available.at(-1)) changeYear(timeline.available[0]);
-      playing = true; $('play').textContent = 'Pause'; $('play').setAttribute('aria-pressed', 'true'); schedulePlayback();
+      setPlaying(true); schedulePlayback();
     });
     document.addEventListener('visibilitychange', () => { if (document.hidden) stopPlayback(); });
     $('basemap').addEventListener('change', () => { mapError = false; engine?.setBasemap($('basemap').value); updateUrl(); });

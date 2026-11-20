@@ -1,4 +1,4 @@
-import { formatYear, nearestYear } from './core.js';
+import { formatYear, nearestYear, parseYearInput } from './core.js';
 
 // Consecutive calendar positions put 1 BCE immediately before 1 CE.
 const position = year => year < 0 ? year + 1 : year;
@@ -22,6 +22,30 @@ export class Timeline {
       return tick;
     }));
     this.setRange(start, end);
+    const entry = $('year-entry'), menu = $('year-select');
+    const restoreYear = () => {
+      entry.setCustomValidity('');
+      entry.value = menu.value ? formatYear(Number(menu.value)) : '';
+    };
+    const commitYear = (reportError) => {
+      const year = parseYearInput(entry.value);
+      if (this.available.includes(year)) {
+        onYear(year);
+        restoreYear();
+      } else if (reportError) {
+        entry.setCustomValidity(year == null ? 'Enter a year such as 117 CE or 42 BCE.'
+          : `No snapshot for ${formatYear(year)} in this filter. Choose a year from the menu.`);
+        entry.reportValidity();
+      } else restoreYear();
+    };
+    entry.addEventListener('focus', () => entry.select());
+    entry.addEventListener('input', () => entry.setCustomValidity(''));
+    entry.addEventListener('blur', () => commitYear(false));
+    entry.addEventListener('keydown', event => {
+      if (event.key === 'Enter') { event.preventDefault(); commitYear(true); }
+      if (event.key === 'Escape') { event.preventDefault(); restoreYear(); }
+    });
+    menu.addEventListener('change', () => onYear(Number(menu.value)));
     const track = $('timeline-track');
     const handles = [$('from-handle'), $('through-handle'), $('year-slider')];
     for (const input of [$('range-start'), $('range-end')]) {
@@ -132,6 +156,10 @@ export class Timeline {
   place(id, year, min, max) {
     const handle = $(id);
     handle.style.left = this.percent(year);
+    if (id === 'year-slider') {
+      $('year-picker').style.setProperty('--playhead', handle.style.left);
+      $('year-entry').value = formatYear(year);
+    }
     handle.setAttribute('aria-valuenow', year);
     handle.setAttribute('aria-valuemin', min);
     handle.setAttribute('aria-valuemax', max);
@@ -151,11 +179,10 @@ export class Timeline {
   }
   renderRange(onExtend) {
     $('time-coverage').querySelector(`input[value="${this.singleYear ? 'year' : 'range'}"]`).checked = true;
-    for (const id of ['range-form', 'from-handle', 'through-handle', 'range-band', 'range-summary']) $(id).hidden = this.singleYear;
+    for (const id of ['range-form', 'from-handle', 'through-handle', 'range-band']) $(id).hidden = this.singleYear;
     this.paintRange(this.start, this.end);
     if (!this.singleYear) {
-      const { label, countLabel } = this.coverage();
-      $('range-summary').textContent = `${label} · ${countLabel}`;
+      $('range-summary').textContent = `Search and download · ${this.coverage().countLabel}`;
     }
     $('full-range').hidden = this.singleYear || (this.start === this.first && this.end === this.last);
     $('year-select').replaceChildren(...this.available.map(y => new Option(formatYear(y), y)));
@@ -176,6 +203,13 @@ export class Timeline {
     const available = this.available;
     $('year-select').value = year ?? '';
     $('year-select').disabled = !available.length;
+    $('year-entry').disabled = !available.length;
+    $('year-entry').setCustomValidity('');
+    if (year == null) {
+      $('year-entry').value = '';
+      $('year-picker').style.removeProperty('--playhead');
+    }
+    if (this.singleYear) $('range-summary').textContent = `Search and download · ${formatYear(year)}`;
     $('year-slider').hidden = year == null;
     if (year != null) this.place('year-slider', year, available[0], available.at(-1));
     $('previous').disabled = !available.length || year === available[0];

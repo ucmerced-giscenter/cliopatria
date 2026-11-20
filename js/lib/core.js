@@ -2,6 +2,15 @@ export const FIELDS = ['OBJECTID', 'Year', 'AreaSqKM', 'Name', 'Color', 'Type', 
 export const FORMATS = { geojson: 'GeoJSON', csv: 'CSV', shapefile: 'Shapefile ZIP', kml: 'KMZ' };
 export const EMPTY = { type: 'FeatureCollection', features: [] };
 export function formatYear(year) { return `${Math.abs(year)} ${year < 0 ? 'BCE' : 'CE'}`; }
+export function parseYearInput(text) {
+  const match = /^(-?)(\d+)\s*(BCE?|CE|AD)?$/i.exec(text.trim().replace('−', '-'));
+  if (!match) return null;
+  const [, minus, digits, era] = match;
+  if (minus && /^(CE|AD)$/i.test(era)) return null;
+  const isBce = minus === '-' || /^BC/i.test(era);
+  const year = isBce ? -Number(digits) : Number(digits);
+  return Number.isSafeInteger(year) && year !== 0 ? year : null;
+}
 export function featureName(feature) { return feature.Name?.trim() || 'Unnamed region'; }
 export function featureDetails(feature) {
   return [
