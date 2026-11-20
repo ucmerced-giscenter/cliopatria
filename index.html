@@ -54,36 +54,6 @@
         >
       </nav>
     </header>
-    <section class="timeline" aria-label="Time navigation">
-      <div class="year-anchor">
-        <div id="year-picker">
-          <label class="sr-only" for="year-entry">Map year</label>
-          <input id="year-entry" type="text" autocomplete="off" spellcheck="false"
-            aria-describedby="year-entry-hint" placeholder="No snapshot" disabled>
-          <span class="sr-only" id="year-entry-hint">Type a recorded year, such as 117 CE or 42 BCE, and press Enter.</span>
-          <div class="year-menu">
-            <select id="year-select" aria-label="Choose a recorded map year" title="Choose a recorded map year" disabled>
-              <option>Loading…</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div id="timeline-track" role="group" aria-label="Timeline range and map year">
-        <div class="time-rail"><div id="range-band"></div><div id="snapshot-ticks" aria-hidden="true"></div></div>
-        <button type="button" role="slider" id="from-handle" aria-label="Range start" disabled></button>
-        <button type="button" role="slider" id="through-handle" aria-label="Range end" disabled></button>
-        <button type="button" role="slider" id="year-slider" aria-label="Map snapshot" disabled></button>
-      </div>
-      <div class="axis-labels" aria-hidden="true"><span id="axis-start"></span><span id="axis-end"></span></div>
-      <div class="timeline-summary">
-        <div class="time-actions" role="group" aria-label="Snapshot playback">
-          <button id="previous" type="button" title="Previous snapshot" disabled><img src="assets/icons/step.svg" width="20" height="20" alt="Previous snapshot"></button>
-          <button id="play" type="button" title="Play snapshots" disabled><img src="assets/icons/play.svg" width="20" height="20" alt="Play snapshots"></button>
-          <button id="next" type="button" title="Next snapshot" disabled><img src="assets/icons/step.svg" width="20" height="20" alt="Next snapshot"></button>
-        </div>
-        <button type="button" id="copy-link">Copy map link</button>
-      </div>
-    </section>
     <main class="workspace">
       <h1 class="sr-only">Explore historical polities</h1>
       <button id="sidebar-toggle" type="button" aria-controls="controls" aria-expanded="true"
@@ -287,6 +257,36 @@
             The map is unavailable. You can still use search and download data.
           </p>
         </div>
+        <section class="timeline" aria-label="Time navigation">
+          <div class="year-anchor">
+            <div id="year-picker">
+              <label class="sr-only" for="year-entry">Map year</label>
+              <input id="year-entry" type="text" autocomplete="off" spellcheck="false"
+                aria-describedby="year-entry-hint" placeholder="No snapshot" disabled>
+              <span class="sr-only" id="year-entry-hint">Type a recorded year, such as 117 CE or 42 BCE, and press Enter.</span>
+              <div class="year-menu">
+                <select id="year-select" aria-label="Choose a recorded map year" title="Choose a recorded map year" disabled>
+                  <option>Loading…</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div id="timeline-track" role="group" aria-label="Timeline range and map year">
+            <div class="time-rail"><div id="range-band"></div><div id="snapshot-ticks" aria-hidden="true"></div></div>
+            <button type="button" role="slider" id="from-handle" aria-label="Range start" disabled></button>
+            <button type="button" role="slider" id="through-handle" aria-label="Range end" disabled></button>
+            <button type="button" role="slider" id="year-slider" aria-label="Map snapshot" disabled></button>
+          </div>
+          <div class="axis-labels" aria-hidden="true"><span id="axis-start"></span><span id="axis-end"></span></div>
+          <div class="timeline-summary">
+            <div class="time-actions" role="group" aria-label="Snapshot playback">
+              <button id="previous" type="button" title="Previous snapshot" disabled><img src="assets/icons/step.svg" width="20" height="20" alt="Previous snapshot"></button>
+              <button id="play" type="button" title="Play snapshots" disabled><img src="assets/icons/play.svg" width="20" height="20" alt="Play snapshots"></button>
+              <button id="next" type="button" title="Next snapshot" disabled><img src="assets/icons/step.svg" width="20" height="20" alt="Next snapshot"></button>
+            </div>
+            <button type="button" id="copy-link">Copy map link</button>
+          </div>
+        </section>
       </section>
     </main>
     <noscript
