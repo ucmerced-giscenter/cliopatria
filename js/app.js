@@ -10,6 +10,7 @@ let manifest, years, timeline, year, engine, selected, querySpec;
 const inside = { list: 'search-results', more: 'more-results', status: 'search-status', rows: [], total: 0 };
 const outside = { list: 'outside-results', more: 'more-outside', status: 'outside-status', rows: [], total: 0 };
 let highlightController, selectionController, exportController;
+let previewKey, previewController;
 let selectionRevision = 0, playbackTimer, playing = false, mapError = false;
 let overlapCandidates = [], overlapPoint;
 let suggestionController, suggestionTimer, suggestionRevision = 0;
@@ -288,7 +289,9 @@ function updateExportControls() {
   if (scope === 'all') coverage = 'Entire dataset · all years';
   else if (scope === 'selected' && selected) coverage = `Selected feature · ${formatYear(selected.Year)}`;
   else if (scope === 'search') coverage = `Filtered search matches · ${countLabel}`;
+  else if (scope === 'extent') coverage = `Visible map extent · ${countLabel}`;
   $('download-range-summary').textContent = coverage;
+  updateDownloadCount();
   $('generate-download').disabled = !!exportController || (scope !== 'all' && !timeline.available.length);
   $('download-selection-label').textContent = selected ? 'Selected feature:' : 'No feature selected.';
   $('download-selection-name').hidden = !selected;
@@ -298,15 +301,58 @@ function updateExportControls() {
     : scope === 'selected' ? 'Only this feature will be exported.' : 'Use the button below to export only this feature.';
   $('use-selected-feature').hidden = !selected || scope === 'selected';
 }
-function exportPeriod() {
-  if (!timeline.available.length) throw new Error('No snapshots in this range.');
+function exportSelection() {
+  const scope = $('download-scope').value;
+  if (scope === 'all') return { where: '1=1', description: 'entire dataset, all years' };
+  if (!timeline.available.length) return null;
+  if (scope === 'selected') {
+    return selected && { where: idsWhere([selected.OBJECTID]), description: `${featureName(selected)}, ${formatYear(selected.Year)}` };
+  }
   const { start, end, label } = timeline.coverage(year);
-  return { where: yearWhere(start, end), description: label };
+  if (scope === 'search') {
+    return querySpec && { where: searchPredicate(), description: `search “${querySpec.term || 'all features'}”, ${label}` };
+  }
+  const where = yearWhere(start, end);
+  if (scope === 'extent') return engine && { where, bounds: engine.bounds(), description: `visible map extent, ${label}` };
+  return { where, description: label };
+}
+async function updateDownloadCount(retry = false) {
+  const selection = exportSelection();
+  const key = JSON.stringify([selection?.where, selection?.bounds]);
+  if (key === previewKey && !retry) return;
+  previewKey = key;
+  previewController?.abort();
+  previewController = null;
+  $('retry-download-count').hidden = true;
+  if (!selection) { status('download-feature-count', '0 features'); return; }
+
+  const controller = previewController = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 15000);
+  status('download-feature-count', 'Counting features…');
+  try {
+    const { where, bounds } = selection;
+    const count = bounds ? await api.extentCount(where, bounds, controller.signal) : await api.count(where, controller.signal);
+    if (previewController === controller && !controller.signal.aborted) {
+      status('download-feature-count', `${count.toLocaleString()} feature${count === 1 ? '' : 's'}`);
+    }
+  } catch {
+    if (previewController === controller) {
+      status('download-feature-count', 'Count unavailable');
+      $('retry-download-count').hidden = false;
+    }
+  } finally {
+    clearTimeout(timer);
+    if (previewController === controller) previewController = null;
+  }
+}
+function updateExtentCount() {
+  if ($('download-scope').value === 'extent') updateDownloadCount();
 }
 async function prepareDownload(event) {
   event.preventDefault();
   if ($('generate-download').disabled) return;
-  const scope = $('download-scope').value, format = $('download-format').value;
+  const selection = exportSelection(), format = $('download-format').value;
+  if (!selection) return;
   const controller = exportController = new AbortController();
   const timer = setTimeout(() => controller.abort(new DOMException('The export is taking too long. Try a smaller range or try again later.', 'TimeoutError')), 15 * 60 * 1000);
   $('generate-download').disabled = true; $('cancel-download').hidden = false; $('download-link').hidden = true; $('download-link').removeAttribute('href');
@@ -314,29 +360,16 @@ async function prepareDownload(event) {
   status('download-status', 'Checking the selected features…');
   try {
     // Capture all criteria before the first await; later map movements do not alter this request.
-    let where, description, count, filters, exportGeometry;
-    if (scope === 'selected') {
-      if (!selected) throw new Error('Select a feature first.');
-      where = idsWhere([selected.OBJECTID]); description = `${featureName(selected)}, ${formatYear(selected.Year)}`;
-    } else if (scope === 'search') {
-      if (!querySpec) throw new Error('Run a search first.');
-      where = searchPredicate(); description = `search “${querySpec.term || 'all features'}”, ${timeline.coverage(year).label}`;
-    } else if (scope === 'all') { where = '1=1'; description = 'entire dataset, all years'; }
-    else {
-      const period = exportPeriod(); where = period.where; description = period.description;
-      if (scope === 'extent') {
-        if (!engine) throw new Error('The map must be available to export its extent.');
-        const bounds = engine.bounds(); description = `visible map extent, ${description}`;
-        const ids = await api.extentIds(where, bounds, controller.signal);
-        count = ids.length;
-        // If the viewport includes every feature in this period, use the short
-        // temporal predicate. Otherwise retain the exact selected IDs.
-        const periodCount = await api.count(where, controller.signal);
-        const boxes = envelopes(bounds);
-        if (count === periodCount) filters = [where];
-        else if (boxes.length === 1) { filters = [where]; exportGeometry = mercatorEnvelope(boxes[0]); }
-        else filters = idFilters(ids); // Avoid duplicates across split antimeridian envelopes.
-      }
+    const { where, description, bounds } = selection;
+    let count, filters, exportGeometry;
+    if (bounds) {
+      const ids = await api.extentIds(where, bounds, controller.signal);
+      count = ids.length;
+      const periodCount = await api.count(where, controller.signal);
+      const boxes = envelopes(bounds);
+      if (count === periodCount) filters = [where];
+      else if (boxes.length === 1) { filters = [where]; exportGeometry = mercatorEnvelope(boxes[0]); }
+      else filters = idFilters(ids); // Avoid duplicates across split antimeridian envelopes.
     }
     if (count === undefined) count = await api.count(where, controller.signal);
     if (!count) throw new Error('No features match this selection. Choose a different year, range, or area.');
@@ -382,7 +415,7 @@ async function initialize() {
     if (!years.length || !manifest.complete) throw new Error('The map data build is not complete.');
     const view = readUrl(location.search, years, { center: config.defaultCenter, zoom: config.defaultZoom, basemaps: config.basemaps });
     year = view.year;
-    timeline = new Timeline(years, { ...view, snapshots: manifest.years }, applyRange, changeYear);
+    timeline = new Timeline(years, view, applyRange, changeYear);
     $('time-coverage').addEventListener('change', event => {
       applyRange(timeline.start, timeline.end, year, event.target.value === 'year');
     });
@@ -394,8 +427,8 @@ async function initialize() {
     timeline.renderYear(year);
     status('map-status', '');
     try {
-      engine = new HistoryMap(manifest, view, { selected: mapSelection, moved: updateUrl,
-        loaded: () => { if (!mapError && $('map-status').textContent) status('map-status', ''); },
+      engine = new HistoryMap(manifest, view, { selected: mapSelection, moved: () => { updateUrl(); updateExtentCount(); },
+        loaded: () => { if (!mapError && $('map-status').textContent) status('map-status', ''); updateExtentCount(); },
         error: message => { mapError = true; stopPlayback(); status('map-status', message, true); },
         basemapFallback: () => { $('basemap').value = 'plain'; mapError = false; } });
       $('view-controls').hidden = false;
@@ -415,6 +448,7 @@ async function initialize() {
     $('projection-control').addEventListener('change', event => {
       engine.setProjection(event.target.value);
       updateUrl();
+      updateExtentCount();
     });
     let shareFeedbackTimer;
     $('share-map').addEventListener('click', async () => {
@@ -465,6 +499,7 @@ async function initialize() {
     $('clear-selection').addEventListener('click', clearSelection);
     $('overlap-select').addEventListener('change', () => { const feature = overlapCandidates.find(item => item.OBJECTID === Number($('overlap-select').value)); if (feature) selectFeature(feature, overlapPoint); });
     $('download-scope').addEventListener('change', updateExportControls);
+    $('retry-download-count').addEventListener('click', () => updateDownloadCount(true));
     $('use-selected-feature').addEventListener('click', () => {
       $('download-scope').value = 'selected'; updateExportControls(); $('download-scope').focus();
     });

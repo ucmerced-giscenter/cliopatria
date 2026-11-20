@@ -7,9 +7,8 @@ const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const $ = id => document.getElementById(id);
 
 export class Timeline {
-  constructor(years, { start, end, singleYear, snapshots }, onRange, onYear) {
+  constructor(years, { start, end, singleYear }, onRange, onYear) {
     this.years = years;
-    this.featureCounts = new Map(snapshots.map(({ year, count }) => [year, count]));
     this.singleYear = singleYear;
     this.first = years[0];
     this.last = years.at(-1);
@@ -160,7 +159,6 @@ export class Timeline {
     if (id === 'year-slider') {
       $('year-picker').style.setProperty('--playhead', handle.style.left);
       $('year-entry').value = formatYear(year);
-      this.showMapFeatureCount(year);
     }
     handle.setAttribute('aria-valuenow', year);
     handle.setAttribute('aria-valuemin', min);
@@ -171,7 +169,7 @@ export class Timeline {
   }
   paintRange(start, end) {
     const coverage = $('timeline-coverage');
-    if (this.singleYear || (start === end && this.featureCounts.has(start))) coverage.textContent = '';
+    if (this.singleYear || (start === end && this.years.includes(start))) coverage.textContent = '';
     else coverage.textContent = start === end ? formatYear(start) : `From ${formatYear(start)} through ${formatYear(end)}`;
     $('range-start').value = start;
     $('range-end').value = end;
@@ -181,12 +179,6 @@ export class Timeline {
     this.place('through-handle', end, start, this.last);
     $('range-band').style.left = this.percent(start);
     $('range-band').style.right = `calc(100% - ${this.percent(end)})`;
-  }
-  showMapFeatureCount(year) {
-    const count = this.featureCounts.get(year) ?? 0;
-    const summary = year == null ? 'No snapshot · 0 features' : `Map year · ${count.toLocaleString()} feature${count === 1 ? '' : 's'}`;
-    const output = $('map-feature-count');
-    if (output.textContent !== summary) output.textContent = summary;
   }
   renderRange(onExtend) {
     $('time-coverage').querySelector(`input[value="${this.singleYear ? 'year' : 'range'}"]`).checked = true;
@@ -217,7 +209,6 @@ export class Timeline {
     $('year-entry').disabled = !available.length;
     $('year-entry').setCustomValidity('');
     if (year == null) {
-      this.showMapFeatureCount(null);
       $('year-entry').value = '';
       $('year-picker').style.removeProperty('--playhead');
     }

@@ -10,12 +10,19 @@ export async function jsonRequest(url, parameters = {}, signal, method = 'GET') 
   if (result.error) throw new Error([result.error.message, ...(result.error.details || [])].filter(Boolean).join(' '));
   return result;
 }
+function spatialFilter(geometry) {
+  return geometry ? { geometry: JSON.stringify(geometry), geometryType: 'esriGeometryEnvelope', inSR: 4326, spatialRel: 'esriSpatialRelIntersects' } : {};
+}
 export class DataService {
   constructor() { this.url = `${config.serviceUrl}/${config.layerId}/query`; }
   query(parameters, signal) { return jsonRequest(this.url, parameters, signal, 'POST'); }
-  async count(where, signal) { return (await this.query({ where, returnCountOnly: true }, signal)).count; }
+  async count(where, signal, geometry) {
+    const { count } = await this.query({ where, returnCountOnly: true, ...spatialFilter(geometry) }, signal);
+    if (!Number.isSafeInteger(count) || count < 0) throw new Error('The service did not return a feature count.');
+    return count;
+  }
   async ids(where, signal, geometry) {
-    const result = await this.query({ where, returnIdsOnly: true, ...(geometry ? { geometry: JSON.stringify(geometry), geometryType: 'esriGeometryEnvelope', inSR: 4326, spatialRel: 'esriSpatialRelIntersects' } : {}) }, signal);
+    const result = await this.query({ where, returnIdsOnly: true, ...spatialFilter(geometry) }, signal);
     if (result.objectIds === null) return [];
     if (!Array.isArray(result.objectIds)) throw new Error('The service did not return a feature selection.');
     return result.objectIds.sort((a, b) => a - b);
@@ -23,6 +30,12 @@ export class DataService {
   async extentIds(where, bounds, signal) {
     const lists = await Promise.all(envelopes(bounds).map(geometry => this.ids(where, signal, geometry)));
     return [...new Set(lists.flat())].sort((a, b) => a - b);
+  }
+  async extentCount(where, bounds, signal) {
+    const boxes = envelopes(bounds);
+    if (boxes.length === 1) return this.count(where, signal, boxes[0]);
+    // A feature crossing the antimeridian can match both boxes.
+    return (await this.extentIds(where, bounds, signal)).length;
   }
   async search(where, offset = 0, signal) {
     const result = await this.query({ where, outFields: FIELDS.join(','), returnGeometry: false, orderByFields: 'Name ASC,Year ASC,AreaSqKM DESC,OBJECTID ASC', resultOffset: offset, resultRecordCount: 25 }, signal);

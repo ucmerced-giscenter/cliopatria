@@ -156,12 +156,13 @@
         <section class="control-section" aria-labelledby="download-title">
           <div class="download-heading">
             <h2 id="download-title" tabindex="-1">Download data</h2>
-            <span id="map-feature-count" class="small" role="status"></span>
+            <span id="download-feature-count" class="small" role="status"></span>
+            <button id="retry-download-count" type="button" hidden>Retry count</button>
           </div>
           <p id="download-range-summary" class="scope-note"></p>
           <form id="download-form">
             <label for="download-scope">Features to export</label
-            ><select id="download-scope" aria-describedby="download-selection-summary">
+            ><select id="download-scope" aria-describedby="download-feature-count download-selection-summary">
               <option value="time">All features in period</option>
               <option value="search" disabled>Current search results</option>
               <option value="extent">Visible map extent</option>
