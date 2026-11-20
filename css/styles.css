@@ -76,7 +76,7 @@
 #timeline-track{position:relative;height:46px;margin:0 22px;touch-action:none;cursor:pointer}
 .time-rail{position:absolute;top:50%;left:0;right:0;height:4px;background:#a3ada4;border-radius:3px;pointer-events:none}
 #range-band{position:absolute;inset:0;background:#244c37}
-#snapshot-ticks i{position:absolute;bottom:0;width:1px;height:8px;background:#244c37}
+#snapshot-ticks i{position:absolute;bottom:100%;width:1px;height:4px;background:#819185}
 #timeline-track button{position:absolute;top:50%;width:26px;height:24px;min-height:0;padding:0;border:0;background:transparent;cursor:ew-resize;touch-action:none}
 #timeline-track button::after{content:'';position:absolute;border:2px solid #244c37;background:white;width:10px;height:14px;top:0}
 #from-handle{transform:translateX(-100%)}

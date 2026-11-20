@@ -11,6 +11,15 @@ export class Timeline {
     this.years = years;
     this.first = years[0];
     this.last = years.at(-1);
+    this.axisStart = position(this.first);
+    this.axisEnd = position(this.last);
+    $('axis-start').textContent = formatYear(this.first);
+    $('axis-end').textContent = formatYear(this.last);
+    $('snapshot-ticks').replaceChildren(...years.map(year => {
+      const tick = document.createElement('i');
+      tick.style.left = this.percent(year);
+      return tick;
+    }));
     this.setRange(start, end);
     const track = $('timeline-track');
     const handles = [$('from-handle'), $('through-handle'), $('year-slider')];
@@ -105,10 +114,6 @@ export class Timeline {
     this.start = start;
     this.end = end;
     this.available = this.years.filter(y => y >= start && y <= end);
-    // Keep short ranges wide enough to scrub, with room to expand either end.
-    const padding = Math.max(2, Math.ceil((position(end) - position(start)) / 4));
-    this.axisStart = Math.max(position(this.first), position(start) - padding);
-    this.axisEnd = Math.min(position(this.last), position(end) + padding);
   }
   get label() {
     return this.start === this.end ? formatYear(this.start) : `${formatYear(this.start)} – ${formatYear(this.end)}`;
@@ -141,13 +146,6 @@ export class Timeline {
   }
   renderRange(onExtend) {
     this.paintRange(this.start, this.end);
-    $('axis-start').textContent = formatYear(calendarYear(this.axisStart));
-    $('axis-end').textContent = formatYear(calendarYear(this.axisEnd));
-    $('snapshot-ticks').replaceChildren(...this.available.map(year => {
-      const tick = document.createElement('i');
-      tick.style.left = this.percent(year);
-      return tick;
-    }));
     $('range-summary').textContent = `${this.label} · ${this.countLabel}`;
     $('full-range').hidden = this.start === this.first && this.end === this.last;
     $('year-select').replaceChildren(...this.available.map(y => new Option(formatYear(y), y)));
