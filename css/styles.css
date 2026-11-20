@@ -70,6 +70,14 @@
 
 .timeline-tools,.timeline-summary,#range-form,#nearby-years{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
 .timeline-tools{justify-content:space-between;gap:8px 20px}
+#time-coverage,.coverage-options{display:flex;align-items:center}
+#time-coverage{gap:8px;font-size:.9rem;font-weight:550}
+.coverage-options{border:1px solid #899c90;border-radius:5px;background:white}
+.coverage-options label{position:relative;margin:0;cursor:pointer}
+.coverage-options span{display:flex;align-items:center;min-height:42px;padding:0 10px;border-radius:4px}
+.coverage-options input:checked + span{background:var(--ink);color:white;font-weight:650}
+.coverage-options input:focus-visible + span{outline:3px solid #006ab4;outline-offset:2px}
+@media(forced-colors:active){.coverage-options input:checked + span{outline:2px solid Highlight;outline-offset:-3px}}
 #range-form label{display:flex;align-items:center;gap:6px;margin:0}
 #range-form input{width:6em;font-variant-numeric:tabular-nums}
 .timeline .time-actions select{min-width:100px}

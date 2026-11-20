@@ -7,8 +7,9 @@ const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const $ = id => document.getElementById(id);
 
 export class Timeline {
-  constructor(years, start, end, onRange, onYear) {
+  constructor(years, { start, end, singleYear }, onRange, onYear) {
     this.years = years;
+    this.singleYear = singleYear;
     this.first = years[0];
     this.last = years.at(-1);
     this.axisStart = position(this.first);
@@ -113,13 +114,17 @@ export class Timeline {
   setRange(start, end) {
     this.start = start;
     this.end = end;
-    this.available = this.years.filter(y => y >= start && y <= end);
+    this.rangeYears = this.years.filter(y => y >= start && y <= end);
   }
-  get label() {
-    return this.start === this.end ? formatYear(this.start) : `${formatYear(this.start)} – ${formatYear(this.end)}`;
+  get available() {
+    return this.singleYear ? this.years : this.rangeYears;
   }
-  get countLabel() {
-    return `${this.available.length} snapshot${this.available.length === 1 ? '' : 's'}`;
+  coverage(year) {
+    const start = this.singleYear ? year : this.start;
+    const end = this.singleYear ? year : this.end;
+    const label = start === end ? formatYear(start) : `${formatYear(start)} – ${formatYear(end)}`;
+    const count = this.singleYear ? 1 : this.rangeYears.length;
+    return { start, end, label, countLabel: `${count} snapshot${count === 1 ? '' : 's'}` };
   }
   percent(year) {
     return (position(year) - this.axisStart) * 100 / (this.axisEnd - this.axisStart || 1) + '%';
@@ -145,9 +150,14 @@ export class Timeline {
     $('range-band').style.right = `calc(100% - ${this.percent(end)})`;
   }
   renderRange(onExtend) {
+    $('time-coverage').querySelector(`input[value="${this.singleYear ? 'year' : 'range'}"]`).checked = true;
+    for (const id of ['range-form', 'from-handle', 'through-handle', 'range-band', 'range-summary']) $(id).hidden = this.singleYear;
     this.paintRange(this.start, this.end);
-    $('range-summary').textContent = `${this.label} · ${this.countLabel}`;
-    $('full-range').hidden = this.start === this.first && this.end === this.last;
+    if (!this.singleYear) {
+      const { label, countLabel } = this.coverage();
+      $('range-summary').textContent = `${label} · ${countLabel}`;
+    }
+    $('full-range').hidden = this.singleYear || (this.start === this.first && this.end === this.last);
     $('year-select').replaceChildren(...this.available.map(y => new Option(formatYear(y), y)));
     $('nearby-years').replaceChildren();
     if (!this.available.length) {

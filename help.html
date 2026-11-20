@@ -17,7 +17,7 @@
 </nav>
 <section aria-labelledby="timeline-instructions">
   <h2 id="timeline-instructions">Timeline instructions</h2>
-  <p>The timeline covers 333 recorded snapshots from 3400 BCE to 1497 CE. The range sets the period for search, playback, and downloads. The map shows one recorded snapshot within that period.</p>
+  <p>The timeline covers 333 recorded snapshots from 3400 BCE to 1497 CE. Choose <strong>Range</strong> or <strong>Single year</strong> in <strong>Time coverage</strong> above the slider. Range limits playback, search, and downloads to the selected period. In Single year, move through any recorded snapshot. Search and downloads follow the displayed year. Switching back to Range restores your endpoints.</p>
   <h3>Set the range and map year</h3>
   <p>Drag the two lower handles, or enter whole years in <strong>From</strong> and <strong>Through</strong> and choose <strong>Apply range</strong>. Use negative numbers for BCE and positive numbers for CE. There is no year zero. <strong>Reset range</strong> restores the full period.</p>
   <p>Drag the upper marker, choose a <strong>Map year</strong>, or use <strong>Previous</strong> and <strong>Next</strong>. Play advances through the recorded snapshots in your range at about two-second intervals and stops at the last one. Pressing Play there starts again from the first snapshot.</p>
@@ -25,7 +25,7 @@
   <h3>Keyboard, touch, and sharing</h3>
   <p>Tab to either range handle and use the arrow keys to adjust it by one year. Arrow keys on the upper marker move by one recorded snapshot. The number fields and Map year menu also work without dragging.</p>
   <p>The map opens in Flat view by default. Choose Globe in the map controls to see the world on a sphere. Zoom out to see its curvature.</p>
-  <p>Copy map link copies the timeline range, displayed snapshot, map location, zoom, projection, basemap, label setting, and submitted search. It does not preserve a selected feature or download settings. Open the link to return to that map view.</p>
+  <p>Copy map link copies the coverage mode, range, displayed snapshot, map location, zoom, projection, basemap, label setting, and submitted search. It does not preserve a selected feature or download settings. Open the link to return to that map view.</p>
 <p class="section-links"><a href="index.html#year-select">Open timeline controls</a><a href="#help-contents">Back to contents</a></p>
 </section>
 <section aria-labelledby="search-instructions">
@@ -33,16 +33,16 @@
   <p>Use Search by name to find a polity or another named feature in the source dataset. Search is case-insensitive and matches part of a name: “Roman” can find Roman Empire and other names containing that word.</p>
   <h3>Search with suggested names</h3>
   <ol>
-    <li>The dates shown beside Search are the active timeline range. Click, tap, or Tab into the name field to see up to six suggested names from that period.</li>
+    <li>The dates shown beside Search follow the timeline’s Time coverage setting. Click, tap, or Tab into the name field to see up to six suggested names from that period.</li>
     <li>Type to narrow the suggestions from the first character. Matching names update after a short pause. Delete the text to return to the alphabetical list.</li>
     <li>Choose a suggested name to fill the field and run the search. You can also keep typing and press Enter or Search. Suggestions are optional and are not the complete result list.</li>
-    <li>Select a result to show its details and outline its polygon. Selecting a dated result shows its snapshot on the map. A named search also lists matches outside the active range. Choose “Extend range to … and view” to include that snapshot.</li>
+    <li>Select a result to show its details and outline its polygon. Selecting a dated result shows its snapshot on the map. A named search also lists matches in other years. Choose “Extend range to … and view” in Range mode or “View …” in Single year mode.</li>
   </ol>
   <p><a href="index.html?year=117&amp;from=100&amp;to=200&amp;q=Roman">Try searching for Roman between 100 and 200 CE</a>.</p>
   <h3>Read and refine results</h3>
   <p>Results load in groups of 25; Show more results adds another group. Each result lists its Name, Year, Type, and area when supplied. One name can appear in many years, and several separate polygons can share the same Name and Year. Check the year and area before selecting a record.</p>
   <p>Blue outlines mark matching features in the current map year. The white and dark outline marks the selected feature; its details also appear in the Selected feature panel. The results list includes the other snapshots in the range.</p>
-  <p>Changing the range refreshes the submitted search. Moving the map year within the range keeps the result list and updates its map highlights. Clear removes search results and their blue outlines; Clear selection separately removes the selected feature.</p>
+  <p>Changing time coverage refreshes the submitted search. In Single year the results follow each new map year. In Range the result list covers the whole period as you step between snapshots. Clear removes search results and their blue outlines; Clear selection separately removes the selected feature.</p>
   <h3>If you cannot find a feature</h3>
   <ul>
     <li>Try a shorter part of the name, another spelling, or an entry under Found outside your range. Suggestions show only a few matching names; Search can return additional matches.</li>
@@ -58,9 +58,9 @@
 <p class="section-links"><a href="index.html#search-title">Open search controls</a><a href="#help-contents">Back to contents</a></p>
 </section>
 <section aria-labelledby="download-instructions">
-<h2 id="download-instructions">Download instructions</h2><ol><li>Choose All features in period, Current search results, Visible map extent, Selected feature, or Entire dataset.</li><li>Time coverage defaults to the timeline range. Choose Map year only for a single snapshot. The download summary shows the chosen dates. Preparing a download captures the selection at that moment.</li><li>Choose GeoJSON, CSV, KMZ, or Shapefile, then Prepare download.</li><li>When the file is ready, use the Download link. No ArcGIS account is required for this public layer.</li></ol>
+<h2 id="download-instructions">Download instructions</h2><ol><li>Choose All features in period, Current search results, Visible map extent, Selected feature, or Entire dataset.</li><li>Set Time coverage on the timeline. Choose Range for a period or Single year for the displayed snapshot. The download summary shows the chosen dates. Preparing a download captures the selection at that moment.</li><li>Choose GeoJSON, CSV, KMZ, or Shapefile, then Prepare download.</li><li>When the file is ready, use the Download link. No ArcGIS account is required for this public layer.</li></ol>
 <p><strong>Visible extent uses the map rectangle when you press Prepare download.</strong> It includes every polygon intersecting that rectangle in the chosen period, keeping each polygon whole. It does not clip borders or export a picture of the map. Panning afterward does not change the pending export.</p>
-<p>Search exports include <strong>all matching results in the timeline range</strong>, including results beyond the first page. Entire dataset exports contain all years, irrespective of the displayed year. Polygons from different snapshots can overlap in a multi-year export; use Year when analyzing them.</p>
+<p>Search exports include <strong>all matching results in the selected time coverage</strong>, including results beyond the first page. Entire dataset exports contain all years, irrespective of the displayed year. Polygons from different snapshots can overlap in a multi-year export; use Year when analyzing them.</p>
 <p>ArcGIS prepares the file and supplies a temporary download link. Large exports may take a minute or longer. Keep the page open while it prepares. Stop waiting stops this page's progress checks; it does not cancel the server job. Generate the file again if its link expires. The browser saves the file without the app reading it all into memory.</p>
 <table><caption>Choosing a format</caption><thead><tr><th>Format</th><th>Contents and limitations</th></tr></thead><tbody><tr><td>GeoJSON</td><td>Geometry and attributes in longitude/latitude (WGS84). Recommended for preserving the source fields, including OBJECTID.</td></tr><tr><td>CSV</td><td>Attribute table; no polygon geometry.</td></tr><tr><td>KMZ</td><td>Compressed KML for Google Earth. The current service exports a uniform blue style and blank placemark names; Name and Year remain in feature descriptions. This does not reproduce the web map's color styling.</td></tr><tr><td>Shapefile ZIP</td><td>Geometry and DBF attributes. Current ArcGIS exports omit the original OBJECTID. Keep all component files together after extracting the ZIP.</td></tr></tbody></table>
 <p>A very large selection crossing the antimeridian (180° longitude) may be prepared in numbered parts to stay within ArcGIS query limits. Download every part for the complete selection. Full-dataset and year-range exports remain single files. If preparation is stopped, links already shown contain only the completed parts.</p>

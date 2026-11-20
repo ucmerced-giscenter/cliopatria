@@ -55,6 +55,7 @@ export function nearestYear(years, requested) {
 }
 export function readUrl(search, years, defaults) {
   const params = new URLSearchParams(search);
+  const singleYear = params.get('coverage') === 'year';
   const value = key => params.has(key) ? Number(params.get(key)) : NaN;
   let start = params.has('from') ? value('from') : years[0];
   let end = params.has('to') ? value('to') : years.at(-1);
@@ -62,14 +63,14 @@ export function readUrl(search, years, defaults) {
     start = years[0]; end = years.at(-1);
   }
   // Older shared searches defaulted to the displayed snapshot.
-  if (!params.has('from') && !params.has('to') && params.get('q') && params.get('search') !== 'all') {
+  if (!singleYear && !params.has('from') && !params.has('to') && params.get('q') && params.get('search') !== 'all') {
     start = end = nearestYear(years, value('year'));
   }
-  const available = years.filter(y => y >= start && y <= end);
+  const available = singleYear ? years : years.filter(y => y >= start && y <= end);
   const year = available.length ? nearestYear(available, value('year')) : null;
   const longitude = value('lng'), latitude = value('lat'), zoom = value('zoom');
   const projection = params.get('projection') === 'globe' ? 'globe' : 'mercator';
-  return { start, end, year, projection, center: Number.isFinite(longitude) && Number.isFinite(latitude) && Math.abs(latitude) <= (projection === 'globe' ? 90 : 85) ? [((longitude + 180) % 360 + 360) % 360 - 180, latitude] : defaults.center,
+  return { start, end, year, singleYear, projection, center: Number.isFinite(longitude) && Number.isFinite(latitude) && Math.abs(latitude) <= (projection === 'globe' ? 90 : 85) ? [((longitude + 180) % 360 + 360) % 360 - 180, latitude] : defaults.center,
     zoom: Number.isFinite(zoom) ? Math.max(0, Math.min(10, zoom)) : defaults.zoom,
     basemap: Object.hasOwn(defaults.basemaps, params.get('basemap')) ? params.get('basemap') : 'gray',
     q: (params.get('q') || '').slice(0, 120), labels: params.get('labels') !== 'off' };

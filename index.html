@@ -56,6 +56,13 @@
     </header>
     <section class="timeline" aria-label="Time navigation">
       <div class="timeline-tools">
+        <div id="time-coverage" role="radiogroup" aria-labelledby="coverage-label">
+          <span id="coverage-label">Time coverage</span>
+          <div class="coverage-options">
+            <label><input class="sr-only" type="radio" name="coverage" value="range" checked><span>Range</span></label>
+            <label><input class="sr-only" type="radio" name="coverage" value="year"><span>Single year</span></label>
+          </div>
+        </div>
         <form id="range-form" aria-label="Timeline range">
           <label>From <input id="range-start" type="number" step="1" required aria-describedby="range-help"></label>
           <label>Through <input id="range-end" type="number" step="1" required aria-describedby="range-help"></label>
@@ -132,7 +139,7 @@
           <section id="outside-group" aria-labelledby="outside-title" hidden>
             <h3 id="outside-title">Found outside your range</h3>
             <p class="small" id="outside-status" role="status"></p>
-            <ul id="outside-results" class="results" aria-label="Results outside your range"></ul>
+            <ul id="outside-results" class="results" aria-labelledby="outside-title"></ul>
             <button id="more-outside" type="button" hidden>Show more outside this range</button>
           </section>
         </section>
@@ -179,13 +186,6 @@
                 <span id="download-selection-help">Select a polygon or a search result to export one feature.</span>
               </p>
               <button id="use-selected-feature" type="button" hidden>Use selected feature</button>
-            </div>
-            <div id="download-time">
-              <label for="download-period">Time coverage</label
-              ><select id="download-period">
-                <option value="range">Timeline range</option>
-                <option value="current">Map year only</option>
-              </select>
             </div>
             <label for="download-format">File format</label
             ><select id="download-format">

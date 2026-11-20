@@ -19,6 +19,7 @@ function updateUrl() {
   if (!years) return;
   const params = new URLSearchParams();
   if (year != null) params.set('year', year);
+  if (timeline.singleYear) params.set('coverage', 'year');
   if (querySpec || timeline.start !== years[0] || timeline.end !== years.at(-1)) {
     params.set('from', timeline.start); params.set('to', timeline.end);
   }
@@ -53,21 +54,35 @@ function renderYear() {
   status('map-status', entry ? `${formatYear(year)} · ${entry.count.toLocaleString()} feature${entry.count === 1 ? '' : 's'}` : 'No snapshots in this range.');
 }
 function extendTo(value) {
-  applyRange(Math.min(timeline.start, value), Math.max(timeline.end, value), value);
+  if (timeline.singleYear) changeYear(value);
+  else applyRange(Math.min(timeline.start, value), Math.max(timeline.end, value), value);
 }
-function applyRange(start, end, preferred = year) {
+function showYear(value) {
+  if (value !== year) {
+    year = value; mapError = false;
+    clearSelection(); engine?.setYear(year);
+  }
+  renderYear();
+}
+function refreshCoverage() {
+  const { label } = timeline.coverage(year);
+  $('search-range').textContent = timeline.singleYear ? `Search in ${label}` : `Search within ${label}`;
+  $('outside-title').textContent = timeline.singleYear ? 'Found in other years' : 'Found outside your range';
+  $('more-outside').textContent = timeline.singleYear ? 'Show more from other years' : 'Show more outside this range';
+  clearSuggestions();
+  if (querySpec) runSearch(querySpec.term);
+  else { updateScopeOptions(); updateUrl(); }
+}
+function applyRange(start, end, preferred = year, singleYear = timeline.singleYear) {
   stopPlayback();
-  const changed = start !== timeline.start || end !== timeline.end;
+  const changed = start !== timeline.start || end !== timeline.end || singleYear !== timeline.singleYear;
+  timeline.singleYear = singleYear;
   timeline.setRange(start, end);
   timeline.renderRange(extendTo);
   const available = timeline.available;
   const next = available.length ? nearestYear(available, preferred ?? start) : null;
-  if (year !== next) changeYear(next);
-  else renderYear();
-  $('search-range').textContent = `Search within ${timeline.label}`;
-  clearSuggestions();
-  if (changed && querySpec) runSearch(querySpec.term);
-  updateScopeOptions(); updateUrl();
+  showYear(next);
+  if (changed) refreshCoverage();
 }
 function stopPlayback() {
   playing = false; clearTimeout(playbackTimer);
@@ -76,9 +91,12 @@ function stopPlayback() {
 function changeYear(value, { playback = false } = {}) {
   if (!playback) stopPlayback();
   if (value === year || (value != null && !timeline.available.includes(value))) return;
-  year = value; mapError = false;
-  clearSuggestions(); clearSelection(); renderYear(); engine?.setYear(year); updateUrl();
-  if (querySpec) updateHighlights();
+  showYear(value);
+  if (timeline.singleYear) refreshCoverage();
+  else {
+    clearSuggestions(); updateUrl();
+    if (querySpec) updateHighlights();
+  }
 }
 function schedulePlayback() {
   clearTimeout(playbackTimer);
@@ -103,8 +121,9 @@ async function updateHighlights() {
   } catch (error) { if (error.name !== 'AbortError') status('search-status', 'Results are available, but map highlighting could not be refreshed.', true); }
 }
 function searchPredicate(group = inside) {
-  const dates = group === inside ? yearWhere(timeline.start, timeline.end)
-    : andWhere(yearWhere(years[0], years.at(-1)), `Year < ${timeline.start} OR Year > ${timeline.end}`);
+  const { start, end } = timeline.coverage(year);
+  const dates = group === inside ? yearWhere(start, end)
+    : andWhere(yearWhere(years[0], years.at(-1)), `Year < ${start} OR Year > ${end}`);
   return andWhere(nameWhere(querySpec.term), dates);
 }
 function clearSuggestions() {
@@ -128,10 +147,10 @@ async function loadSuggestions(term, revision) {
   suggestionTimer = null;
   const controller = suggestionController = new AbortController();
   const timer = setTimeout(() => controller.abort(new DOMException('Suggestions timed out.', 'TimeoutError')), 10000);
-  const scopeLabel = timeline.label;
+  const { start, end, label: scopeLabel } = timeline.coverage(year);
   status('suggestions-status', 'Finding suggested names…');
   try {
-    const names = await api.suggestNames(andWhere(nameWhere(term), yearWhere(timeline.start, timeline.end)), controller.signal);
+    const names = await api.suggestNames(andWhere(nameWhere(term), yearWhere(start, end)), controller.signal);
     if (revision !== suggestionRevision) return;
     const prefix = term.toLocaleUpperCase();
     names.sort((a, b) => Number(b.toLocaleUpperCase().startsWith(prefix)) - Number(a.toLocaleUpperCase().startsWith(prefix)) || a.localeCompare(b));
@@ -148,7 +167,7 @@ async function loadSuggestions(term, revision) {
     $('search-suggestions').hidden = !list.children.length;
     status('suggestions-status', list.children.length
       ? `${list.children.length} suggested name${list.children.length === 1 ? '' : 's'}. ${term ? 'Choose a name to search.' : 'Type to find more, or choose a name.'}`
-      : `No suggested names in ${scopeLabel}. Press Search for matches outside your range.`);
+      : `No suggested names in ${scopeLabel}. Press Search for matches in other years.`);
   } catch (error) {
     if (revision === suggestionRevision) status('suggestions-status', 'Suggestions are unavailable. You can still press Search.');
   } finally { clearTimeout(timer); if (revision === suggestionRevision) suggestionController = null; }
@@ -167,7 +186,8 @@ function renderResults(group = inside) {
     detail.textContent = `${formatYear(feature.Year)} · ${feature.Type || 'Feature'}${Number.isFinite(feature.AreaSqKM) ? ` · ${feature.AreaSqKM.toLocaleString(undefined, { maximumFractionDigits: 1 })} km²` : ''}`;
     button.append(title, detail);
     if (group === outside) {
-      const action = document.createElement('span'); action.textContent = `Extend range to ${formatYear(feature.Year)} and view`;
+      const action = document.createElement('span');
+      action.textContent = timeline.singleYear ? `View ${formatYear(feature.Year)}` : `Extend range to ${formatYear(feature.Year)} and view`;
       button.append(action);
     }
     button.addEventListener('click', () => {
@@ -191,16 +211,18 @@ function runSearch(term = $('search-input').value.trim()) {
   querySpec = { term };
   updateScopeOptions(); updateUrl(); updateHighlights();
   loadResults(inside);
-  if (term && (timeline.start > years[0] || timeline.end < years.at(-1))) loadResults(outside);
+  const { start, end } = timeline.coverage(year);
+  if (term && (start > years[0] || end < years.at(-1))) loadResults(outside);
 }
 async function loadResults(group, more = false) {
   group.request?.abort();
   const controller = group.request = new AbortController();
   const timer = setTimeout(() => controller.abort(new DOMException('Search timed out. Please try again.', 'TimeoutError')), 30000);
   const where = searchPredicate(group);
-  const label = timeline.label;
+  const { label } = timeline.coverage(year);
+  const outsideLabel = timeline.singleYear ? 'in other years' : 'outside your range';
   $(group.more).disabled = true;
-  status(group.status, group === inside ? `Searching ${label}…` : 'Looking for matches outside your range…');
+  status(group.status, group === inside ? `Searching ${label}…` : `Looking for matches ${outsideLabel}…`);
   try {
     const [rows, count] = group === inside && !timeline.available.length ? [[], 0] : await Promise.all([
       api.search(where, group.rows.length, controller.signal), more ? group.total : api.count(where, controller.signal)
@@ -209,7 +231,7 @@ async function loadResults(group, more = false) {
     group.rows.push(...rows); group.total = count;
     renderResults(group);
     if (group === outside) $('outside-group').hidden = !count;
-    const scope = group === inside ? `in ${label}` : 'outside your range';
+    const scope = group === inside ? `in ${label}` : outsideLabel;
     status(group.status, count ? `${group.rows.length.toLocaleString()} of ${count.toLocaleString()} results ${scope}.` : `No matches ${scope}.`);
   } catch (error) {
     if (group.request === controller && error.name !== 'AbortError') {
@@ -259,13 +281,10 @@ function mapSelection(candidate, point, candidates) {
 }
 function updateExportControls() {
   const scope = $('download-scope').value;
-  const timed = ['time', 'extent'].includes(scope);
-  $('download-time').hidden = !timed;
-  const currentOnly = timed && $('download-period').value === 'current';
-  let coverage = `${timeline.label} · ${timeline.countLabel}`;
-  if (scope === 'all') coverage = `Entire dataset · all years, including any outside the timeline range`;
+  const { label, countLabel } = timeline.coverage(year);
+  let coverage = `${label} · ${countLabel}`;
+  if (scope === 'all') coverage = 'Entire dataset · all years';
   else if (scope === 'selected' && selected) coverage = `Selected feature · ${formatYear(selected.Year)}`;
-  else if (currentOnly) coverage = year == null ? 'No map snapshot in this range.' : `Map year only · ${formatYear(year)}`;
   else if (scope === 'search') coverage = `Search matches within ${coverage}`;
   $('download-range-summary').textContent = coverage;
   $('generate-download').disabled = !!exportController || (scope !== 'all' && !timeline.available.length);
@@ -279,8 +298,8 @@ function updateExportControls() {
 }
 function exportPeriod() {
   if (!timeline.available.length) throw new Error('No snapshots in this range.');
-  if ($('download-period').value === 'current') return { where: yearWhere(year), description: formatYear(year) };
-  return { where: yearWhere(timeline.start, timeline.end), description: timeline.label };
+  const { start, end, label } = timeline.coverage(year);
+  return { where: yearWhere(start, end), description: label };
 }
 async function prepareDownload(event) {
   event.preventDefault();
@@ -299,7 +318,7 @@ async function prepareDownload(event) {
       where = idsWhere([selected.OBJECTID]); description = `${featureName(selected)}, ${formatYear(selected.Year)}`;
     } else if (scope === 'search') {
       if (!querySpec) throw new Error('Run a search first.');
-      where = searchPredicate(); description = `search “${querySpec.term || 'all features'}”, ${timeline.label}`;
+      where = searchPredicate(); description = `search “${querySpec.term || 'all features'}”, ${timeline.coverage(year).label}`;
     } else if (scope === 'all') { where = '1=1'; description = 'entire dataset, all years'; }
     else {
       const period = exportPeriod(); where = period.where; description = period.description;
@@ -345,11 +364,13 @@ async function initialize() {
     if (!years.length || !manifest.complete) throw new Error('The map data build is not complete.');
     const view = readUrl(location.search, years, { center: config.defaultCenter, zoom: config.defaultZoom, basemaps: config.basemaps });
     year = view.year;
-    timeline = new Timeline(years, view.start, view.end, applyRange, changeYear);
+    timeline = new Timeline(years, view, applyRange, changeYear);
+    $('time-coverage').addEventListener('change', event => {
+      applyRange(timeline.start, timeline.end, year, event.target.value === 'year');
+    });
     $('timeline-track').addEventListener('pointerdown', stopPlayback, true);
     $('range-form').addEventListener('input', stopPlayback);
     timeline.renderRange(extendTo);
-    $('search-range').textContent = `Search within ${timeline.label}`;
     $('basemap').value = view.basemap; $('labels').checked = view.labels; $('search-input').value = view.q;
     $('projection-control').querySelector(`input[value="${view.projection}"]`).checked = true;
     renderYear();
@@ -417,12 +438,12 @@ async function initialize() {
     });
     $('clear-selection').addEventListener('click', clearSelection);
     $('overlap-select').addEventListener('change', () => { const feature = overlapCandidates.find(item => item.OBJECTID === Number($('overlap-select').value)); if (feature) selectFeature(feature, overlapPoint); });
-    $('download-scope').addEventListener('change', updateExportControls); $('download-period').addEventListener('change', updateExportControls);
+    $('download-scope').addEventListener('change', updateExportControls);
     $('use-selected-feature').addEventListener('click', () => {
       $('download-scope').value = 'selected'; updateExportControls(); $('download-scope').focus();
     });
     $('download-form').addEventListener('submit', prepareDownload); $('cancel-download').addEventListener('click', () => exportController?.abort());
-    updateScopeOptions(); updateUrl();
+    refreshCoverage();
     if (view.q) runSearch();
   } catch (error) { status('map-status', error.message, true); status('search-status', 'The snapshot list is unavailable. See Help or open the source dataset.', true); }
 }

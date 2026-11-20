@@ -25,3 +25,12 @@ test('invalid bounds recover and legacy search links retain their original scope
   assert.deepEqual(time('?year=117&q=Roman&search=all'), [-14, 1497, 117]);
   assert.deepEqual(time('?from=-14&to=1497&year=117&q=Roman'), [-14, 1497, 117]);
 });
+
+test('single-year links restore the snapshot independently of the saved range', () => {
+  const query = '?coverage=year&from=118&to=126&year=127&q=Roman';
+  assert.equal(readUrl(query, years, defaults).singleYear, true);
+  assert.deepEqual(time(query), [118, 126, 127]);
+  assert.deepEqual(time('?coverage=year&year=117&q=Roman'), [-14, 1497, 117]);
+  assert.equal(readUrl('?from=117&to=127', years, defaults).singleYear, false);
+  assert.deepEqual(time('?from=118&to=126&year=127'), [118, 126, null]);
+});
