@@ -355,7 +355,23 @@ async function prepareDownload(event) {
   } catch (error) { status('download-status', `${error.name === 'AbortError' ? 'Stopped waiting. ArcGIS may still finish this export.' : error.message}${!$('download-link').hidden ? ' Links already shown contain only the completed parts.' : ''}`, error.name !== 'AbortError'); }
   finally { clearTimeout(timer); exportController = null; updateExportControls(); $('cancel-download').hidden = true; }
 }
+function bindSidebar() {
+  const panel = $('controls'), toggle = $('sidebar-toggle');
+  function setExpanded(expanded) {
+    panel.hidden = !expanded;
+    toggle.setAttribute('aria-expanded', String(expanded));
+    toggle.title = expanded ? 'Hide sidebar' : 'Show sidebar';
+  }
+  toggle.addEventListener('click', () => setExpanded(panel.hidden));
+  for (const link of document.querySelectorAll('.skip-link')) {
+    if (panel.contains(document.getElementById(link.hash.slice(1)))) {
+      link.addEventListener('click', () => setExpanded(true));
+    }
+  }
+  toggle.hidden = false;
+}
 async function initialize() {
+  bindSidebar();
   try {
     const response = await fetch(config.manifestUrl);
     if (!response.ok) throw new Error('The map snapshot list could not load. Reload the page or consult the source dataset.');
