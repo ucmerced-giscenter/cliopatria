@@ -28,7 +28,7 @@ export class HistoryMap {
       canvasContextAttributes: { antialias: false }, renderWorldCopies: true });
     this.map.touchZoomRotate.disableRotation();
     this.map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
-    for (const id of ['basemap-control', 'legend-control']) {
+    for (const id of ['basemap-control', 'share-control', 'legend-control']) {
       const control = document.getElementById(id);
       this.map.addControl({
         onAdd() { control.hidden = false; return control; },

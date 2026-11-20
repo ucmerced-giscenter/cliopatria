@@ -416,11 +416,19 @@ async function initialize() {
       engine.setProjection(event.target.value);
       updateUrl();
     });
-    $('copy-link').addEventListener('click', async () => {
+    let shareFeedbackTimer;
+    $('share-map').addEventListener('click', async () => {
       updateUrl();
-      try { await navigator.clipboard.writeText(location.href); $('copy-link').textContent = 'Link copied'; setTimeout(() => { $('copy-link').textContent = 'Copy map link'; }, 1800); }
-      catch { status('map-status', 'Copy the address from your browser to share this map view.'); }
+      try {
+        await navigator.clipboard.writeText(location.href);
+        status('share-feedback', 'Link copied');
+      } catch {
+        status('share-feedback', 'Copy the address from your browser to share this view.');
+      }
+      clearTimeout(shareFeedbackTimer);
+      shareFeedbackTimer = setTimeout(() => status('share-feedback', ''), 4500);
     });
+    $('share-control').hidden = false;
     $('search-input').addEventListener('input', event => { stopPlayback(); if (event.isComposing) clearSuggestions(); else scheduleSuggestions(); });
     $('search-input').addEventListener('compositionend', scheduleSuggestions);
     $('search-input').addEventListener('focus', openSuggestions);

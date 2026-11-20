@@ -225,6 +225,12 @@
             <option value="plain">Plain background</option>
           </select>
         </div>
+        <div id="share-control" class="maplibregl-ctrl maplibregl-ctrl-group" hidden>
+          <button type="button" id="share-map" title="Copy a link to this map view">
+            <img src="assets/icons/share.svg" width="18" height="18" alt="">Share
+          </button>
+          <span id="share-feedback" role="status"></span>
+        </div>
         <details id="legend-control" class="maplibregl-ctrl maplibregl-ctrl-group map-legend" hidden>
           <summary>Legend</summary>
           <div class="legend-content">
@@ -281,13 +287,10 @@
             <span id="timeline-coverage" role="status"></span>
             <span id="axis-end" aria-hidden="true"></span>
           </div>
-          <div class="timeline-summary">
-            <div class="time-actions" role="group" aria-label="Snapshot playback">
-              <button id="previous" type="button" title="Previous snapshot" disabled><img src="assets/icons/step.svg" width="20" height="20" alt="Previous snapshot"></button>
-              <button id="play" type="button" title="Play snapshots" disabled><img src="assets/icons/play.svg" width="20" height="20" alt="Play snapshots"></button>
-              <button id="next" type="button" title="Next snapshot" disabled><img src="assets/icons/step.svg" width="20" height="20" alt="Next snapshot"></button>
-            </div>
-            <button type="button" id="copy-link">Copy map link</button>
+          <div class="time-actions" role="group" aria-label="Snapshot playback">
+            <button id="previous" type="button" title="Previous snapshot" disabled><img src="assets/icons/step.svg" width="20" height="20" alt="Previous snapshot"></button>
+            <button id="play" type="button" title="Play snapshots" disabled><img src="assets/icons/play.svg" width="20" height="20" alt="Play snapshots"></button>
+            <button id="next" type="button" title="Next snapshot" disabled><img src="assets/icons/step.svg" width="20" height="20" alt="Next snapshot"></button>
           </div>
           <p id="map-status" role="status">Loading historical boundaries…</p>
         </section>
