@@ -9,7 +9,8 @@ const $ = id => document.getElementById(id);
 export class Timeline {
   constructor(years, { start, end, singleYear, snapshots }, onRange, onYear) {
     this.years = years;
-    this.snapshots = snapshots;
+    this.featureCounts = new Map(snapshots.map(({ year, count }) => [year, count]));
+    this.playheadYear = null;
     this.singleYear = singleYear;
     this.first = years[0];
     this.last = years.at(-1);
@@ -160,7 +161,8 @@ export class Timeline {
     if (id === 'year-slider') {
       $('year-picker').style.setProperty('--playhead', handle.style.left);
       $('year-entry').value = formatYear(year);
-      if (this.singleYear) this.summarizePeriod(year, year);
+      this.playheadYear = year;
+      this.summarizePeriod();
     }
     handle.setAttribute('aria-valuenow', year);
     handle.setAttribute('aria-valuemin', min);
@@ -180,11 +182,18 @@ export class Timeline {
     $('range-band').style.left = this.percent(start);
     $('range-band').style.right = `calc(100% - ${this.percent(end)})`;
   }
-  summarizePeriod(start, end) {
-    const total = this.snapshots.reduce((sum, { year, count }) =>
-      year >= start && year <= end ? sum + count : sum, 0);
-    const period = start === end ? formatYear(start) : `From ${formatYear(start)} through ${formatYear(end)}`;
-    const summary = `${period} · ${total.toLocaleString()}\u00a0feature${total === 1 ? '' : 's'}`;
+  summarizePeriod(start = this.start, end = this.end) {
+    const year = this.playheadYear;
+    const count = this.featureCounts.get(year) ?? 0;
+    const features = `${count.toLocaleString()}\u00a0feature${count === 1 ? '' : 's'}`;
+    let summary;
+    if (this.singleYear || (start === end && year === start)) {
+      summary = `${formatYear(year)} · ${features}`;
+    } else {
+      const period = start === end ? formatYear(start) : `From ${formatYear(start)} through ${formatYear(end)}`;
+      const snapshot = year === null ? '0 features (no snapshot)' : `${features} in ${formatYear(year)}`;
+      summary = `${period} · ${snapshot}`;
+    }
     const output = $('timeline-coverage');
     if (output.textContent !== summary) output.textContent = summary;
   }
@@ -217,6 +226,8 @@ export class Timeline {
     $('year-entry').disabled = !available.length;
     $('year-entry').setCustomValidity('');
     if (year == null) {
+      this.playheadYear = null;
+      this.summarizePeriod();
       $('year-entry').value = '';
       $('year-picker').style.removeProperty('--playhead');
     }
