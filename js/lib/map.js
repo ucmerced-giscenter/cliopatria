@@ -20,6 +20,7 @@ export class HistoryMap {
     this.basemap = view.basemap;
     this.projection = view.projection;
     this.styleReady = false;
+    this.sourceRevision = 0;
     this.protocol = new pmtiles.Protocol();
     maplibregl.addProtocol('pmtiles', this.protocol.tile);
     this.map = new maplibregl.Map({ container: 'map', style: baseStyle(this.basemap), center: view.center, zoom: view.zoom, maxZoom: 10, minZoom: 0,
@@ -65,7 +66,7 @@ export class HistoryMap {
       }
     });
     this.map.on('click', 'polities-fill', event => {
-      const candidates = [...new Map((event.features || []).map(feature => [feature.properties.OBJECTID, feature.properties])).values()];
+      const candidates = [...new Map((event.features || []).filter(feature => feature.properties.Year === this.year).map(feature => [feature.properties.OBJECTID, feature.properties])).values()];
       if (candidates.length) callbacks.selected?.(candidates[0], event.lngLat, candidates);
     });
     this.map.on('mouseenter', 'polities-fill', () => { this.map.getCanvas().style.cursor = 'pointer'; });
@@ -73,13 +74,16 @@ export class HistoryMap {
   }
   install() {
     const entry = this.manifest.years.find(item => item.year === this.year);
-    if (!entry) return;
     this.popup?.remove();
     for (const id of [...layerIds].reverse()) if (this.map.getLayer(id)) this.map.removeLayer(id);
-    if (this.map.getSource('history')) this.map.removeSource('history');
+    if (this.historySource && this.map.getSource(this.historySource)) this.map.removeSource(this.historySource);
+    this.historySource = null;
+    if (!entry) return;
     const url = new URL(entry.url, document.baseURI).href;
-    this.map.addSource('history', { type: 'vector', url: `pmtiles://${url}`, minzoom: this.manifest.minZoom, maxzoom: this.manifest.maxZoom, attribution });
-    const layer = { source: 'history', 'source-layer': config.sourceLayer };
+    // In-flight tile work from a discarded snapshot must never target its replacement.
+    this.historySource = `history-${this.year}-${++this.sourceRevision}`;
+    this.map.addSource(this.historySource, { type: 'vector', url: `pmtiles://${url}`, minzoom: this.manifest.minZoom, maxzoom: this.manifest.maxZoom, attribution });
+    const layer = { source: this.historySource, 'source-layer': config.sourceLayer };
     this.map.addLayer({ id: 'polities-fill', type: 'fill', ...layer, paint: { 'fill-color': ['get', 'Color'], 'fill-opacity': 0.68, 'fill-opacity-transition': { duration: 0 } } });
     this.map.addLayer({ id: 'polities-outline', type: 'line', ...layer, paint: { 'line-color': '#25342f', 'line-opacity': 0.65, 'line-width': ['interpolate', ['linear'], ['zoom'], 0, 0.25, 5, 0.8, 10, 1.2] } });
     this.map.addLayer({ id: 'search-outline', type: 'line', ...layer, paint: { 'line-color': '#005fcc', 'line-width': 2.5 } });
@@ -97,8 +101,6 @@ export class HistoryMap {
     this.year = year;
     this.selectedId = -1;
     this.searchIds = [];
-    // A year can change while the previous year's tiles are still loading.
-    // isStyleLoaded() also waits for those tiles, so it would lose fast slider changes.
     if (this.styleReady) this.install();
   }
   setBasemap(name) {
@@ -152,5 +154,5 @@ export class HistoryMap {
   reset() { this.map.jumpTo({ center: config.defaultCenter, zoom: config.defaultZoom }); }
   view() { const center = this.map.getCenter(); return { longitude: center.lng, latitude: center.lat, zoom: this.map.getZoom() }; }
   bounds() { const b = this.map.getBounds(); return { west: b.getWest(), east: b.getEast(), south: b.getSouth(), north: b.getNorth() }; }
-  isLoaded() { return !!this.map.getSource('history') && this.map.isSourceLoaded('history'); }
+  isLoaded() { return !!this.historySource && !!this.map.getSource(this.historySource) && this.map.isSourceLoaded(this.historySource); }
 }

@@ -1,13 +1,16 @@
 import { config } from './config.js';
 import { DataService, exportFile } from './lib/api.js';
-import { FORMATS, formatYear, featureName, featureDetails, colorHex, yearWhere, nameWhere, andWhere, idsWhere, idFilters, envelopes, mercatorEnvelope, readUrl, wikipediaUrl } from './lib/core.js';
+import { FORMATS, formatYear, featureName, featureDetails, colorHex, yearWhere, nameWhere, andWhere, idsWhere, idFilters, envelopes, mercatorEnvelope, readUrl, nearestYear, wikipediaUrl } from './lib/core.js';
+import { Timeline } from './lib/timeline.js';
 import { HistoryMap } from './lib/map.js';
 
 const $ = id => document.getElementById(id);
 const api = new DataService();
-let manifest, years, year, engine, selected, querySpec, queryRows = [], queryTotal = 0;
-let searchController, highlightController, selectionController, exportController;
-let searchRevision = 0, selectionRevision = 0, sliderTimer, playbackTimer, playing = false, mapError = false;
+let manifest, years, timeline, year, engine, selected, querySpec;
+const inside = { list: 'search-results', more: 'more-results', status: 'search-status', rows: [], total: 0 };
+const outside = { list: 'outside-results', more: 'more-outside', status: 'outside-status', rows: [], total: 0 };
+let highlightController, selectionController, exportController;
+let selectionRevision = 0, playbackTimer, playing = false, mapError = false;
 let overlapCandidates = [], overlapPoint;
 let suggestionController, suggestionTimer, suggestionRevision = 0;
 
@@ -15,7 +18,10 @@ function status(id, message, error = false) { $(id).textContent = message; $(id)
 function updateUrl() {
   if (!years) return;
   const params = new URLSearchParams();
-  params.set('year', year);
+  if (year != null) params.set('year', year);
+  if (querySpec || timeline.start !== years[0] || timeline.end !== years.at(-1)) {
+    params.set('from', timeline.start); params.set('to', timeline.end);
+  }
   if (engine) {
     const view = engine.view();
     params.set('lng', view.longitude.toFixed(4)); params.set('lat', view.latitude.toFixed(4)); params.set('zoom', view.zoom.toFixed(2));
@@ -23,10 +29,7 @@ function updateUrl() {
   }
   if ($('basemap').value !== 'gray') params.set('basemap', $('basemap').value);
   if (!$('labels').checked) params.set('labels', 'off');
-  if (querySpec) {
-    if (querySpec.term) params.set('q', querySpec.term);
-    if (querySpec.allYears) params.set('search', 'all');
-  }
+  if (querySpec?.term) params.set('q', querySpec.term);
   history.replaceState(null, '', `${location.pathname}?${params}${location.hash}`);
 }
 function updateScopeOptions() {
@@ -45,45 +48,53 @@ function clearSelection() {
   for (const button of $('search-results').querySelectorAll('button')) button.setAttribute('aria-pressed', 'false');
 }
 function renderYear() {
-  const index = years.indexOf(year);
-  $('year-slider').value = index;
-  $('year-slider').setAttribute('aria-valuetext', formatYear(year));
-  $('year-select').value = year;
-  $('previous').disabled = index === 0; $('next').disabled = index === years.length - 1;
-  $('panel-count').textContent = `Snapshot ${index + 1} of ${years.length} · no year zero`;
-  const entry = manifest.years[index];
-  status('map-status', `${formatYear(year)} · ${entry.count.toLocaleString()} feature${entry.count === 1 ? '' : 's'}`);
+  timeline.renderYear(year);
+  const entry = manifest.years.find(item => item.year === year);
+  status('map-status', entry ? `${formatYear(year)} · ${entry.count.toLocaleString()} feature${entry.count === 1 ? '' : 's'}` : 'No snapshots in this range.');
+}
+function extendTo(value) {
+  applyRange(Math.min(timeline.start, value), Math.max(timeline.end, value), value);
+}
+function applyRange(start, end, preferred = year) {
+  stopPlayback();
+  const changed = start !== timeline.start || end !== timeline.end;
+  timeline.setRange(start, end);
+  timeline.renderRange(extendTo);
+  const available = timeline.available;
+  const next = available.length ? nearestYear(available, preferred ?? start) : null;
+  if (year !== next) changeYear(next);
+  else renderYear();
+  $('search-range').textContent = `Search within ${timeline.label}`;
+  clearSuggestions();
+  if (changed && querySpec) runSearch(querySpec.term);
+  updateScopeOptions(); updateUrl();
 }
 function stopPlayback() {
   playing = false; clearTimeout(playbackTimer);
   $('play').textContent = 'Play'; $('play').setAttribute('aria-pressed', 'false');
 }
-function changeYear(value, { playback = false, search = true } = {}) {
-  if (!years.includes(value)) return;
-  clearTimeout(sliderTimer);
+function changeYear(value, { playback = false } = {}) {
   if (!playback) stopPlayback();
+  if (value === year || (value != null && !timeline.available.includes(value))) return;
   year = value; mapError = false;
-  clearSuggestions();
-  clearSelection(); renderYear(); engine?.setYear(year); updateUrl();
-  if (querySpec && search) {
-    if (!querySpec.allYears) runSearch(false);
-    else updateHighlights();
-  }
+  clearSuggestions(); clearSelection(); renderYear(); engine?.setYear(year); updateUrl();
+  if (querySpec) updateHighlights();
 }
 function schedulePlayback() {
   clearTimeout(playbackTimer);
   if (!playing) return;
   playbackTimer = setTimeout(() => {
     if (!playing) return;
-    if (document.hidden || years.indexOf(year) === years.length - 1) { stopPlayback(); return; }
+    if (document.hidden || year === timeline.available.at(-1)) { stopPlayback(); return; }
     if (engine && !engine.isLoaded()) { schedulePlayback(); return; }
-    changeYear(years[years.indexOf(year) + 1], { playback: true });
-    schedulePlayback();
+    changeYear(timeline.available[timeline.available.indexOf(year) + 1], { playback: true });
+    if (year === timeline.available.at(-1)) stopPlayback();
+    else schedulePlayback();
   }, config.animationInterval);
 }
 async function updateHighlights() {
   highlightController?.abort();
-  if (!querySpec || !engine) { engine?.highlight([]); return; }
+  if (!querySpec || !engine || year == null) { engine?.highlight([]); return; }
   const controller = highlightController = new AbortController();
   const requestedYear = year;
   try {
@@ -91,7 +102,11 @@ async function updateHighlights() {
     if (!controller.signal.aborted && year === requestedYear) engine.highlight(ids);
   } catch (error) { if (error.name !== 'AbortError') status('search-status', 'Results are available, but map highlighting could not be refreshed.', true); }
 }
-function searchPredicate(spec = querySpec) { return andWhere(nameWhere(spec.term), spec.allYears ? null : yearWhere(spec.year)); }
+function searchPredicate(group = inside) {
+  const dates = group === inside ? yearWhere(timeline.start, timeline.end)
+    : andWhere(yearWhere(years[0], years.at(-1)), `Year < ${timeline.start} OR Year > ${timeline.end}`);
+  return andWhere(nameWhere(querySpec.term), dates);
+}
 function clearSuggestions() {
   clearTimeout(suggestionTimer); suggestionController?.abort(); suggestionRevision++;
   suggestionTimer = null; suggestionController = null;
@@ -101,22 +116,22 @@ function clearSuggestions() {
 function scheduleSuggestions({ immediate = false } = {}) {
   clearSuggestions();
   const term = $('search-input').value.trim();
-  const allYears = $('search-years').value === 'all', requestedYear = year, revision = suggestionRevision;
-  suggestionTimer = setTimeout(() => loadSuggestions(term, allYears, requestedYear, revision), immediate ? 0 : 300);
+  const revision = suggestionRevision;
+  suggestionTimer = setTimeout(() => loadSuggestions(term, revision), immediate ? 0 : 300);
 }
 function openSuggestions() {
   stopPlayback();
   if ($('search-suggestions').hidden && !suggestionTimer && !suggestionController) scheduleSuggestions({ immediate: true });
 }
-async function loadSuggestions(term, allYears, requestedYear, revision) {
+async function loadSuggestions(term, revision) {
   if (revision !== suggestionRevision) return;
   suggestionTimer = null;
   const controller = suggestionController = new AbortController();
   const timer = setTimeout(() => controller.abort(new DOMException('Suggestions timed out.', 'TimeoutError')), 10000);
-  const scopeLabel = allYears ? 'all years' : formatYear(requestedYear);
+  const scopeLabel = timeline.label;
   status('suggestions-status', 'Finding suggested names…');
   try {
-    const names = await api.suggestNames(andWhere(nameWhere(term), allYears ? null : yearWhere(requestedYear)), controller.signal);
+    const names = await api.suggestNames(andWhere(nameWhere(term), yearWhere(timeline.start, timeline.end)), controller.signal);
     if (revision !== suggestionRevision) return;
     const prefix = term.toLocaleUpperCase();
     names.sort((a, b) => Number(b.toLocaleUpperCase().startsWith(prefix)) - Number(a.toLocaleUpperCase().startsWith(prefix)) || a.localeCompare(b));
@@ -133,14 +148,14 @@ async function loadSuggestions(term, allYears, requestedYear, revision) {
     $('search-suggestions').hidden = !list.children.length;
     status('suggestions-status', list.children.length
       ? `${list.children.length} suggested name${list.children.length === 1 ? '' : 's'}. ${term ? 'Choose a name to search.' : 'Type to find more, or choose a name.'}`
-      : `No suggested names in ${scopeLabel}. ${allYears ? 'Try another spelling or press Search.' : 'Try All years or press Search.'}`);
+      : `No suggested names in ${scopeLabel}. Press Search for matches outside your range.`);
   } catch (error) {
     if (revision === suggestionRevision) status('suggestions-status', 'Suggestions are unavailable. You can still press Search.');
   } finally { clearTimeout(timer); if (revision === suggestionRevision) suggestionController = null; }
 }
-function renderResults() {
-  const list = $('search-results'); list.replaceChildren();
-  for (const feature of queryRows) {
+function renderResults(group = inside) {
+  const list = $(group.list); list.replaceChildren();
+  for (const feature of group.rows) {
     const item = document.createElement('li');
     const button = document.createElement('button'); button.type = 'button'; button.className = 'result-button';
     button.dataset.objectid = feature.OBJECTID;
@@ -148,39 +163,68 @@ function renderResults() {
     const title = document.createElement('strong');
     const swatch = document.createElement('i'); swatch.className = 'swatch'; swatch.style.backgroundColor = colorHex(feature.Color); swatch.setAttribute('aria-hidden', 'true');
     title.append(swatch, document.createTextNode(featureName(feature)));
-    const detail = document.createElement('span'); detail.textContent = `${formatYear(feature.Year)} · ${feature.Type || 'Feature'}${Number.isFinite(feature.AreaSqKM) ? ` · ${feature.AreaSqKM.toLocaleString(undefined, { maximumFractionDigits: 1 })} km²` : ''}`;
-    button.append(title, detail); button.addEventListener('click', () => selectFeature(feature, null, true));
+    const detail = document.createElement('span');
+    detail.textContent = `${formatYear(feature.Year)} · ${feature.Type || 'Feature'}${Number.isFinite(feature.AreaSqKM) ? ` · ${feature.AreaSqKM.toLocaleString(undefined, { maximumFractionDigits: 1 })} km²` : ''}`;
+    button.append(title, detail);
+    if (group === outside) {
+      const action = document.createElement('span'); action.textContent = `Extend range to ${formatYear(feature.Year)} and view`;
+      button.append(action);
+    }
+    button.addEventListener('click', () => {
+      if (group === outside) extendTo(feature.Year);
+      selectFeature(feature, null, true);
+    });
     item.append(button); list.append(item);
   }
-  $('more-results').hidden = queryRows.length >= queryTotal;
+  $(group.more).hidden = group.rows.length >= group.total;
 }
-async function runSearch(more = false) {
-  clearSuggestions();
-  searchController?.abort();
-  const revision = ++searchRevision;
-  const controller = searchController = new AbortController();
-  const timer = setTimeout(() => controller.abort(new DOMException('Search timed out. Please try again.', 'TimeoutError')), 30000);
-  if (!more) {
-    querySpec = { term: $('search-input').value.trim(), allYears: $('search-years').value === 'all', year };
-    queryRows = []; queryTotal = 0; renderResults();
+function resetResults() {
+  for (const group of [inside, outside]) {
+    group.request?.abort(); group.request = null;
+    group.rows = []; group.total = 0;
+    renderResults(group); status(group.status, '');
   }
-  const where = searchPredicate();
-  status('search-status', 'Searching the source dataset…');
-  $('search-button').disabled = true; $('more-results').disabled = true;
-  updateScopeOptions(); updateUrl();
+  $('outside-group').hidden = true;
+}
+function runSearch(term = $('search-input').value.trim()) {
+  clearSuggestions(); resetResults();
+  querySpec = { term };
+  updateScopeOptions(); updateUrl(); updateHighlights();
+  loadResults(inside);
+  if (term && (timeline.start > years[0] || timeline.end < years.at(-1))) loadResults(outside);
+}
+async function loadResults(group, more = false) {
+  group.request?.abort();
+  const controller = group.request = new AbortController();
+  const timer = setTimeout(() => controller.abort(new DOMException('Search timed out. Please try again.', 'TimeoutError')), 30000);
+  const where = searchPredicate(group);
+  const label = timeline.label;
+  $(group.more).disabled = true;
+  status(group.status, group === inside ? `Searching ${label}…` : 'Looking for matches outside your range…');
   try {
-    const [rows, count] = await Promise.all([api.search(where, queryRows.length, controller.signal), more ? queryTotal : api.count(where, controller.signal)]);
-    if (revision !== searchRevision) return;
-    queryRows.push(...rows); queryTotal = count;
-    renderResults();
-    status('search-status', count ? `${queryRows.length.toLocaleString()} of ${count.toLocaleString()} results. Select a result to view its details.` : 'No matching features. Try a different name or search all years.');
-    updateHighlights();
-  } catch (error) { if (revision === searchRevision && error.name !== 'AbortError') status('search-status', error.message, true); }
-  finally { clearTimeout(timer); if (revision === searchRevision) { $('search-button').disabled = false; $('more-results').disabled = false; } }
+    const [rows, count] = group === inside && !timeline.available.length ? [[], 0] : await Promise.all([
+      api.search(where, group.rows.length, controller.signal), more ? group.total : api.count(where, controller.signal)
+    ]);
+    if (group.request !== controller) return;
+    group.rows.push(...rows); group.total = count;
+    renderResults(group);
+    if (group === outside) $('outside-group').hidden = !count;
+    const scope = group === inside ? `in ${label}` : 'outside your range';
+    status(group.status, count ? `${group.rows.length.toLocaleString()} of ${count.toLocaleString()} results ${scope}.` : `No matches ${scope}.`);
+  } catch (error) {
+    if (group.request === controller && error.name !== 'AbortError') {
+      if (group === outside) $('outside-group').hidden = false;
+      status(group.status, error.message, true);
+    }
+  } finally {
+    clearTimeout(timer);
+    if (group.request === controller) $(group.more).disabled = false;
+  }
 }
 async function selectFeature(candidate, point, zoomToFeature = false) {
   stopPlayback();
-  if (Number(candidate.Year) !== year) changeYear(Number(candidate.Year), { search: false });
+  if (!timeline.available.includes(Number(candidate.Year))) return;
+  if (Number(candidate.Year) !== year) changeYear(Number(candidate.Year));
   selectionController?.abort();
   const revision = ++selectionRevision;
   const controller = selectionController = new AbortController();
@@ -217,8 +261,14 @@ function updateExportControls() {
   const scope = $('download-scope').value;
   const timed = ['time', 'extent'].includes(scope);
   $('download-time').hidden = !timed;
-  $('download-range').hidden = !timed || $('download-period').value !== 'range';
-  for (const input of $('download-range').querySelectorAll('input')) input.disabled = $('download-range').hidden;
+  const currentOnly = timed && $('download-period').value === 'current';
+  let coverage = `${timeline.label} · ${timeline.countLabel}`;
+  if (scope === 'all') coverage = `Entire dataset · all years, including any outside the timeline range`;
+  else if (scope === 'selected' && selected) coverage = `Selected feature · ${formatYear(selected.Year)}`;
+  else if (currentOnly) coverage = year == null ? 'No map snapshot in this range.' : `Map year only · ${formatYear(year)}`;
+  else if (scope === 'search') coverage = `Search matches within ${coverage}`;
+  $('download-range-summary').textContent = coverage;
+  $('generate-download').disabled = !!exportController || (scope !== 'all' && !timeline.available.length);
   $('download-selection-label').textContent = selected ? 'Selected feature:' : 'No feature selected.';
   $('download-selection-name').hidden = !selected;
   $('download-selection-name').textContent = selected ? `${featureName(selected)} · ${formatYear(selected.Year)}` : '';
@@ -228,13 +278,9 @@ function updateExportControls() {
   $('use-selected-feature').hidden = !selected || scope === 'selected';
 }
 function exportPeriod() {
-  const period = $('download-period').value;
-  if (period === 'all') return { where: '1=1', description: 'all years' };
-  if (period === 'current') return { where: yearWhere(year), description: formatYear(year) };
-  const first = Number($('range-start').value), last = Number($('range-end').value);
-  const where = yearWhere(first, last);
-  if (first < years[0] || last > years.at(-1)) throw new Error(`Choose years between ${formatYear(years[0])} and ${formatYear(years.at(-1))}.`);
-  return { where, description: `${formatYear(first)}–${formatYear(last)}` };
+  if (!timeline.available.length) throw new Error('No snapshots in this range.');
+  if ($('download-period').value === 'current') return { where: yearWhere(year), description: formatYear(year) };
+  return { where: yearWhere(timeline.start, timeline.end), description: timeline.label };
 }
 async function prepareDownload(event) {
   event.preventDefault();
@@ -253,7 +299,7 @@ async function prepareDownload(event) {
       where = idsWhere([selected.OBJECTID]); description = `${featureName(selected)}, ${formatYear(selected.Year)}`;
     } else if (scope === 'search') {
       if (!querySpec) throw new Error('Run a search first.');
-      where = searchPredicate(); description = `search “${querySpec.term || 'all features'}”, ${querySpec.allYears ? 'all years' : formatYear(querySpec.year)}`;
+      where = searchPredicate(); description = `search “${querySpec.term || 'all features'}”, ${timeline.label}`;
     } else if (scope === 'all') { where = '1=1'; description = 'entire dataset, all years'; }
     else {
       const period = exportPeriod(); where = period.where; description = period.description;
@@ -288,7 +334,7 @@ async function prepareDownload(event) {
     }
     status('download-status', `${summary}. ${filters.length > 1 ? `All ${filters.length} parts are ready. Download each part to obtain the complete selection.` : `${FORMATS[format]} is ready.`} (${((performance.now() - started) / 1000).toFixed(1)} s to prepare).`);
   } catch (error) { status('download-status', `${error.name === 'AbortError' ? 'Stopped waiting. ArcGIS may still finish this export.' : error.message}${!$('download-link').hidden ? ' Links already shown contain only the completed parts.' : ''}`, error.name !== 'AbortError'); }
-  finally { clearTimeout(timer); $('generate-download').disabled = false; $('cancel-download').hidden = true; }
+  finally { clearTimeout(timer); exportController = null; updateExportControls(); $('cancel-download').hidden = true; }
 }
 async function initialize() {
   try {
@@ -299,35 +345,28 @@ async function initialize() {
     if (!years.length || !manifest.complete) throw new Error('The map data build is not complete.');
     const view = readUrl(location.search, years, { center: config.defaultCenter, zoom: config.defaultZoom, basemaps: config.basemaps });
     year = view.year;
-    $('year-select').replaceChildren(...years.map(value => new Option(formatYear(value), value)));
-    $('year-select').disabled = false; $('year-slider').disabled = false; $('play').disabled = false;
-    $('year-slider').max = years.length - 1;
-    $('first-year').textContent = formatYear(years[0]); $('last-year').textContent = formatYear(years.at(-1));
-    for (const id of ['range-start', 'range-end']) { $(id).min = years[0]; $(id).max = years.at(-1); }
-    $('basemap').value = view.basemap; $('labels').checked = view.labels; $('search-input').value = view.q; $('search-years').value = view.allYears ? 'all' : 'current';
+    timeline = new Timeline(years, view.start, view.end, applyRange, changeYear);
+    $('timeline-track').addEventListener('pointerdown', stopPlayback, true);
+    $('range-form').addEventListener('input', stopPlayback);
+    timeline.renderRange(extendTo);
+    $('search-range').textContent = `Search within ${timeline.label}`;
+    $('basemap').value = view.basemap; $('labels').checked = view.labels; $('search-input').value = view.q;
     $('projection-control').querySelector(`input[value="${view.projection}"]`).checked = true;
     renderYear();
     try {
       engine = new HistoryMap(manifest, view, { selected: mapSelection, moved: updateUrl, loaded: () => {
-        if (!mapError) { const count = manifest.years[years.indexOf(year)].count; status('map-status', `${formatYear(year)} · ${count.toLocaleString()} feature${count === 1 ? '' : 's'}`); }
+        if (!mapError && year != null) { const count = manifest.years[years.indexOf(year)].count; status('map-status', `${formatYear(year)} · ${count.toLocaleString()} feature${count === 1 ? '' : 's'}`); }
       },
         error: message => { mapError = true; stopPlayback(); status('map-status', message, true); },
         basemapFallback: () => { $('basemap').value = 'plain'; mapError = false; } });
       $('view-controls').hidden = false;
     } catch (error) { $('map-failure').hidden = false; status('map-status', error.message, true); }
-    $('year-slider').addEventListener('input', () => {
-      stopPlayback(); clearTimeout(sliderTimer);
-      const value = years[Number($('year-slider').value)];
-      $('year-slider').setAttribute('aria-valuetext', formatYear(value));
-      sliderTimer = setTimeout(() => changeYear(value), 120);
-    });
-    $('year-slider').addEventListener('change', () => changeYear(years[Number($('year-slider').value)]));
     $('year-select').addEventListener('change', () => changeYear(Number($('year-select').value)));
-    $('previous').addEventListener('click', () => changeYear(years[years.indexOf(year) - 1]));
-    $('next').addEventListener('click', () => changeYear(years[years.indexOf(year) + 1]));
+    $('previous').addEventListener('click', () => changeYear(timeline.available[timeline.available.indexOf(year) - 1]));
+    $('next').addEventListener('click', () => changeYear(timeline.available[timeline.available.indexOf(year) + 1]));
     $('play').addEventListener('click', () => {
       if (playing) { stopPlayback(); return; }
-      if (year === years.at(-1)) changeYear(years[0]);
+      if (year === timeline.available.at(-1)) changeYear(timeline.available[0]);
       playing = true; $('play').textContent = 'Pause'; $('play').setAttribute('aria-pressed', 'true'); schedulePlayback();
     });
     document.addEventListener('visibilitychange', () => { if (document.hidden) stopPlayback(); });
@@ -347,7 +386,7 @@ async function initialize() {
     $('search-input').addEventListener('compositionend', scheduleSuggestions);
     $('search-input').addEventListener('focus', openSuggestions);
     $('search-input').addEventListener('click', openSuggestions);
-    $('search-years').addEventListener('change', () => scheduleSuggestions({ immediate: true }));
+
     $('search-input').addEventListener('keydown', event => {
       if (event.key === 'ArrowDown' && $('suggestions-list').firstElementChild) {
         event.preventDefault(); $('suggestions-list').querySelector('button').focus();
@@ -368,11 +407,12 @@ async function initialize() {
     });
     $('search-form').addEventListener('focusout', event => { if (!$('search-form').contains(event.relatedTarget)) clearSuggestions(); });
     $('search-form').addEventListener('submit', event => { event.preventDefault(); stopPlayback(); runSearch(); });
-    $('more-results').addEventListener('click', () => runSearch(true));
+    $('more-results').addEventListener('click', () => loadResults(inside, true));
+    $('more-outside').addEventListener('click', () => loadResults(outside, true));
     $('clear-search').addEventListener('click', () => {
       clearSuggestions();
-      searchController?.abort(); highlightController?.abort(); searchRevision++;
-      querySpec = null; queryRows = []; queryTotal = 0; $('search-input').value = ''; engine?.highlight([]); renderResults(); updateScopeOptions(); updateUrl();
+      resetResults(); highlightController?.abort();
+      querySpec = null; $('search-input').value = ''; engine?.highlight([]); updateScopeOptions(); updateUrl();
       $('search-button').disabled = false; status('search-status', 'Search cleared. Leave the name blank to browse features.');
     });
     $('clear-selection').addEventListener('click', clearSelection);

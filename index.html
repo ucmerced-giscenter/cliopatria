@@ -55,43 +55,33 @@
       </nav>
     </header>
     <section class="timeline" aria-label="Time navigation">
-      <div class="time-actions">
-        <label for="year-select">Year</label
-        ><select id="year-select" disabled>
-          <option>Loading years…</option>
-        </select>
-        <button
-          id="previous"
-          type="button"
-          aria-label="Previous available year"
-          disabled
-        >
-          Previous</button
-        ><button id="play" type="button" aria-pressed="false" disabled>
-          Play</button
-        ><button
-          id="next"
-          type="button"
-          aria-label="Next available year"
-          disabled
-        >
-          Next
-        </button>
-        <button id="copy-link" type="button">Copy map link</button>
-        <a class="timeline-help small" href="help.html#timeline-instructions">Timeline instructions</a>
-        <span id="panel-count" class="subtle"></span>
+      <div class="timeline-tools">
+        <form id="range-form" aria-label="Timeline range">
+          <label>From <input id="range-start" type="number" step="1" required aria-describedby="range-help"></label>
+          <label>Through <input id="range-end" type="number" step="1" required aria-describedby="range-help"></label>
+          <button type="submit">Apply range</button>
+          <span id="range-help" class="small">Use negative years for BCE.</span>
+        </form>
+        <div class="time-actions">
+          <label for="year-select">Map year</label>
+          <select id="year-select" disabled><option>Loading…</option></select>
+          <button id="previous" type="button" aria-label="Previous snapshot" disabled>Previous</button>
+          <button id="play" type="button" aria-pressed="false" disabled>Play</button>
+          <button id="next" type="button" aria-label="Next snapshot" disabled>Next</button>
+        </div>
       </div>
-      <div class="slider-row">
-        <span id="first-year">3400 BCE</span
-        ><input
-          type="range"
-          id="year-slider"
-          min="0"
-          max="0"
-          value="0"
-          aria-label="Snapshot year"
-          disabled
-        /><span id="last-year">1497 CE</span>
+      <div id="timeline-track" role="group" aria-label="Timeline range and map year">
+        <div class="time-rail"><div id="range-band"></div><div id="snapshot-ticks" aria-hidden="true"></div></div>
+        <button type="button" role="slider" id="from-handle" aria-label="Range start" disabled></button>
+        <button type="button" role="slider" id="through-handle" aria-label="Range end" disabled></button>
+        <button type="button" role="slider" id="year-slider" aria-label="Map snapshot" disabled></button>
+      </div>
+      <div class="axis-labels" aria-hidden="true"><span id="axis-start"></span><span id="axis-end"></span></div>
+      <div class="timeline-summary">
+        <span id="range-summary"></span>
+        <div id="nearby-years"></div>
+        <button type="button" id="full-range" hidden>Reset range</button>
+        <button type="button" id="copy-link">Copy map link</button>
       </div>
     </section>
     <main class="workspace">
@@ -104,6 +94,7 @@
       >
         <section class="control-section" aria-labelledby="search-title">
           <h2 id="search-title" tabindex="-1">Search by name</h2>
+          <p id="search-range" class="scope-note"></p>
           <form id="search-form">
             <label for="search-input" class="sr-only">Polity name</label
             ><input
@@ -120,11 +111,6 @@
               <ul id="suggestions-list" class="name-suggestions" aria-labelledby="suggestions-label"></ul>
             </div>
             <p id="suggestions-status" class="small" role="status"></p>
-            <label for="search-years">Search within</label
-            ><select id="search-years">
-              <option value="current">Map year</option>
-              <option value="all">All years</option>
-            </select>
             <div class="button-row">
               <button type="submit" id="search-button">Search</button
               ><button type="button" id="clear-search">Clear</button>
@@ -143,6 +129,12 @@
           <button id="more-results" type="button" hidden>
             Show more results
           </button>
+          <section id="outside-group" aria-labelledby="outside-title" hidden>
+            <h3 id="outside-title">Found outside your range</h3>
+            <p class="small" id="outside-status" role="status"></p>
+            <ul id="outside-results" class="results" aria-label="Results outside your range"></ul>
+            <button id="more-outside" type="button" hidden>Show more outside this range</button>
+          </section>
         </section>
         <section class="control-section" aria-labelledby="feature-title">
           <h2 id="feature-title">Selected feature</h2>
@@ -170,14 +162,15 @@
         </section>
         <section class="control-section" aria-labelledby="download-title">
           <h2 id="download-title" tabindex="-1">Download data</h2>
+          <p id="download-range-summary" class="scope-note"></p>
           <form id="download-form">
             <label for="download-scope">Features to export</label
             ><select id="download-scope" aria-describedby="download-selection-summary">
-              <option value="time">Year or year range</option>
+              <option value="time">All features in period</option>
               <option value="search" disabled>Current search results</option>
               <option value="extent">Visible map extent</option>
               <option value="selected" disabled>Selected feature</option>
-              <option value="all">Entire dataset</option>
+              <option value="all">Entire dataset · all years</option>
             </select>
             <div class="download-selection">
               <p id="download-selection-summary" class="small" role="status" aria-atomic="true">
@@ -190,32 +183,9 @@
             <div id="download-time">
               <label for="download-period">Time coverage</label
               ><select id="download-period">
-                <option value="current">Map year</option>
-                <option value="range">Custom year range</option>
-                <option value="all">All years</option>
+                <option value="range">Timeline range</option>
+                <option value="current">Map year only</option>
               </select>
-              <div id="download-range" hidden>
-                <div class="range-fields">
-                  <label
-                    >From year<input
-                      id="range-start"
-                      type="number"
-                      value="-3400"
-                      step="1"
-                      aria-describedby="range-help" /></label
-                  ><label
-                    >Through year<input
-                      id="range-end"
-                      type="number"
-                      value="1497"
-                      step="1"
-                      aria-describedby="range-help"
-                  /></label>
-                </div>
-                <p id="range-help" class="small">
-                  Use negative numbers for BCE. There is no year zero.
-                </p>
-              </div>
             </div>
             <label for="download-format">File format</label
             ><select id="download-format">
