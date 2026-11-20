@@ -26,6 +26,8 @@
 #suggestions-status:empty{margin:0}
 .timeline-help{display:inline-flex;align-items:center;min-height:44px;padding:8px 0}
 #download-parts a{margin:10px 0}
+.download-heading{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 10px;margin-bottom:12px}
+.download-heading h2{margin:0}
 .download-selection{margin:10px 0;padding:10px 12px;border-left:3px solid #899c90;background:var(--pale);overflow-wrap:anywhere}
 .download-selection p{margin:0}
 .download-selection span,.download-selection strong{display:block}

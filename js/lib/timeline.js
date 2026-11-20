@@ -10,7 +10,6 @@ export class Timeline {
   constructor(years, { start, end, singleYear, snapshots }, onRange, onYear) {
     this.years = years;
     this.featureCounts = new Map(snapshots.map(({ year, count }) => [year, count]));
-    this.playheadYear = null;
     this.singleYear = singleYear;
     this.first = years[0];
     this.last = years.at(-1);
@@ -161,8 +160,7 @@ export class Timeline {
     if (id === 'year-slider') {
       $('year-picker').style.setProperty('--playhead', handle.style.left);
       $('year-entry').value = formatYear(year);
-      this.playheadYear = year;
-      this.summarizePeriod();
+      this.showMapFeatureCount(year);
     }
     handle.setAttribute('aria-valuenow', year);
     handle.setAttribute('aria-valuemin', min);
@@ -172,7 +170,9 @@ export class Timeline {
     handle.disabled = false;
   }
   paintRange(start, end) {
-    if (!this.singleYear) this.summarizePeriod(start, end);
+    const coverage = $('timeline-coverage');
+    if (this.singleYear || (start === end && this.featureCounts.has(start))) coverage.textContent = '';
+    else coverage.textContent = start === end ? formatYear(start) : `From ${formatYear(start)} through ${formatYear(end)}`;
     $('range-start').value = start;
     $('range-end').value = end;
     $('range-start').setCustomValidity('');
@@ -182,19 +182,10 @@ export class Timeline {
     $('range-band').style.left = this.percent(start);
     $('range-band').style.right = `calc(100% - ${this.percent(end)})`;
   }
-  summarizePeriod(start = this.start, end = this.end) {
-    const year = this.playheadYear;
+  showMapFeatureCount(year) {
     const count = this.featureCounts.get(year) ?? 0;
-    const features = `${count.toLocaleString()}\u00a0feature${count === 1 ? '' : 's'}`;
-    let summary;
-    if (this.singleYear || (start === end && year === start)) {
-      summary = `${formatYear(year)} · ${features}`;
-    } else {
-      const period = start === end ? formatYear(start) : `From ${formatYear(start)} through ${formatYear(end)}`;
-      const snapshot = year === null ? '0 features (no snapshot)' : `${features} in ${formatYear(year)}`;
-      summary = `${period} · ${snapshot}`;
-    }
-    const output = $('timeline-coverage');
+    const summary = year == null ? 'No snapshot · 0 features' : `Map year · ${count.toLocaleString()} feature${count === 1 ? '' : 's'}`;
+    const output = $('map-feature-count');
     if (output.textContent !== summary) output.textContent = summary;
   }
   renderRange(onExtend) {
@@ -226,8 +217,7 @@ export class Timeline {
     $('year-entry').disabled = !available.length;
     $('year-entry').setCustomValidity('');
     if (year == null) {
-      this.playheadYear = null;
-      this.summarizePeriod();
+      this.showMapFeatureCount(null);
       $('year-entry').value = '';
       $('year-picker').style.removeProperty('--playhead');
     }
