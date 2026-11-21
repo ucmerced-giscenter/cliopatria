@@ -157,5 +157,8 @@
 #previous img{transform:rotate(180deg)}
 .scope-note{margin:8px 0;color:var(--ink);font-weight:600;font-size:.9rem}
 #outside-group{margin-top:16px;border-top:1px solid var(--line);padding-top:8px}
+#other-years-group{margin-top:8px}
+#other-years-title{padding:10px 0;min-height:44px;color:var(--ink);font-weight:600;cursor:pointer}
+#other-years-title:focus-visible{outline:3px solid #006ab4;outline-offset:2px}
 #outside-title,#outside-results .result-button span{color:var(--muted)}
 #outside-results .result-button{background:#f6f7f5}

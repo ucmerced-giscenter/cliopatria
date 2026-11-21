@@ -7,8 +7,9 @@ import { HistoryMap } from './lib/map.js';
 const $ = id => document.getElementById(id);
 const api = new DataService();
 let manifest, years, timeline, year, engine, selected, querySpec;
-const inside = { list: 'search-results', more: 'more-results', status: 'search-status', rows: [], total: 0 };
-const outside = { list: 'outside-results', more: 'more-outside', status: 'outside-status', rows: [], total: 0 };
+const current = { list: 'search-results', more: 'more-results', status: 'search-status', rows: [], total: null };
+const otherYears = { list: 'other-years-results', more: 'more-other-years', status: 'other-years-status', rows: [], total: null };
+const outside = { list: 'outside-results', more: 'more-outside', status: 'outside-status', rows: [], total: null };
 let highlightController, selectionController, exportController;
 let previewKey, previewController;
 let selectionRevision = 0, playbackTimer, playing = false, mapError = false;
@@ -47,7 +48,7 @@ function clearSelection() {
   $('selection-empty').hidden = false; $('feature-detail').hidden = true; $('overlap-options').hidden = true;
   status('selection-status', '');
   updateScopeOptions();
-  for (const button of $('search-results').querySelectorAll('button')) button.setAttribute('aria-pressed', 'false');
+  markSelectedResult();
 }
 function extendTo(value) {
   if (timeline.singleYear) changeYear(value);
@@ -97,7 +98,7 @@ function changeYear(value, { playback = false } = {}) {
   if (timeline.singleYear) refreshCoverage();
   else {
     clearSuggestions(); updateUrl();
-    if (querySpec) updateHighlights();
+    if (querySpec) { searchDisplayedYear(); updateHighlights(); }
   }
 }
 function schedulePlayback() {
@@ -122,11 +123,12 @@ async function updateHighlights() {
     if (!controller.signal.aborted && year === requestedYear) engine.highlight(ids);
   } catch (error) { if (error.name !== 'AbortError') status('search-status', 'Results are available, but map highlighting could not be refreshed.', true); }
 }
-function searchPredicate(group = inside) {
+function searchPredicate(group) {
   const { start, end } = timeline.coverage(year);
-  const dates = group === inside ? yearWhere(start, end)
-    : andWhere(yearWhere(years[0], years.at(-1)), `Year < ${start} OR Year > ${end}`);
-  return andWhere(nameWhere(querySpec.term), dates);
+  const name = nameWhere(querySpec.term);
+  if (group === current) return andWhere(name, yearWhere(year));
+  if (group === outside) return andWhere(name, yearWhere(years[0], years.at(-1)), `Year < ${start} OR Year > ${end}`);
+  return andWhere(name, yearWhere(start, end), group === otherYears ? `Year <> ${year}` : '');
 }
 function clearSuggestions() {
   clearTimeout(suggestionTimer); suggestionController?.abort(); suggestionRevision++;
@@ -153,12 +155,18 @@ async function loadSuggestions(term, revision) {
   const scopeLabel = timeline.singleYear ? 'this year' : 'this range';
   status('suggestions-status', 'Finding suggested names…');
   try {
-    const names = await api.suggestNames(andWhere(nameWhere(term), yearWhere(start, end)), controller.signal);
-    if (revision !== suggestionRevision) return;
     const prefix = term.toLocaleUpperCase();
-    names.sort((a, b) => Number(b.toLocaleUpperCase().startsWith(prefix)) - Number(a.toLocaleUpperCase().startsWith(prefix)) || a.localeCompare(b));
+    const suggest = async (from, through) => {
+      const names = await api.suggestNames(andWhere(nameWhere(term), yearWhere(from, through)), controller.signal);
+      return names.sort((a, b) => Number(b.toLocaleUpperCase().startsWith(prefix)) - Number(a.toLocaleUpperCase().startsWith(prefix)) || a.localeCompare(b));
+    };
+    const names = new Set(year == null ? [] : await suggest(year, year));
+    if (names.size < 6 && !timeline.singleYear && timeline.rangeYears.length > 1 && revision === suggestionRevision) {
+      for (const name of await suggest(start, end)) names.add(name);
+    }
+    if (revision !== suggestionRevision) return;
     const list = $('suggestions-list');
-    for (const name of names.slice(0, 6)) {
+    for (const name of [...names].slice(0, 6)) {
       const item = document.createElement('li'), button = document.createElement('button');
       button.type = 'button'; button.textContent = name;
       button.addEventListener('click', () => {
@@ -166,7 +174,7 @@ async function loadSuggestions(term, revision) {
       });
       item.append(button); list.append(item);
     }
-    $('suggestions-label').textContent = `${term ? 'Suggested names' : 'Names A–Z'} · ${scopeLabel}`;
+    $('suggestions-label').textContent = `Suggested names · ${scopeLabel}`;
     $('search-suggestions').hidden = !list.children.length;
     status('suggestions-status', list.children.length
       ? `${list.children.length} suggested name${list.children.length === 1 ? '' : 's'}. ${term ? 'Choose a name to search.' : 'Type to find more, or choose a name.'}`
@@ -175,7 +183,12 @@ async function loadSuggestions(term, revision) {
     if (revision === suggestionRevision) status('suggestions-status', 'Suggestions are unavailable. You can still press Search.');
   } finally { clearTimeout(timer); if (revision === suggestionRevision) suggestionController = null; }
 }
-function renderResults(group = inside) {
+function markSelectedResult() {
+  for (const button of document.querySelectorAll('.results .result-button')) {
+    button.setAttribute('aria-pressed', String(button.dataset.objectid === String(selected?.OBJECTID)));
+  }
+}
+function renderResults(group) {
   const list = $(group.list); list.replaceChildren();
   for (const feature of group.rows) {
     const item = document.createElement('li');
@@ -194,26 +207,51 @@ function renderResults(group = inside) {
       button.append(action);
     }
     button.addEventListener('click', () => {
+      const hadFocus = document.activeElement === button;
       if (group === outside) extendTo(feature.Year);
       selectFeature(feature, null, true);
+      if (hadFocus && !button.isConnected) $('current-year-title').focus({ preventScroll: true });
     });
     item.append(button); list.append(item);
   }
   $(group.more).hidden = group.rows.length >= group.total;
 }
 function resetResults() {
-  for (const group of [inside, outside]) {
-    group.request?.abort(); group.request = null;
-    group.rows = []; group.total = 0;
-    renderResults(group); status(group.status, '');
-  }
+  for (const group of [current, otherYears, outside]) resetGroup(group);
+  $('current-year-title').hidden = true;
+  $('other-years-group').hidden = true;
+  $('other-years-group').open = false;
   $('outside-group').hidden = true;
 }
+function resetGroup(group) {
+  group.request?.abort(); group.request = null;
+  group.rows = []; group.total = null;
+  $(group.list).replaceChildren(); $(group.more).hidden = true; status(group.status, '');
+}
+function updateOtherYearsLabel() {
+  const action = $('other-years-group').open ? 'Hide' : 'Show';
+  const count = otherYears.total == null ? '' : ` (${otherYears.total.toLocaleString()})`;
+  $('other-years-title').textContent = `${action} matches from other years in this range${count}`;
+}
+function searchDisplayedYear() {
+  resetGroup(current); resetGroup(otherYears);
+  $('other-years-group').hidden = true;
+  $('other-years-group').open = querySpec.showOtherYears;
+  $('current-year-title').hidden = year == null;
+  if (year == null) {
+    status('search-status', 'No recorded snapshots in this range.');
+    return;
+  }
+  $('current-year-title').textContent = `Matches in ${formatYear(year)}`;
+  loadResults(current);
+  if (!timeline.singleYear && timeline.rangeYears.length > 1) loadResults(otherYears);
+}
 function runSearch(term = $('search-input').value.trim()) {
-  clearSuggestions(); resetResults();
-  querySpec = { term };
+  clearSuggestions(); resetGroup(outside);
+  $('outside-group').hidden = true;
+  querySpec = { term, showOtherYears: false };
   updateScopeOptions(); updateUrl(); updateHighlights();
-  loadResults(inside);
+  searchDisplayedYear();
   const { start, end } = timeline.coverage(year);
   if (term && (start > years[0] || end < years.at(-1))) loadResults(outside);
 }
@@ -222,28 +260,45 @@ async function loadResults(group, more = false) {
   const controller = group.request = new AbortController();
   const timer = setTimeout(() => controller.abort(new DOMException('Search timed out. Please try again.', 'TimeoutError')), 30000);
   const where = searchPredicate(group);
-  const insideLabel = timeline.singleYear ? 'in this year' : 'in this range';
-  const outsideLabel = timeline.singleYear ? 'in other years' : 'outside your range';
+  const onlyCount = group === otherYears && !more && !$('other-years-group').open;
+  let scope = 'elsewhere in this range';
+  if (group === current) scope = `in ${formatYear(year)}`;
+  if (group === outside) scope = timeline.singleYear ? 'in other years' : 'outside your range';
   $(group.more).disabled = true;
-  status(group.status, group === inside ? `Searching ${insideLabel}…` : `Looking for matches ${outsideLabel}…`);
+  status(group.status, `Looking for matches ${scope}…`);
   try {
-    const [rows, count] = group === inside && !timeline.available.length ? [[], 0] : await Promise.all([
-      api.search(where, group.rows.length, controller.signal), more ? group.total : api.count(where, controller.signal)
+    const [rows, count] = await Promise.all([
+      onlyCount ? [] : api.search(where, group.rows.length, controller.signal),
+      more ? group.total : api.count(where, controller.signal)
     ]);
     if (group.request !== controller) return;
     group.rows.push(...rows); group.total = count;
-    renderResults(group);
+    if (!onlyCount) renderResults(group);
+    if (group === otherYears) {
+      $('other-years-group').hidden = !count;
+      updateOtherYearsLabel();
+    }
+    if (!more && group !== outside && current.total === 0 && otherYears.total > 0) $('other-years-group').open = true;
+    if (group === current) $('current-year-title').hidden = !count;
     if (group === outside) $('outside-group').hidden = !count;
-    const scope = group === inside ? insideLabel : outsideLabel;
-    status(group.status, count ? `${group.rows.length.toLocaleString()} of ${count.toLocaleString()} results ${scope}.` : `No matches ${scope}.`);
+    const progress = `${group.rows.length.toLocaleString()} of ${count.toLocaleString()} result${count === 1 ? '' : 's'}`;
+    if (!onlyCount) status(group.status, count ? `${progress}.` : `No matches ${scope}.`);
   } catch (error) {
     if (group.request === controller && error.name !== 'AbortError') {
       if (group === outside) $('outside-group').hidden = false;
+      if (group === otherYears) {
+        $('other-years-group').hidden = false;
+        $('other-years-group').open = true;
+        updateOtherYearsLabel();
+      }
       status(group.status, error.message, true);
     }
   } finally {
     clearTimeout(timer);
-    if (group.request === controller) $(group.more).disabled = false;
+    if (group.request === controller) {
+      group.request = null;
+      $(group.more).disabled = false;
+    }
   }
 }
 async function selectFeature(candidate, point, zoomToFeature = false) {
@@ -272,7 +327,7 @@ async function selectFeature(candidate, point, zoomToFeature = false) {
     engine?.select(feature.OBJECTID); engine?.showPopup(feature, point);
     if (extent) engine?.fit(extent);
     status('selection-status', `Selected ${featureName(feature)}, ${formatYear(feature.Year)}.`);
-    updateScopeOptions(); renderResults(); updateHighlights();
+    updateScopeOptions(); markSelectedResult(); updateHighlights();
   } catch (error) { if (revision === selectionRevision && error.name !== 'AbortError') status('selection-status', error.message, true); }
   finally { clearTimeout(timer); }
 }
@@ -488,7 +543,15 @@ async function initialize() {
     });
     $('search-form').addEventListener('focusout', event => { if (!$('search-form').contains(event.relatedTarget)) clearSuggestions(); });
     $('search-form').addEventListener('submit', event => { event.preventDefault(); stopPlayback(); runSearch(); });
-    $('more-results').addEventListener('click', () => loadResults(inside, true));
+    $('more-results').addEventListener('click', () => loadResults(current, true));
+    $('other-years-title').addEventListener('click', () => { querySpec.showOtherYears = !$('other-years-group').open; });
+    $('other-years-group').addEventListener('toggle', () => {
+      updateOtherYearsLabel();
+      if ($('other-years-group').open && otherYears.total > 0 && !otherYears.rows.length && !otherYears.request) {
+        loadResults(otherYears, true);
+      }
+    });
+    $('more-other-years').addEventListener('click', () => loadResults(otherYears, true));
     $('more-outside').addEventListener('click', () => loadResults(outside, true));
     $('clear-search').addEventListener('click', () => {
       clearSuggestions();

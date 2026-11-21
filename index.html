@@ -110,6 +110,7 @@
             </div>
           </form>
           <p class="small"><a href="help.html#search-instructions">Search instructions</a></p>
+          <h3 id="current-year-title" tabindex="-1" hidden></h3>
           <p id="search-status" class="small" role="status">
             Search results are also available without using the map.
           </p>
@@ -117,11 +118,17 @@
             id="search-results"
             class="results"
             tabindex="-1"
-            aria-label="Search results"
+            aria-labelledby="current-year-title"
           ></ul>
           <button id="more-results" type="button" hidden>
-            Show more results
+            Show more from this year
           </button>
+          <details id="other-years-group" hidden>
+            <summary id="other-years-title">Matches from other years in this range</summary>
+            <p class="small" id="other-years-status" role="status"></p>
+            <ul id="other-years-results" class="results" aria-label="Matches from other years in this range"></ul>
+            <button id="more-other-years" type="button" hidden>Show more from these years</button>
+          </details>
           <section id="outside-group" aria-labelledby="outside-title" hidden>
             <h3 id="outside-title">Found outside your range</h3>
             <p class="small" id="outside-status" role="status"></p>
