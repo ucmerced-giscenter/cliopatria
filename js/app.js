@@ -448,20 +448,23 @@ async function prepareDownload(event) {
 function bindWelcome() {
   const dialog = $('welcome'), help = $('open-welcome');
   if (typeof dialog.showModal !== 'function') return;
-  const seenKey = 'cliopatria.welcomeSeen';
-  let seen = false;
-  try { seen = localStorage.getItem(seenKey) === '1'; }
+  const agreement = $('agree-to-terms'), explore = $('explore-map');
+  const storageKey = 'cliopatria.welcomeAgreement';
+  const termsVersion = 'placeholder-1';
+  let accepted = false;
+  try { accepted = localStorage.getItem(storageKey) === termsVersion; }
   catch { /* The dialog also works when browser storage is unavailable. */ }
 
   function openWelcome() {
     if (dialog.open) return;
     stopPlayback();
     $('welcome-more').open = false;
+    $('welcome-agreement').hidden = accepted;
+    agreement.disabled = accepted;
+    agreement.checked = accepted;
+    explore.disabled = !accepted;
+    dialog.setAttribute('closedby', accepted ? 'closerequest' : 'none');
     dialog.showModal();
-    if (!seen) {
-      seen = true;
-      try { localStorage.setItem(seenKey, '1'); } catch { /* Remember for this page only. */ }
-    }
   }
   function openFromLink() {
     if (location.hash !== '#welcome') return;
@@ -471,12 +474,22 @@ function bindWelcome() {
   help.hidden = false;
   $('help-fallback').hidden = true;
   help.addEventListener('click', openWelcome);
+  agreement.addEventListener('change', () => { explore.disabled = !agreement.checked; });
+  $('welcome-form').addEventListener('submit', () => {
+    if (accepted) return;
+    accepted = true;
+    try { localStorage.setItem(storageKey, termsVersion); } catch { /* Remember for this page only. */ }
+  });
+  dialog.addEventListener('cancel', event => { if (!accepted) event.preventDefault(); });
+  dialog.addEventListener('keydown', event => {
+    if (!accepted && event.key === 'Escape') event.preventDefault();
+  });
   dialog.addEventListener('close', () => {
     if (document.activeElement === document.body) $('workspace').focus({ preventScroll: true });
   });
   window.addEventListener('hashchange', openFromLink);
   openFromLink();
-  if (!seen) openWelcome();
+  if (!accepted) openWelcome();
 }
 function bindSidebar() {
   const panel = $('controls'), toggle = $('sidebar-toggle');

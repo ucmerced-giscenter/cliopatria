@@ -51,11 +51,21 @@
       </nav>
     </header>
     <dialog id="welcome" aria-labelledby="welcome-title" aria-describedby="welcome-intro">
-      <h2 id="welcome-title">Explore historical boundaries</h2>
+      <h2 id="welcome-title" tabindex="-1" autofocus>Welcome to Cliopatria</h2>
       <p id="welcome-intro">Choose a year on the timeline to see kingdoms, empires, and other states on the map. Looking for a particular one? Search by name in the sidebar, where you can also set a date range and download boundaries.</p>
-      <form method="dialog" class="welcome-actions">
-        <button type="submit" autofocus>Explore the map</button>
-        <a href="help.html">Instructions</a>
+      <section class="welcome-terms" aria-label="Terms of Use">
+        <p>Before you get started, take a moment to review the Terms of Use.</p>
+        <p id="welcome-terms-note"><strong>Local preview.</strong> The project’s Terms of Use will appear here.</p>
+      </section>
+      <form method="dialog" id="welcome-form">
+        <label id="welcome-agreement">
+          <input id="agree-to-terms" type="checkbox" required aria-describedby="welcome-terms-note">
+          By continuing, I agree to the Terms of Use.
+        </label>
+        <div class="welcome-actions">
+          <button id="explore-map" type="submit" disabled>Explore the map</button>
+          <a href="help.html">Instructions</a>
+        </div>
       </form>
       <details id="welcome-more">
         <summary>More</summary>
