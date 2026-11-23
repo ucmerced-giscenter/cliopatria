@@ -445,6 +445,39 @@ async function prepareDownload(event) {
   } catch (error) { status('download-status', `${error.name === 'AbortError' ? 'Stopped waiting. ArcGIS may still finish this export.' : error.message}${!$('download-link').hidden ? ' Links already shown contain only the completed parts.' : ''}`, error.name !== 'AbortError'); }
   finally { clearTimeout(timer); exportController = null; updateExportControls(); $('cancel-download').hidden = true; }
 }
+function bindWelcome() {
+  const dialog = $('welcome'), help = $('open-welcome');
+  if (typeof dialog.showModal !== 'function') return;
+  const seenKey = 'cliopatria.welcomeSeen';
+  let seen = false;
+  try { seen = localStorage.getItem(seenKey) === '1'; }
+  catch { /* The dialog also works when browser storage is unavailable. */ }
+
+  function openWelcome() {
+    if (dialog.open) return;
+    stopPlayback();
+    $('welcome-more').open = false;
+    dialog.showModal();
+    if (!seen) {
+      seen = true;
+      try { localStorage.setItem(seenKey, '1'); } catch { /* Remember for this page only. */ }
+    }
+  }
+  function openFromLink() {
+    if (location.hash !== '#welcome') return;
+    history.replaceState(history.state, '', location.pathname + location.search);
+    openWelcome();
+  }
+  help.hidden = false;
+  $('help-fallback').hidden = true;
+  help.addEventListener('click', openWelcome);
+  dialog.addEventListener('close', () => {
+    if (document.activeElement === document.body) $('workspace').focus({ preventScroll: true });
+  });
+  window.addEventListener('hashchange', openFromLink);
+  openFromLink();
+  if (!seen) openWelcome();
+}
 function bindSidebar() {
   const panel = $('controls'), toggle = $('sidebar-toggle');
   function setExpanded(expanded) {
@@ -461,6 +494,7 @@ function bindSidebar() {
   toggle.hidden = false;
 }
 async function initialize() {
+  bindWelcome();
   bindSidebar();
   try {
     const response = await fetch(config.manifestUrl);

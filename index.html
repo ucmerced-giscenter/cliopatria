@@ -46,15 +46,28 @@
       <nav aria-label="Main navigation">
         <a href="index.html" aria-current="page">Map</a
         ><a href="about.html">About</a><a href="cite.html">Cite</a
-        ><a href="help.html">Help</a
-        ><a
-          href="https://github.com/ucmerced-giscenter/cliopatria"
-          title="Project repository; currently private"
-          >GitHub</a
-        >
+        ><a id="help-fallback" href="help.html">Help</a>
+        <button id="open-welcome" type="button" aria-haspopup="dialog" aria-controls="welcome" hidden>Help</button>
       </nav>
     </header>
-    <main class="workspace">
+    <dialog id="welcome" aria-labelledby="welcome-title" aria-describedby="welcome-intro">
+      <h2 id="welcome-title">Explore historical boundaries</h2>
+      <p id="welcome-intro">Choose a year on the timeline to see kingdoms, empires, and other states on the map. Looking for a particular one? Search by name in the sidebar, where you can also set a date range and download boundaries.</p>
+      <form method="dialog" class="welcome-actions">
+        <button type="submit" autofocus>Explore the map</button>
+        <a href="help.html">Instructions</a>
+      </form>
+      <details id="welcome-more">
+        <summary>More</summary>
+        <ul>
+          <li><a href="about.html#credits">Dataset credits and sources</a></li>
+          <li><a href="about.html#privacy">Privacy and service availability</a></li>
+          <li><a href="developer.html">Developer documentation</a></li>
+          <li><a href="https://github.com/ucmerced-giscenter/cliopatria">GitHub repository (access required)</a></li>
+        </ul>
+      </details>
+    </dialog>
+    <main class="workspace" id="workspace" tabindex="-1">
       <h1 class="sr-only">Explore historical polities</h1>
       <button id="sidebar-toggle" type="button" aria-controls="controls" aria-expanded="true"
         aria-label="Time filter, search, selection and downloads" title="Hide sidebar" hidden>
