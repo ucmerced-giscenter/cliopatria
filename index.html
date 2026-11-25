@@ -4,16 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Cliopatria · Historical political boundaries</title>
-    <meta name="description" content="Explore historical political boundaries from 3400 BCE to 1497 CE. Choose a year, search for a state or empire, and download boundaries from the UC Merced GIS Center.">
+    <meta name="description" content="Explore historical political boundaries from 3400 BCE to 2024 CE. Choose a year, search for a state or empire, and download boundaries from the UC Merced GIS Center.">
     <link rel="canonical" href="https://ucmerced-giscenter.github.io/cliopatria/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Cliopatria">
     <meta property="og:url" content="https://ucmerced-giscenter.github.io/cliopatria/">
     <meta property="og:title" content="Cliopatria · Historical political boundaries">
-    <meta property="og:description" content="Explore historical political boundaries from 3400 BCE to 1497 CE. Choose a year, search for a state or empire, and download boundaries from the UC Merced GIS Center.">
+    <meta property="og:description" content="Explore historical political boundaries from 3400 BCE to 2024 CE. Choose a year, search for a state or empire, and download boundaries from the UC Merced GIS Center.">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Cliopatria · Historical political boundaries">
-    <meta name="twitter:description" content="Explore historical political boundaries from 3400 BCE to 1497 CE. Choose a year, search for a state or empire, and download boundaries from the UC Merced GIS Center.">
+    <meta name="twitter:description" content="Explore historical political boundaries from 3400 BCE to 2024 CE. Choose a year, search for a state or empire, and download boundaries from the UC Merced GIS Center.">
     <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="vendor/maplibre-gl.css" />
     <link rel="stylesheet" href="css/styles.css" />
@@ -55,7 +55,7 @@
         ><a href="help.html">Help</a
         ><a
           href="https://github.com/ucmerced-giscenter/cliopatria"
-          title="Project repository; currently private"
+          title="Cliopatria project repository"
           >GitHub</a
         >
       </nav>
@@ -143,7 +143,7 @@
           </section>
         </section>
         <section class="control-section" aria-labelledby="feature-title">
-          <h2 id="feature-title">Map selection</h2>
+          <h2 id="feature-title">Selected feature</h2>
           <p id="selection-empty" class="small">
             Select a polygon on the map or a search result.
           </p>
@@ -179,16 +179,16 @@
               <option value="time">All features in period</option>
               <option value="search" disabled>Current search results</option>
               <option value="extent">Visible map extent</option>
-              <option value="selected" disabled>Map selection</option>
+              <option value="selected" disabled>Selected feature</option>
               <option value="all">Entire dataset · all years</option>
             </select>
             <div class="download-selection">
               <p id="download-selection-summary" class="small" role="status" aria-atomic="true">
                 <span id="download-selection-label">No feature selected.</span>
                 <strong id="download-selection-name" hidden></strong>
-                <span id="download-selection-help">Select a polygon or a search result.</span>
+                <span id="download-selection-help">Select a polygon or a search result to export one feature.</span>
               </p>
-              <button id="use-selected-feature" type="button" hidden>Use map selection</button>
+              <button id="use-selected-feature" type="button" hidden>Use selected feature</button>
             </div>
             <label for="download-format">File format</label
             ><select id="download-format">
@@ -254,11 +254,11 @@
             <ul>
               <li><span class="legend-swatch" role="img" aria-label="Filled polygon"></span>Polity boundary</li>
               <li><span class="legend-swatch search-match" role="img" aria-label="Blue outline"></span>Search match</li>
-              <li><span class="legend-swatch selected-feature" role="img" aria-label="Dark outline with a white halo"></span>Map selection</li>
+              <li><span class="legend-swatch selected-feature" role="img" aria-label="Dark outline with a white halo"></span>Selected feature</li>
             </ul>
             <p>The basemap shows modern geography beneath the generalized historical boundaries.</p>
             <p>Fill colors come from the source dataset, including for unnamed regions.</p>
-            <p><a href="cite.html">Aligned Cliopatria v1.1</a> · <a href="https://ucmerced.maps.arcgis.com/home/item.html?id=8eae64c12ac047d3933d43e449c8e551">Source item</a></p>
+            <p><a href="cite.html">Aligned Cliopatria v1.2</a> · <a href="https://ucmerced.maps.arcgis.com/home/item.html?id=735e05986b18429ea53637ea86e2a574">Source item</a></p>
           </div>
         </details>
         <div class="map-overlay">
@@ -317,7 +317,7 @@
       ><p class="notice">
         JavaScript is required for the interactive map.
         <a
-          href="https://ucmerced.maps.arcgis.com/home/item.html?id=8eae64c12ac047d3933d43e449c8e551"
+          href="https://ucmerced.maps.arcgis.com/home/item.html?id=735e05986b18429ea53637ea86e2a574"
           >Open the source dataset</a
         >
         or read the <a href="help.html">user guide</a>.

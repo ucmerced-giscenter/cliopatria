@@ -1,1 +1,1 @@
-{"year":-3400,"sourceSHA256":"cc40020e36ca046f2537d8e0712bfe30afc5a430bf2239b35acbc345692699ea","groups":[{"name":"Sumerian City-States","ids":[83],"anchor":[45.84337118526237,31.553415]}]}
+{"type":"FeatureCollection","year":-3400,"sourceSHA256":"cfa5188dbebf080c5e597787ff6fe093f5da077aad6fdb652f15378f93ba0047","features":[{"type":"Feature","properties":{"Name":"Sumerian City-States"},"geometry":{"type":"Point","coordinates":[45.84337118526237,31.553415]}}]}

@@ -1,71 +1,76 @@
-"""Build per-year display data from the map manifest's GeoJSON (requires Shapely 2.1)."""
+"""Generate one interior label point per named polity and snapshot from the release GeoJSON."""
 import argparse
 import hashlib
 import json
-import math
 from collections import defaultdict
+from contextlib import ExitStack
 from pathlib import Path
+from zipfile import ZipFile, is_zipfile
 
-from shapely import make_valid, union_all
-from shapely.geometry import mapping, shape
-
-
-def polygon_parts(geometry):
-    if geometry.geom_type == "Polygon":
-        yield geometry
-    elif geometry.geom_type in ("MultiPolygon", "GeometryCollection"):
-        for item in geometry.geoms:
-            yield from polygon_parts(item)
+import ijson
+from pyproj import Geod
+from shapely.geometry import shape
 
 
-def display_group(name, records):
-    polygons = []
-    for record in records:
-        geometry = shape(record["geometry"])
-        polygons.extend(polygon_parts(geometry if geometry.is_valid else make_valid(geometry)))
-    ids = sorted(record["properties"]["OBJECTID"] for record in records)
-    group = {"name": name, "ids": ids}
-    if len(records) > 1:
-        group["area"] = round(sum(record["properties"]["AreaSqKM"] for record in records), 2)
-        articles = {record["properties"].get("Wikipedia") for record in records}
-        group["wikipedia"] = articles.pop() if len(articles) == 1 else None
-        merged = union_all(polygons)
-        # Disconnected pieces can keep their existing tiles. Replace the drawn
-        # polygons only where a shared or overlapping boundary disappears.
-        if merged.length < sum(p.length for p in polygons) - 1e-8:
-            group["geometry"] = mapping(merged)
-            largest_record = max(records, key=lambda r: r["properties"]["AreaSqKM"])
-            group["color"] = largest_record["properties"].get("Color")
-            polygons = list(polygon_parts(merged))
-    # Correct degree-area weighting for latitude when choosing the label's landmass.
-    largest = max(polygons, key=lambda p: p.area * math.cos(math.radians(p.centroid.y)))
-    anchor = largest.representative_point()
-    group["anchor"] = [anchor.x, anchor.y]
-    return group
+WGS84 = Geod(ellps="WGS84")
+
+
+def label_point(geometry):
+    polygon = shape(geometry)
+    if polygon.geom_type == "MultiPolygon":
+        # AreaSqKM covers the entire record. Within it, choose the largest part.
+        polygon = max(polygon.geoms, key=lambda part: abs(WGS84.geometry_area_perimeter(part)[0]))
+    point = polygon.representative_point()
+    return [point.x, point.y]
+
+
+def largest_polity_labels(features):
+    winners = defaultdict(dict)
+    for feature in features:
+        p = feature["properties"]
+        name = p.get("Name")
+        if p.get("Type") != "POLITY" or not (name or "").strip():
+            continue
+        panel = winners[p["Year"]]
+        # Equal published areas are settled by the lower OBJECTID in the release file.
+        rank = (p["AreaSqKM"], -p["OBJECTID"])
+        if name not in panel or rank > panel[name][0]:
+            panel[name] = (rank, label_point(feature["geometry"]))
+    return winners
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("geojson", type=Path)
+    parser.add_argument("source", type=Path, help="Release ZIP or its extracted GeoJSON")
     args = parser.parse_args()
     data = Path(__file__).resolve().parents[1] / "data"
     manifest = json.loads((data / "manifest.json").read_bytes())
-    raw = args.geojson.read_bytes()
-    digest = hashlib.sha256(raw).hexdigest()
-    if digest != manifest["sourceSHA256"]:
-        parser.error("GeoJSON SHA-256 does not match the PMTiles build manifest.")
-    years = defaultdict(lambda: defaultdict(list))
-    for record in json.loads(raw)["features"]:
-        p = record["properties"]
-        if p.get("Type") == "POLITY" and (p.get("Name") or "").strip():
-            years[p["Year"]][p["Name"]].append(record)
+    with ExitStack() as files:
+        if is_zipfile(args.source):
+            archive = files.enter_context(ZipFile(args.source))
+            members = [name for name in archive.namelist() if name.lower().endswith(".geojson")]
+            if len(members) != 1:
+                parser.error("Expected one GeoJSON file in the release ZIP.")
+            source = files.enter_context(archive.open(members[0]))
+        else:
+            source = files.enter_context(args.source.open("rb"))
+        digest = hashlib.file_digest(source, "sha256").hexdigest()
+        if digest != manifest["sourceSHA256"]:
+            parser.error("GeoJSON SHA-256 does not match the map manifest.")
+        source.seek(0)
+        winners = largest_polity_labels(ijson.items(source, "features.item", use_float=True))
+
     output = data / "polity-display"
     output.mkdir(exist_ok=True)
     for year in manifest["yearValues"]:
-        groups = [display_group(name, rows) for name, rows in sorted(years[year].items())]
-        payload = {"year": year, "sourceSHA256": digest, "groups": groups}
+        points = [
+            {"type": "Feature", "properties": {"Name": name},
+             "geometry": {"type": "Point", "coordinates": coords}}
+            for name, (_, coords) in sorted(winners[year].items())
+        ]
+        panel = {"type": "FeatureCollection", "year": year, "sourceSHA256": digest, "features": points}
         (output / f"{year}.json").write_bytes(
-            (json.dumps(payload, separators=(",", ":"), ensure_ascii=False, allow_nan=False) + "\n").encode()
+            (json.dumps(panel, ensure_ascii=False, separators=(",", ":"), allow_nan=False) + "\n").encode()
         )
 
 

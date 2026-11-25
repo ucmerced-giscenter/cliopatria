@@ -9,11 +9,11 @@ const paperAuthors = ['Bennett, James S.', 'Mutch, Erin', 'Tollefson, Andrew', '
 const title = 'Cliopatria - A geospatial database of world-wide political entities from 3400BCE to 2024CE';
 const bibtex = `@misc{ucmerced2026aligned,
   author = {{GIS Center and Geospatial Services, UC Merced University Library}},
-  title = {Aligned Cliopatria (v1.1)},
+  title = {Aligned Cliopatria (v1.2)},
   year = {2026},
   url = {${item}},
   urldate = {${date}},
-  note = {Aligned and reviewed by Erin Mutch. Coverage: 3400 BCE to 1497 CE. Suggested citation; publisher approval pending.}
+  note = {Aligned and reviewed by Erin Mutch. Coverage: 3400 BCE to 2024 CE. Suggested citation; publisher approval pending.}
 }
 
 @article{bennett2025cliopatria,
@@ -26,22 +26,22 @@ const bibtex = `@misc{ucmerced2026aligned,
   doi = {10.1038/s41597-025-04516-9}
 }
 
-@misc{chalstrey2024cliopatria,
-  author = {Chalstrey, Ed and Bennett, James and Mutch, Erin},
-  title = {${title} (v0.0.1)},
-  year = {2024},
-  publisher = {Zenodo},
-  doi = {10.5281/zenodo.13363121}
+@misc{seshat2026cliopatria,
+  author = {{Seshat Global History Databank}},
+  title = {Cliopatria (v0.2.1)},
+  year = {2026},
+  publisher = {GitHub},
+  url = {https://github.com/Seshat-Global-History-Databank/cliopatria/releases/tag/v0.2.1}
 }
 `;
 const ris = `TY  - DATA
 AU  - GIS Center and Geospatial Services, UC Merced University Library
 TI  - Aligned Cliopatria
-ET  - v1.1
+ET  - v1.2
 PY  - 2026
 UR  - ${item}
 Y2  - ${date.replaceAll('-', '/')}
-N1  - Aligned and reviewed by Erin Mutch. Coverage: 3400 BCE to 1497 CE. Suggested citation; publisher approval pending.
+N1  - Aligned and reviewed by Erin Mutch. Coverage: 3400 BCE to 2024 CE. Suggested citation; publisher approval pending.
 ER  -
 
 TY  - JOUR
@@ -55,14 +55,12 @@ DO  - 10.1038/s41597-025-04516-9
 ER  -
 
 TY  - DATA
-AU  - Chalstrey, Ed
-AU  - Bennett, James
-AU  - Mutch, Erin
-TI  - ${title}
-ET  - v0.0.1
-PY  - 2024
-PB  - Zenodo
-DO  - 10.5281/zenodo.13363121
+AU  - Seshat Global History Databank
+TI  - Cliopatria
+ET  - v0.2.1
+PY  - 2026
+PB  - GitHub
+UR  - https://github.com/Seshat-Global-History-Databank/cliopatria/releases/tag/v0.2.1
 ER  -
 `;
 function download(text, extension, type) {

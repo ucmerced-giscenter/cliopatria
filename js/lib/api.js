@@ -52,8 +52,8 @@ export class DataService {
     if (!result.features?.length) throw new Error('This feature is no longer available in the source layer.');
     return result.features[0].attributes;
   }
-  async extent(ids, signal) {
-    const result = await this.query({ where: idsWhere(Array.isArray(ids) ? ids : [ids]), returnExtentOnly: true, outSR: 4326 }, signal);
+  async extent(id, signal) {
+    const result = await this.query({ where: idsWhere([id]), returnExtentOnly: true, outSR: 4326 }, signal);
     return result.extent;
   }
 }

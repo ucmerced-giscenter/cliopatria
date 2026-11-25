@@ -3,7 +3,6 @@ import { DataService, exportFile } from './lib/api.js';
 import { FORMATS, formatYear, featureName, featureDetails, colorHex, yearWhere, nameWhere, andWhere, idsWhere, idFilters, envelopes, mercatorEnvelope, readUrl, nearestYear, wikipediaUrl } from './lib/core.js';
 import { Timeline } from './lib/timeline.js';
 import { HistoryMap } from './lib/map.js';
-import { isNamedPolity, loadPolities, makeSelection, selectionNote } from './lib/polity-display.js';
 
 const $ = id => document.getElementById(id);
 const api = new DataService();
@@ -186,7 +185,7 @@ async function loadSuggestions(term, revision) {
 }
 function markSelectedResult() {
   for (const button of document.querySelectorAll('.results .result-button')) {
-    button.setAttribute('aria-pressed', String(selected?.memberIds.includes(Number(button.dataset.objectid)) ?? false));
+    button.setAttribute('aria-pressed', String(button.dataset.objectid === String(selected?.OBJECTID)));
   }
 }
 function renderResults(group) {
@@ -195,7 +194,7 @@ function renderResults(group) {
     const item = document.createElement('li');
     const button = document.createElement('button'); button.type = 'button'; button.className = 'result-button';
     button.dataset.objectid = feature.OBJECTID;
-    button.setAttribute('aria-pressed', String(selected?.memberIds.includes(feature.OBJECTID) ?? false));
+    button.setAttribute('aria-pressed', String(selected?.OBJECTID === feature.OBJECTID));
     const title = document.createElement('strong');
     const swatch = document.createElement('i'); swatch.className = 'swatch'; swatch.style.backgroundColor = colorHex(feature.Color); swatch.setAttribute('aria-hidden', 'true');
     title.append(swatch, document.createTextNode(featureName(feature)));
@@ -312,17 +311,9 @@ async function selectFeature(candidate, point, zoomToFeature = false) {
   const timer = setTimeout(() => controller.abort(new DOMException('Feature lookup timed out. Please select it again.', 'TimeoutError')), 30000);
   status('selection-status', 'Loading feature information…');
   try {
-    const [record, snapshot] = await Promise.all([
-      api.feature(Number(candidate.OBJECTID), controller.signal),
-      isNamedPolity(candidate) ? loadPolities(year, manifest.sourceSHA256) : null
-    ]);
+    const [feature, extent] = await Promise.all([api.feature(Number(candidate.OBJECTID), controller.signal), zoomToFeature ? api.extent(Number(candidate.OBJECTID), controller.signal) : null]);
     if (revision !== selectionRevision) return;
-    if (record.Year !== year || (isNamedPolity(candidate) && (candidate.Name !== record.Name || !isNamedPolity(record)))) {
-      throw new Error('The source layer has changed since these map tiles were prepared. Please check the source item.');
-    }
-    const feature = makeSelection(record, snapshot);
-    const extent = zoomToFeature ? await api.extent(feature.memberIds, controller.signal) : null;
-    if (revision !== selectionRevision) return;
+    if (feature.Year !== year) throw new Error('The source layer has changed since these map tiles were prepared. Please check the source item.');
     selected = feature;
     $('selection-empty').hidden = true; $('feature-detail').hidden = false;
     $('feature-name').textContent = featureName(feature);
@@ -332,8 +323,8 @@ async function selectFeature(candidate, point, zoomToFeature = false) {
     }
     const wiki = wikipediaUrl(feature.Wikipedia); $('wikipedia-link').hidden = !wiki;
     if (wiki) $('wikipedia-link').href = wiki; else $('wikipedia-link').removeAttribute('href');
-    $('feature-note').textContent = selectionNote(feature);
-    engine?.select(feature.memberIds); engine?.showPopup(feature, point);
+    $('feature-note').textContent = feature.Name?.trim() ? '' : 'Some region polygons intentionally have no name in the source dataset.';
+    engine?.select(feature.OBJECTID); engine?.showPopup(feature, point);
     if (extent) engine?.fit(extent);
     status('selection-status', `Selected ${featureName(feature)}, ${formatYear(feature.Year)}.`);
     updateScopeOptions(); markSelectedResult(); updateHighlights();
@@ -343,7 +334,7 @@ async function selectFeature(candidate, point, zoomToFeature = false) {
 function mapSelection(candidate, point, candidates) {
   overlapCandidates = candidates; overlapPoint = point;
   $('overlap-options').hidden = candidates.length < 2;
-  $('overlap-select').replaceChildren(...candidates.map(feature => new Option(`${featureName(feature)} · ${feature.Type || 'Feature'}`, feature.OBJECTID)));
+  $('overlap-select').replaceChildren(...candidates.map(feature => new Option(`${featureName(feature)} · ${feature.Type || 'Feature'} · Record ${feature.OBJECTID}`, feature.OBJECTID)));
   selectFeature(candidate, point);
 }
 function updateExportControls() {
@@ -351,18 +342,18 @@ function updateExportControls() {
   const { countLabel } = timeline.coverage(year);
   let coverage = `Time filter · ${countLabel}`;
   if (scope === 'all') coverage = 'Entire dataset · all years';
-  else if (scope === 'selected' && selected) coverage = `Map selection · ${formatYear(selected.Year)}`;
+  else if (scope === 'selected' && selected) coverage = `Selected feature · ${formatYear(selected.Year)}`;
   else if (scope === 'search') coverage = `Filtered search matches · ${countLabel}`;
   else if (scope === 'extent') coverage = `Visible map extent · ${countLabel}`;
   $('download-range-summary').textContent = coverage;
   updateDownloadCount();
   $('generate-download').disabled = !!exportController || (scope !== 'all' && !timeline.available.length);
-  $('download-selection-label').textContent = selected ? 'Map selection:' : 'No selection.';
+  $('download-selection-label').textContent = selected ? 'Selected feature:' : 'No feature selected.';
   $('download-selection-name').hidden = !selected;
   $('download-selection-name').textContent = selected ? `${featureName(selected)} · ${formatYear(selected.Year)}` : '';
   $('download-selection-help').textContent = !selected
-    ? 'Select a polygon or a search result.'
-    : `${selected.memberIds.length} source record${selected.memberIds.length === 1 ? '' : 's'} in this selection.`;
+    ? 'Select a polygon or a search result to export one feature.'
+    : scope === 'selected' ? 'Only this feature will be exported.' : 'Use the button below to export only this feature.';
   $('use-selected-feature').hidden = !selected || scope === 'selected';
 }
 function exportSelection() {
@@ -370,7 +361,7 @@ function exportSelection() {
   if (scope === 'all') return { where: '1=1', description: 'entire dataset, all years' };
   if (!timeline.available.length) return null;
   if (scope === 'selected') {
-    return selected && { where: idsWhere(selected.memberIds), description: `${featureName(selected)}, ${formatYear(selected.Year)}` };
+    return selected && { where: idsWhere([selected.OBJECTID]), description: `${featureName(selected)}, ${formatYear(selected.Year)}` };
   }
   const { start, end, label } = timeline.coverage(year);
   if (scope === 'search') {
@@ -475,6 +466,9 @@ async function initialize() {
     const response = await fetch(config.manifestUrl);
     if (!response.ok) throw new Error('The map snapshot list could not load. Reload the page or consult the source dataset.');
     manifest = await response.json();
+    if (manifest.sourceItemId !== config.itemId || manifest.sourceURL !== `${config.serviceUrl}/${config.layerId}`) {
+      throw new Error('The map tiles and feature service identify different releases. Reload the page to get the current version.');
+    }
     years = manifest.yearValues || manifest.years.map(entry => entry.year);
     if (!years.length || !manifest.complete) throw new Error('The map data build is not complete.');
     const view = readUrl(location.search, years, { center: config.defaultCenter, zoom: config.defaultZoom, basemaps: config.basemaps });

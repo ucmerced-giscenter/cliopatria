@@ -1,39 +1,50 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
-import { makeSelection, prepareSnapshot, selectionNote } from '../js/lib/polity-display.js';
+import { HistoryMap } from '../js/lib/map.js';
+import { loadPolityLabels } from '../js/lib/polity-display.js';
 
-async function panel(year) {
-  return prepareSnapshot(JSON.parse(await readFile(new URL(`../data/polity-display/${year}.json`, import.meta.url))));
-}
+const data = new URL('../data/', import.meta.url);
 
-test('Sicily and Sardinia share one label and the same 35 source records in 207 CE', async () => {
-  const snapshot = await panel(207);
-  const rome = { Year: 207, Name: 'Roman Empire', Type: 'POLITY' };
-  const sicily = makeSelection({ ...rome, OBJECTID: 6173 }, snapshot);
-  const sardinia = makeSelection({ ...rome, OBJECTID: 6179 }, snapshot);
-  assert.equal(snapshot.labels.features.filter(f => f.properties.Name === rome.Name).length, 1);
-  assert.deepEqual(sicily.memberIds, sardinia.memberIds);
-  assert.equal(sicily.memberIds.length, 35);
-  assert.equal(sicily.AreaSqKM, sardinia.AreaSqKM);
-  assert.match(selectionNote(sicily), /35 source records/);
-  assert.throws(() => makeSelection({ ...rome, Year: 117, OBJECTID: 6173 }, snapshot));
+test('each v1.2 snapshot supplies exactly one point per named polity', async () => {
+  const manifest = JSON.parse(await readFile(new URL('manifest.json', data)));
+  let total = 0;
+  for (const year of manifest.yearValues) {
+    const panel = JSON.parse(await readFile(new URL(`polity-display/${year}.json`, data)));
+    assert.equal(panel.type, 'FeatureCollection');
+    assert.equal(panel.year, year);
+    assert.equal(panel.sourceSHA256, manifest.sourceSHA256);
+    const names = new Set();
+    for (const { properties: { Name }, geometry } of panel.features) {
+      assert.ok(Name.trim() && !names.has(Name), `${year}: ${Name}`);
+      names.add(Name);
+      assert.equal(geometry.type, 'Point');
+      const [lon, lat] = geometry.coordinates;
+      assert.ok(Math.abs(lon) <= 180 && Math.abs(lat) <= 90);
+    }
+    total += names.size;
+  }
+  assert.equal(total, 41422);
 });
 
-test('only touching or overlapping polity groups replace their original display boundaries', async () => {
-  const snapshot = await panel(-331);
-  const union = snapshot.unions.features.find(f => f.properties.Name === 'Nanda Empire');
-  const ids = snapshot.byId.get(union.properties.OBJECTID).ids;
-  assert.equal(ids.length, 3);
-  assert.ok(ids.every(id => snapshot.replacedIds.includes(id)));
-  const rome = await panel(207);
-  assert.ok(!rome.replacedIds.includes(6173));
-  assert.ok(!rome.replacedIds.includes(6179));
+test('a failed label lookup can retry without accepting a stale release', async t => {
+  const request = t.mock.method(globalThis, 'fetch');
+  const response = sourceSHA256 => Response.json({ type: 'FeatureCollection', year: 207, sourceSHA256, features: [] });
+  request.mock.mockImplementationOnce(async () => response('old'));
+  await assert.rejects(loadPolityLabels(207, 'new'), /different snapshots or releases/);
+  request.mock.mockImplementationOnce(async () => response('new'));
+  assert.equal((await loadPolityLabels(207, 'new')).sourceSHA256, 'new');
 });
 
-test('unnamed regions and other feature types stay individually selectable', () => {
-  for (const [Name, Type] of [['', 'POLITY'], ['Roman Empire', 'GROUP']]) {
-    const selected = makeSelection({ Year: 207, OBJECTID: 5, Name, Type });
-    assert.deepEqual(selected.memberIds, [5]);
+test('changing polygons replaces the selected OBJECTID in both highlight layers', () => {
+  const history = Object.create(HistoryMap.prototype);
+  const filters = new Map();
+  history.searchIds = [];
+  history.map = { getLayer: () => true, setFilter: (id, filter) => filters.set(id, filter) };
+  for (const id of [101, 102]) {
+    history.select(id);
+    for (const layer of ['selection-halo', 'selection-outline']) {
+      assert.deepEqual(filters.get(layer), ['==', ['get', 'OBJECTID'], id]);
+    }
   }
 });
