@@ -1,5 +1,5 @@
 import { config } from '../config.js';
-import { FIELDS, FORMATS, envelopes, idsWhere, andWhere } from './core.js';
+import { FIELDS, FORMATS, envelopes, idsWhere, andWhere, yearWhere, isNamedPolity, makeSelection } from './core.js';
 
 export async function jsonRequest(url, parameters = {}, signal, method = 'GET') {
   const body = new URLSearchParams({ f: 'json', ...parameters });
@@ -52,8 +52,25 @@ export class DataService {
     if (!result.features?.length) throw new Error('This feature is no longer available in the source layer.');
     return result.features[0].attributes;
   }
-  async extent(id, signal) {
-    const result = await this.query({ where: idsWhere([id]), returnExtentOnly: true, outSR: 4326 }, signal);
+  async selection(candidate, signal) {
+    if (!isNamedPolity(candidate)) {
+      return makeSelection(candidate, [await this.feature(candidate.OBJECTID, signal)]);
+    }
+    const where = andWhere(yearWhere(candidate.Year), "Type = 'POLITY'", `Name = '${candidate.Name.replaceAll("'", "''")}'`);
+    const rows = [];
+    let page;
+    do {
+      page = await this.query({ where, outFields: FIELDS.join(','), returnGeometry: false,
+        orderByFields: 'OBJECTID ASC', resultOffset: rows.length, resultRecordCount: 2000 }, signal);
+      if (!Array.isArray(page.features) || (page.exceededTransferLimit && !page.features.length)) {
+        throw new Error('The service did not return the full polity selection. Please try again.');
+      }
+      rows.push(...page.features.map(feature => feature.attributes));
+    } while (page.exceededTransferLimit);
+    return makeSelection(candidate, rows);
+  }
+  async extent(ids, signal) {
+    const result = await this.query({ where: idsWhere(Array.isArray(ids) ? ids : [ids]), returnExtentOnly: true, outSR: 4326 }, signal);
     return result.extent;
   }
 }

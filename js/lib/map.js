@@ -1,6 +1,6 @@
 import { config } from '../config.js';
 import { basemapKey } from '../basemap-key.js';
-import { EMPTY, featureName, featureDetails, wikipediaUrl } from './core.js';
+import { EMPTY, featureName, featureDetails, isNamedPolity, selectionNote, wikipediaUrl } from './core.js';
 import { loadPolityLabels } from './polity-display.js';
 
 const labelLayers = ['other-labels', 'polities-labels'];
@@ -18,7 +18,7 @@ export class HistoryMap {
     this.year = view.year;
     this.labels = view.labels;
     this.searchIds = [];
-    this.selectedId = -1;
+    this.selectedIds = [];
     this.basemap = view.basemap;
     this.projection = view.projection;
     this.styleReady = false;
@@ -68,7 +68,13 @@ export class HistoryMap {
       }
     });
     this.map.on('click', 'polities-fill', event => {
-      const candidates = [...new Map((event.features || []).filter(feature => feature.properties.Year === this.year).map(feature => [feature.properties.OBJECTID, feature.properties])).values()];
+      const choices = new Map();
+      for (const { properties } of event.features || []) {
+        if (properties.Year !== this.year) continue;
+        const key = isNamedPolity(properties) ? properties.Name : properties.OBJECTID;
+        if (!choices.has(key)) choices.set(key, properties);
+      }
+      const candidates = [...choices.values()];
       if (candidates.length) callbacks.selected?.(candidates[0], event.lngLat, candidates);
     });
     this.map.on('mouseenter', 'polities-fill', () => { this.map.getCanvas().style.cursor = 'pointer'; });
@@ -124,7 +130,7 @@ export class HistoryMap {
   }
   setYear(year) {
     this.year = year;
-    this.selectedId = -1;
+    this.selectedIds = [];
     this.searchIds = [];
     if (this.styleReady) this.install();
   }
@@ -145,11 +151,11 @@ export class HistoryMap {
     }
   }
   highlight(ids) { this.searchIds = ids; this.updateHighlights(); }
-  select(id) { this.selectedId = id; this.updateHighlights(); }
+  select(ids) { this.selectedIds = ids; this.updateHighlights(); }
   updateHighlights() {
     if (!this.map.getLayer('search-outline')) return;
     this.map.setFilter('search-outline', ['in', ['get', 'OBJECTID'], ['literal', this.searchIds]]);
-    for (const id of ['selection-halo', 'selection-outline']) this.map.setFilter(id, ['==', ['get', 'OBJECTID'], this.selectedId]);
+    for (const id of ['selection-halo', 'selection-outline']) this.map.setFilter(id, ['in', ['get', 'OBJECTID'], ['literal', this.selectedIds]]);
   }
   showPopup(properties, lngLat) {
     this.popup?.remove();
@@ -170,14 +176,12 @@ export class HistoryMap {
       link.setAttribute('aria-label', `Read about ${featureName(properties)} on Wikipedia (opens in a new tab)`);
       content.append(link);
     }
-    if (!properties.Name?.trim()) {
-      const note = document.createElement('p'); note.className = 'small';
-      note.textContent = 'Some region polygons intentionally have no name in the source dataset.';
-      content.append(note);
-    }
+    const note = document.createElement('p'); note.className = 'small';
+    note.textContent = selectionNote(properties);
+    content.append(note);
     this.popup = new maplibregl.Popup({ focusAfterOpen: false, maxWidth: 'min(300px, calc(100vw - 32px))' }).setLngLat(lngLat).setDOMContent(content).addTo(this.map);
   }
-  clearSelection() { this.selectedId = -1; this.popup?.remove(); this.updateHighlights(); }
+  clearSelection() { this.selectedIds = []; this.popup?.remove(); this.updateHighlights(); }
   fit(extent) {
     if (extent) this.map.fitBounds([[extent.xmin, extent.ymin], [extent.xmax, extent.ymax]], { padding: 55, maxZoom: 6, duration: 0 });
   }

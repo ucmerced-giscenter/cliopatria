@@ -82,7 +82,7 @@
         <caption>How each export scope becomes a filter</caption>
         <thead><tr><th scope="col">Scope</th><th scope="col">Selection rule</th></tr></thead>
         <tbody>
-          <tr><td>Selected feature</td><td>Filter by the selected <code>OBJECTID</code>. Export one record, even when others share its Name and Year.</td></tr>
+          <tr><td>Map selection</td><td>Use the hosted OBJECTIDs of every record in the selected polity and snapshot. Unnamed polygons and features of other types each use one OBJECTID. The export retains each original polygon.</td></tr>
           <tr><td>Current search results</td><td>Use the submitted Name predicate and time scope. Include all matches, beyond the loaded search page.</td></tr>
           <tr><td>Year or year range</td><td>Use <code>Year = 117</code> or inclusive bounds such as <code>Year &gt;= -3400 AND Year &lt;= -1</code>. Include available snapshots within those bounds.</td></tr>
           <tr><td>Visible map extent</td><td>Combine the time predicate with intersection against the map rectangle captured when Prepare download is pressed. Keep each intersecting polygon whole.</td></tr>
@@ -95,7 +95,7 @@
 
       <h3 id="download-workflow">How a download is prepared</h3>
       <ol>
-        <li><strong>Capture and count the selection.</strong> <code>prepareDownload()</code> captures the scope, format, period, and selected feature or map bounds. It counts matches and reports an empty selection before starting a job.</li>
+        <li><strong>Capture and count the selection.</strong> <code>prepareDownload()</code> captures the scope, format, period, and selected record IDs or map bounds. It counts matches and reports an empty selection before starting a job.</li>
         <li><strong>Check the service.</strong> <code>exportFile()</code> reads metadata and verifies extraction and format support.</li>
         <li><strong>Submit the job.</strong> POST to <code>/createReplica</code> with the parameters below. Filtered exports include <code>layerQueries</code>; full-dataset exports omit it.</li>
         <li><strong>Wait for completion.</strong> Follow the returned <code>statusUrl</code>, waiting two seconds between pending responses. The map remains usable.</li>
@@ -181,7 +181,7 @@
       <h2 id="polity-labels">Polity label placement</h2>
       <p>Within each snapshot, the label builder groups <code>POLITY</code> records by exact <code>Name</code> and chooses the highest <code>AreaSqKM</code>. Equal areas use the lower OBJECTID in the release GeoJSON. The point sits inside the winning polygon. For a multipart record, it sits inside the part with the largest geodesic area.</p>
       <p>Regenerate the label points with Python 3.11 or later and the <code>ijson</code>, <code>pyproj</code> and <code>shapely</code> packages. Run <code>python scripts/build_polity_display.py path/to/release.zip</code> from the project root. The script also accepts the extracted GeoJSON and checks its SHA-256 against the map manifest.</p>
-      <p>When a different feature type shares a polity’s name in the same snapshot, the polity supplies the label. Map clicks, highlights, feature details and selected-feature exports use the individual polygon’s hosted OBJECTID.</p>
+      <p>When a different feature type shares a polity’s name in the same snapshot, the polity supplies the label. A click on a named polity or one of its search results queries the v1.2 service for the same year, exact name and <code>POLITY</code> type. The client checks the exact spelling and the clicked OBJECTID. The returned hosted IDs drive highlights, record counts, search selection extents and exports, including polygons outside the viewport.</p>
     </section>
 
     <section aria-labelledby="implementation">

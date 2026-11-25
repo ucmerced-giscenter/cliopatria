@@ -143,9 +143,9 @@
           </section>
         </section>
         <section class="control-section" aria-labelledby="feature-title">
-          <h2 id="feature-title">Selected feature</h2>
+          <h2 id="feature-title">Map selection</h2>
           <p id="selection-empty" class="small">
-            Select a polygon on the map or a search result.
+            Click any piece to select its polity for this year, or choose a search result.
           </p>
           <div id="feature-detail" hidden>
             <h3 id="feature-name"></h3>
@@ -179,16 +179,16 @@
               <option value="time">All features in period</option>
               <option value="search" disabled>Current search results</option>
               <option value="extent">Visible map extent</option>
-              <option value="selected" disabled>Selected feature</option>
+              <option value="selected" disabled>Map selection</option>
               <option value="all">Entire dataset · all years</option>
             </select>
             <div class="download-selection">
               <p id="download-selection-summary" class="small" role="status" aria-atomic="true">
-                <span id="download-selection-label">No feature selected.</span>
+                <span id="download-selection-label">No selection.</span>
                 <strong id="download-selection-name" hidden></strong>
-                <span id="download-selection-help">Select a polygon or a search result to export one feature.</span>
+                <span id="download-selection-help">Select a polygon or a search result.</span>
               </p>
-              <button id="use-selected-feature" type="button" hidden>Use selected feature</button>
+              <button id="use-selected-feature" type="button" hidden>Use map selection</button>
             </div>
             <label for="download-format">File format</label
             ><select id="download-format">
@@ -254,7 +254,7 @@
             <ul>
               <li><span class="legend-swatch" role="img" aria-label="Filled polygon"></span>Polity boundary</li>
               <li><span class="legend-swatch search-match" role="img" aria-label="Blue outline"></span>Search match</li>
-              <li><span class="legend-swatch selected-feature" role="img" aria-label="Dark outline with a white halo"></span>Selected feature</li>
+              <li><span class="legend-swatch selected-feature" role="img" aria-label="Dark outline with a white halo"></span>Map selection</li>
             </ul>
             <p>The basemap shows modern geography beneath the generalized historical boundaries.</p>
             <p>Fill colors come from the source dataset, including for unnamed regions.</p>

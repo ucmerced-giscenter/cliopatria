@@ -12,10 +12,36 @@ export function parseYearInput(text) {
   return Number.isSafeInteger(year) && year !== 0 ? year : null;
 }
 export function featureName(feature) { return feature.Name?.trim() || 'Unnamed region'; }
+export function isNamedPolity(feature) { return feature.Type === 'POLITY' && Boolean(feature.Name?.trim()); }
+export function makeSelection(candidate, records) {
+  // The service can compare strings case-insensitively. Match the exact names used by the labels.
+  const matching = new Map();
+  for (const row of records) {
+    if (row.Year === candidate.Year && (row.Type ?? '') === (candidate.Type ?? '') && (row.Name ?? '') === (candidate.Name ?? '')) {
+      matching.set(row.OBJECTID, row);
+    }
+  }
+  const clicked = matching.get(candidate.OBJECTID);
+  if (!clicked) throw new Error('This record no longer matches the source layer. Reload the map and try again.');
+  if (!isNamedPolity(clicked) || matching.size === 1) return { ...clicked, memberIds: [clicked.OBJECTID] };
+
+  const members = [...matching.values()];
+  const selection = { ...clicked, memberIds: [...matching.keys()],
+    AreaSqKM: members.every(row => Number.isFinite(row.AreaSqKM)) ? members.reduce((sum, row) => sum + row.AreaSqKM, 0) : null };
+  for (const field of ['Wikipedia', 'Wikidata', 'SeshatID']) {
+    if (!members.every(row => row[field] === clicked[field])) selection[field] = null;
+  }
+  return selection;
+}
+export function selectionNote(feature) {
+  const count = feature.memberIds.length;
+  const summary = `This selection includes ${count} source record${count === 1 ? '' : 's'}.`;
+  return feature.Name?.trim() ? summary : `${summary} This region has no name in the source dataset.`;
+}
 export function featureDetails(feature) {
   return [
     ['Year', formatYear(feature.Year)],
-    ['Area (km²)', Number.isFinite(feature.AreaSqKM) ? feature.AreaSqKM.toLocaleString(undefined, { maximumFractionDigits: 1 }) : 'Not supplied'],
+    [feature.memberIds?.length > 1 ? 'Sum of source areas (km²)' : 'Area (km²)', Number.isFinite(feature.AreaSqKM) ? feature.AreaSqKM.toLocaleString(undefined, { maximumFractionDigits: 1 }) : 'Not supplied'],
     ['Type', feature.Type || 'Not supplied'],
     ...(feature.Wikidata ? [['Wikidata', feature.Wikidata]] : []),
     ...(feature.SeshatID ? [['Seshat ID', feature.SeshatID]] : [])
