@@ -1,13 +1,13 @@
 // Public URLs and presentation settings. No account credentials are required for data.
 export const config = {
-  itemId: '8eae64c12ac047d3933d43e449c8e551',
-  serviceUrl: 'https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer',
+  itemId: '735e05986b18429ea53637ea86e2a574',
+  serviceUrl: 'https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1_2_WGS84/FeatureServer',
   layerId: 0,
-  manifestUrl: './data/manifest.json',
+  manifestUrl: './data/manifest.json?v=1.2',
   sourceLayer: 'polities',
-  version: 'Aligned Cliopatria v1.1',
+  version: 'Aligned Cliopatria v1.2',
   repositoryUrl: 'https://github.com/ucmerced-giscenter/cliopatria',
-  repositoryPrivate: true,
+  repositoryPrivate: false,
   defaultCenter: [20, 28],
   defaultZoom: 1.5,
   animationInterval: 2000,

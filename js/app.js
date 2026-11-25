@@ -466,6 +466,9 @@ async function initialize() {
     const response = await fetch(config.manifestUrl);
     if (!response.ok) throw new Error('The map snapshot list could not load. Reload the page or consult the source dataset.');
     manifest = await response.json();
+    if (manifest.sourceItemId !== config.itemId || manifest.sourceURL !== `${config.serviceUrl}/${config.layerId}`) {
+      throw new Error('The map tiles and feature service identify different releases. Reload the page to get the current version.');
+    }
     years = manifest.yearValues || manifest.years.map(entry => entry.year);
     if (!years.length || !manifest.complete) throw new Error('The map data build is not complete.');
     const view = readUrl(location.search, years, { center: config.defaultCenter, zoom: config.defaultZoom, basemaps: config.basemaps });

@@ -41,8 +41,8 @@
     <section aria-labelledby="service-endpoints">
       <h2 id="service-endpoints">Service endpoints</h2>
       <p>Configured in <a href="js/config.js">js/config.js</a>, using layer <code>0</code>:</p>
-      <p><code>https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer</code></p>
-      <p><a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer?f=pjson">Feature service metadata</a> · <a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer/0?f=pjson">Layer 0 metadata</a> · <a href="data/manifest.json">Local display manifest</a></p>
+      <p><code>https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1_2_WGS84/FeatureServer</code></p>
+      <p><a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1_2_WGS84/FeatureServer?f=pjson">Feature service metadata</a> · <a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1_2_WGS84/FeatureServer/0?f=pjson">Layer 0 metadata</a> · <a href="data/manifest.json">Local display manifest</a></p>
     </section>
 
     <section aria-labelledby="api-requirements">
@@ -52,10 +52,10 @@
       <h3>Access and service capabilities</h3>
       <ul>
         <li>The feature service and layer 0 must allow anonymous queries and extraction over HTTPS, with CORS permitting requests from the website. Data requests use <code>credentials: 'omit'</code> and do not send an ArcGIS account token.</li>
-        <li>The app requires <code>Query</code> and <code>Extract</code>, distinct Name queries for suggestions, ordered and paginated attribute queries, and the seven fields below. Before each export, it checks <code>Extract</code> and the requested format in <code>supportedExportFormats</code>.</li>
+        <li>The app requires <code>Query</code> and <code>Extract</code>, distinct Name queries for suggestions, ordered and paginated attribute queries, and the nine fields below. Before each export, it checks <code>Extract</code> and the requested format in <code>supportedExportFormats</code>.</li>
         <li>Extraction uses <code>syncModel=none</code>. Editing and attachments are not required. The public Esri basemap key is a separate dependency; it is not used to authorize feature queries or downloads.</li>
       </ul>
-      <p class="small">Metadata checked November 4, 2026: the service advertises Query and Extract, all four requested formats, and a 2,000-record query limit. Layer 0 supports pagination and ordering, has no attachments, and reports no timeInfo. Recheck these settings when replacing or republishing the source.</p>
+      <p class="small">Metadata checked November 24, 2026: the service advertises Query and Extract, all four requested formats, and a 2,000-record query limit. Layer 0 supports pagination and ordering, has no attachments, and reports no timeInfo. Recheck these settings when replacing or republishing the source.</p>
 
       <h3>Requests and responses</h3>
       <p>Here, <code>serviceUrl</code> means the <a href="#service-endpoints">FeatureServer URL</a>. ArcGIS metadata, query, and job requests include <code>f=json</code>. POST bodies are form-encoded with <code>URLSearchParams</code>; JSON-valued fields such as <code>layerQueries</code> are serialized inside that form body.</p>
@@ -72,7 +72,7 @@
           <tr><td><code>GET returned file URL</code></td><td>The visitor follows the Download link directly to Esri. Application JavaScript does not fetch and assemble the export file in memory.</td></tr>
         </tbody>
       </table>
-      <p>Search uses <code>returnGeometry=false</code>, the seven fields, <code>resultRecordCount=25</code>, and a changing <code>resultOffset</code>. Stable ordering is <code>Name ASC,Year ASC,AreaSqKM DESC,OBJECTID ASC</code>. Counts and IDs use <code>returnCountOnly=true</code> and <code>returnIdsOnly=true</code>. Feature extents use <code>returnExtentOnly=true</code> and <code>outSR=4326</code>. See the <a href="https://developers.arcgis.com/rest/services-reference/enterprise/query-feature-service-layer/">Esri Query reference</a>.</p>
+      <p>Search uses <code>returnGeometry=false</code>, the nine fields, <code>resultRecordCount=25</code>, and a changing <code>resultOffset</code>. Stable ordering is <code>Name ASC,Year ASC,AreaSqKM DESC,OBJECTID ASC</code>. Counts and IDs use <code>returnCountOnly=true</code> and <code>returnIdsOnly=true</code>. Feature extents use <code>returnExtentOnly=true</code> and <code>outSR=4326</code>. See the <a href="https://developers.arcgis.com/rest/services-reference/enterprise/query-feature-service-layer/">Esri Query reference</a>.</p>
 
       <p>Name suggestions use the same <code>/0/query</code> endpoint with <code>outFields=Name</code>, <code>returnGeometry=false</code>, <code>returnDistinctValues=true</code>, <code>orderByFields=Name ASC</code>, and <code>resultRecordCount=12</code>. Focusing or clicking the field requests names for the selected search scope, including an empty field. Null and empty names are excluded. The default list displays at most six names alphabetically. Typing updates matches after a 300 ms pause, with no minimum length; names starting with the input are preferred among the returned candidates. Superseded requests are aborted; suggestion requests time out after ten seconds. Choosing a suggestion runs the ordinary partial-name search. See <a href="help.html#search-instructions">Search instructions</a>.</p>
 
@@ -155,6 +155,8 @@
           <tr><td>Name</td><td>String</td><td>Entity name. Some region names are intentionally blank.</td></tr>
           <tr><td>Color</td><td>String</td><td>Source 0xRRGGBB color, normalized to #RRGGBB in tiles; null fallback #82939A.</td></tr>
           <tr><td>Type</td><td>String</td><td>POLITY, LEADER, GROUP, ARMY, EVENT, or missing.</td></tr>
+          <tr><td>Wikidata</td><td>String</td><td>Wikidata item ID from upstream Cliopatria v0.2.1, when available.</td></tr>
+          <tr><td>SeshatID</td><td>String</td><td>Seshat polity identifier from the same upstream release, when available.</td></tr>
           <tr><td>Wikipedia</td><td>String</td><td>Article title; converted to an encoded Wikipedia link.</td></tr>
         </tbody>
       </table>
@@ -163,7 +165,7 @@
 
     <section aria-labelledby="sample-queries">
       <h2 id="sample-queries">Sample queries</h2>
-      <p><a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer/0/query?f=pjson&amp;where=Year%20%3D%20-3400&amp;returnCountOnly=true">Count the 3400 BCE panel</a> · <a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1.1_WGS84/FeatureServer/0/query?f=geojson&amp;where=Year%20%3D%20-3400&amp;outFields=OBJECTID,Year,Name,AreaSqKM,Color,Type,Wikipedia&amp;outSR=4326&amp;returnGeometry=true">Get that panel as GeoJSON</a></p>
+      <p><a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1_2_WGS84/FeatureServer/0/query?f=pjson&amp;where=Year%20%3D%20-3400&amp;returnCountOnly=true">Count the 3400 BCE panel</a> · <a href="https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Aligned_Cliopatria_v1_2_WGS84/FeatureServer/0/query?f=geojson&amp;where=Year%20%3D%20-3400&amp;outFields=OBJECTID,Year,Name,AreaSqKM,Color,Type,Wikipedia,Wikidata,SeshatID&amp;outSR=4326&amp;returnGeometry=true">Get that panel as GeoJSON</a></p>
       <p>For a range, use <code>Year &gt;= 1000 AND Year &lt;= 1497</code>. For search, use <code>UPPER(Name) LIKE '%ROMAN%'</code>. Escape apostrophes as doubled apostrophes and validate numeric IDs and years. The current Name filter retains SQL LIKE wildcards <code>%</code> and <code>_</code>. The helpers in <a href="js/lib/core.js">js/lib/core.js</a> build these predicates.</p>
       <p>These direct query examples inspect a panel. For large downloads, use extraction. Paginate feature queries with a stable order, or query IDs; do not assume a single feature-set response contains every match.</p>
     </section>
@@ -171,7 +173,7 @@
     <section aria-labelledby="hosting">
       <h2 id="hosting">Hosting and data releases</h2>
       <p>PMTiles hosting needs byte-range responses (<code>206 Partial Content</code>) with correct <code>Content-Range</code>. Separate tile hosting also needs CORS. Do not gzip whole PMTiles files at the HTTP layer. See <a href="https://docs.protomaps.com/pmtiles/cloud-storage">PMTiles hosting documentation</a>. For local testing, open index.html with Live Server.</p>
-      <p>Match the tile manifest and feature service to the same release. Rebuild after source revisions, especially OBJECTID renumbering. The selected record's year check cannot detect every source change. This folder contains the runnable website; preparation scripts and review reports are maintained separately.</p>
+      <p>The v1.2 tiles use geometry from the <a href="https://github.com/ucmerced-giscenter/cliopatria/releases/tag/v1.2-dev">published GeoJSON</a> and OBJECTIDs from the v1.2 feature service. The ZIP and service number polygons independently. The build matched records by year, attributes and area, using geometry bounds to resolve ties. For records with identical attributes and geometry, the build kept every copy and assigned each a distinct hosted ID. The manifest records the ZIP and GeoJSON SHA-256 hashes. Match the tile manifest and feature service to the same release. Rebuild after source revisions, especially OBJECTID renumbering. The selected record's year check cannot detect every source change. This folder contains the runnable website; preparation scripts and review reports are maintained separately.</p>
     </section>
 
     <section aria-labelledby="implementation">

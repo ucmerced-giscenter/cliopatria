@@ -79,7 +79,8 @@ export class HistoryMap {
     if (this.historySource && this.map.getSource(this.historySource)) this.map.removeSource(this.historySource);
     this.historySource = null;
     if (!entry) return;
-    const url = new URL(entry.url, document.baseURI).href;
+    const url = new URL(entry.url, document.baseURI);
+    url.searchParams.set('v', this.manifest.version);
     // In-flight tile work from a discarded snapshot must never target its replacement.
     this.historySource = `history-${this.year}-${++this.sourceRevision}`;
     this.map.addSource(this.historySource, { type: 'vector', url: `pmtiles://${url}`, minzoom: this.manifest.minZoom, maxzoom: this.manifest.maxZoom, attribution });
