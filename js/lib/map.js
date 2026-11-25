@@ -67,15 +67,20 @@ export class HistoryMap {
         callbacks.basemapFallback?.();
       }
     });
-    this.map.on('click', 'polities-fill', event => {
+    this.map.on('click', event => {
+      const features = this.map.getLayer('polities-fill')
+        ? this.map.queryRenderedFeatures(event.point, { layers: ['polities-fill'] })
+        : [];
       const choices = new Map();
-      for (const { properties } of event.features || []) {
+      for (const { properties } of features) {
         if (properties.Year !== this.year) continue;
         const key = isNamedPolity(properties) ? properties.Name : properties.OBJECTID;
         if (!choices.has(key)) choices.set(key, properties);
       }
       const candidates = [...choices.values()];
+      // A click on another polygon replaces the popup once that selection loads.
       if (candidates.length) callbacks.selected?.(candidates[0], event.lngLat, candidates);
+      else this.popup?.remove();
     });
     this.map.on('mouseenter', 'polities-fill', () => { this.map.getCanvas().style.cursor = 'pointer'; });
     this.map.on('mouseleave', 'polities-fill', () => { this.map.getCanvas().style.cursor = ''; });
@@ -179,7 +184,12 @@ export class HistoryMap {
     const note = document.createElement('p'); note.className = 'small';
     note.textContent = selectionNote(properties);
     content.append(note);
-    this.popup = new maplibregl.Popup({ focusAfterOpen: false, maxWidth: 'min(300px, calc(100vw - 32px))' }).setLngLat(lngLat).setDOMContent(content).addTo(this.map);
+    this.popup = new maplibregl.Popup({ closeOnClick: false, focusAfterOpen: false, maxWidth: 'min(300px, calc(100vw - 32px))' })
+      .setLngLat(lngLat).setDOMContent(content).addTo(this.map);
+    this.popup.once('close', () => {
+      this.popup = null;
+      this.callbacks.popupClosed?.(properties);
+    });
   }
   clearSelection() { this.selectedIds = []; this.popup?.remove(); this.updateHighlights(); }
   fit(extent) {

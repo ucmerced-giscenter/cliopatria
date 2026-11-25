@@ -490,7 +490,9 @@ async function initialize() {
     timeline.renderYear(year);
     status('map-status', '');
     try {
-      engine = new HistoryMap(manifest, view, { selected: mapSelection, moved: () => { updateUrl(); updateExtentCount(); },
+      engine = new HistoryMap(manifest, view, { selected: mapSelection,
+        popupClosed: feature => { if (selected === feature) clearSelection(); },
+        moved: () => { updateUrl(); updateExtentCount(); },
         loaded: () => { if (!mapError && $('map-status').textContent) status('map-status', ''); updateExtentCount(); },
         error: message => { mapError = true; stopPlayback(); status('map-status', message, true); },
         basemapFallback: () => { $('basemap').value = 'plain'; mapError = false; } });
