@@ -15,7 +15,7 @@ export function featureName(feature) { return feature.Name?.trim() || 'Unnamed r
 export function featureDetails(feature) {
   return [
     ['Year', formatYear(feature.Year)],
-    ['Area (km²)', Number.isFinite(feature.AreaSqKM) ? feature.AreaSqKM.toLocaleString(undefined, { maximumFractionDigits: 1 }) : 'Not supplied'],
+    [feature.memberIds?.length > 1 ? 'Sum of source areas (km²)' : 'Area (km²)', Number.isFinite(feature.AreaSqKM) ? feature.AreaSqKM.toLocaleString(undefined, { maximumFractionDigits: 1 }) : 'Not supplied'],
     ['Type', feature.Type || 'Not supplied']
   ];
 }

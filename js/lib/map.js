@@ -1,8 +1,18 @@
 import { config } from '../config.js';
 import { basemapKey } from '../basemap-key.js';
-import { featureName, featureDetails, wikipediaUrl } from './core.js';
+import { EMPTY, featureName, featureDetails, wikipediaUrl } from './core.js';
+import { loadPolities, selectionNote } from './polity-display.js';
 
-const layerIds = ['polities-fill', 'polities-outline', 'search-outline', 'selection-halo', 'selection-outline', 'polities-labels'];
+const paintLayers = [
+  ['polities-fill', 'fill', { 'fill-color': ['get', 'Color'], 'fill-opacity': 0.68, 'fill-opacity-transition': { duration: 0 } }],
+  ['polities-outline', 'line', { 'line-color': '#25342f', 'line-opacity': 0.65, 'line-width': ['interpolate', ['linear'], ['zoom'], 0, 0.25, 5, 0.8, 10, 1.2] }],
+  ['search-outline', 'line', { 'line-color': '#005fcc', 'line-width': 2.5 }],
+  ['selection-halo', 'line', { 'line-color': '#ffffff', 'line-width': 6 }],
+  ['selection-outline', 'line', { 'line-color': '#101c16', 'line-width': 3 }]
+];
+const labelLayers = ['other-labels', 'polities-labels'];
+const layerIds = [...paintLayers.flatMap(([id]) => [id, id + '-union']), ...labelLayers];
+const idFilter = ids => ['in', ['get', 'OBJECTID'], ['literal', ids]];
 const attribution = 'Aligned boundaries: Erin Mutch, UC Merced GIS Center · Source: Cliopatria; original maps by Tollefson';
 function baseStyle(name) {
   if (name === 'plain' || !basemapKey) return { version: 8, glyphs: `https://basemaps-api.arcgis.com/arcgis/rest/services/World_Basemap_v2/VectorTileServer/resources/fonts/{fontstack}/{range}.pbf?token=${encodeURIComponent(basemapKey)}`, sources: {}, layers: [{ id: 'background', type: 'background', paint: { 'background-color': '#f1f0e9' } }] };
@@ -16,7 +26,7 @@ export class HistoryMap {
     this.year = view.year;
     this.labels = view.labels;
     this.searchIds = [];
-    this.selectedId = -1;
+    this.selectedIds = [];
     this.basemap = view.basemap;
     this.projection = view.projection;
     this.styleReady = false;
@@ -65,41 +75,66 @@ export class HistoryMap {
         callbacks.basemapFallback?.();
       }
     });
-    this.map.on('click', 'polities-fill', event => {
-      const candidates = [...new Map((event.features || []).filter(feature => feature.properties.Year === this.year).map(feature => [feature.properties.OBJECTID, feature.properties])).values()];
+    const hitLayers = ['polities-fill', 'polities-fill-union'];
+    this.map.on('click', hitLayers, event => {
+      const matches = new Map();
+      for (const { properties } of event.features || []) {
+        if (properties.Year !== this.year) continue;
+        const key = this.snapshot?.byId.get(properties.OBJECTID)?.ids[0] ?? properties.OBJECTID;
+        if (!matches.has(key)) matches.set(key, properties);
+      }
+      const candidates = [...matches.values()];
       if (candidates.length) callbacks.selected?.(candidates[0], event.lngLat, candidates);
     });
-    this.map.on('mouseenter', 'polities-fill', () => { this.map.getCanvas().style.cursor = 'pointer'; });
-    this.map.on('mouseleave', 'polities-fill', () => { this.map.getCanvas().style.cursor = ''; });
+    this.map.on('mouseenter', hitLayers, () => { this.map.getCanvas().style.cursor = 'pointer'; });
+    this.map.on('mouseleave', hitLayers, () => { this.map.getCanvas().style.cursor = ''; });
   }
-  install() {
+  async install() {
+    const revision = ++this.sourceRevision;
     const entry = this.manifest.years.find(item => item.year === this.year);
     this.popup?.remove();
     for (const id of [...layerIds].reverse()) if (this.map.getLayer(id)) this.map.removeLayer(id);
-    if (this.historySource && this.map.getSource(this.historySource)) this.map.removeSource(this.historySource);
+    for (const id of [this.historySource, 'polity-unions', 'polity-anchors']) {
+      if (id && this.map.getSource(id)) this.map.removeSource(id);
+    }
     this.historySource = null;
+    this.snapshot = null;
     if (!entry) return;
+    let snapshot;
+    try {
+      snapshot = await loadPolities(entry.year, this.manifest.sourceSHA256);
+    } catch (error) {
+      if (revision === this.sourceRevision && this.styleReady) this.callbacks.error?.(error.message);
+    }
+    if (revision !== this.sourceRevision || !this.styleReady) return;
+    this.snapshot = snapshot;
     const url = new URL(entry.url, document.baseURI).href;
     // In-flight tile work from a discarded snapshot must never target its replacement.
-    this.historySource = `history-${this.year}-${++this.sourceRevision}`;
+    this.historySource = `history-${this.year}-${revision}`;
     this.map.addSource(this.historySource, { type: 'vector', url: `pmtiles://${url}`, minzoom: this.manifest.minZoom, maxzoom: this.manifest.maxZoom, attribution });
     const layer = { source: this.historySource, 'source-layer': config.sourceLayer };
-    this.map.addLayer({ id: 'polities-fill', type: 'fill', ...layer, paint: { 'fill-color': ['get', 'Color'], 'fill-opacity': 0.68, 'fill-opacity-transition': { duration: 0 } } });
-    this.map.addLayer({ id: 'polities-outline', type: 'line', ...layer, paint: { 'line-color': '#25342f', 'line-opacity': 0.65, 'line-width': ['interpolate', ['linear'], ['zoom'], 0, 0.25, 5, 0.8, 10, 1.2] } });
-    this.map.addLayer({ id: 'search-outline', type: 'line', ...layer, paint: { 'line-color': '#005fcc', 'line-width': 2.5 } });
-    this.map.addLayer({ id: 'selection-halo', type: 'line', ...layer, paint: { 'line-color': '#ffffff', 'line-width': 6 } });
-    this.map.addLayer({ id: 'selection-outline', type: 'line', ...layer, paint: { 'line-color': '#101c16', 'line-width': 3 } });
+    this.map.addSource('polity-unions', { type: 'geojson', data: snapshot?.unions ?? EMPTY, tolerance: 0 });
+    this.map.addSource('polity-anchors', { type: 'geojson', data: snapshot?.labels ?? EMPTY, buffer: 0 });
+    this.rawFilter = ['!', idFilter(snapshot?.replacedIds ?? [])];
+    for (const [id, type, paint] of paintLayers) {
+      const isOutlineHighlight = id === 'search-outline' || id.startsWith('selection-');
+      this.map.addLayer({ id, type, ...layer, paint, filter: isOutlineHighlight ? idFilter([]) : this.rawFilter });
+      this.map.addLayer({ id: id + '-union', type, source: 'polity-unions', paint, ...(isOutlineHighlight && { filter: idFilter([]) }) });
+    }
     // Basemap styles supply different font stacks. Reuse an available one when possible.
     const fonts = this.map.getStyle().layers.filter(item => item.type === 'symbol' && Array.isArray(item.layout?.['text-font'])).map(item => item.layout['text-font']);
     const font = fonts.find(stack => stack.every(name => typeof name === 'string') && stack.some(name => /regular/i.test(name))) || fonts[0] || ['Ubuntu Regular'];
-    this.map.addLayer({ id: 'polities-labels', type: 'symbol', ...layer, minzoom: 2,
-      filter: ['!=', ['get', 'Name'], ''], layout: { 'text-field': ['get', 'Name'], 'text-font': font, 'text-size': ['interpolate', ['linear'], ['zoom'], 2, 10, 6, 13], 'text-max-width': 12, 'text-padding': 5, visibility: this.labels ? 'visible' : 'none' },
-      paint: { 'text-color': '#14241d', 'text-halo-color': '#ffffff', 'text-halo-width': 1.5 } });
+    const symbol = { type: 'symbol', minzoom: 2, layout: { 'text-field': ['get', 'Name'], 'text-font': font, 'text-size': ['interpolate', ['linear'], ['zoom'], 2, 10, 6, 13], 'text-max-width': 12, 'text-padding': 5, visibility: this.labels ? 'visible' : 'none' },
+      paint: { 'text-color': '#14241d', 'text-halo-color': '#ffffff', 'text-halo-width': 1.5 } };
+    const hasName = ['!=', ['get', 'Name'], ''];
+    this.map.addLayer({ id: 'other-labels', ...symbol, ...layer,
+      filter: snapshot ? ['all', hasName, ['!=', ['get', 'Type'], 'POLITY']] : hasName });
+    this.map.addLayer({ id: 'polities-labels', ...symbol, source: 'polity-anchors' });
     this.updateHighlights();
   }
   setYear(year) {
     this.year = year;
-    this.selectedId = -1;
+    this.selectedIds = [];
     this.searchIds = [];
     if (this.styleReady) this.install();
   }
@@ -113,13 +148,25 @@ export class HistoryMap {
     this.projection = type;
     if (this.styleReady) this.map.setProjection({ type });
   }
-  setLabels(enabled) { this.labels = enabled; if (this.map.getLayer('polities-labels')) this.map.setLayoutProperty('polities-labels', 'visibility', enabled ? 'visible' : 'none'); }
+  setLabels(enabled) {
+    this.labels = enabled;
+    for (const id of labelLayers) if (this.map.getLayer(id)) this.map.setLayoutProperty(id, 'visibility', enabled ? 'visible' : 'none');
+  }
   highlight(ids) { this.searchIds = ids; this.updateHighlights(); }
-  select(id) { this.selectedId = id; this.updateHighlights(); }
+  select(ids) { this.selectedIds = ids; this.updateHighlights(); }
   updateHighlights() {
     if (!this.map.getLayer('search-outline')) return;
-    this.map.setFilter('search-outline', ['in', ['get', 'OBJECTID'], ['literal', this.searchIds]]);
-    for (const id of ['selection-halo', 'selection-outline']) this.map.setFilter(id, ['==', ['get', 'OBJECTID'], this.selectedId]);
+    for (const [layers, ids] of [[['search-outline'], this.searchIds], [['selection-halo', 'selection-outline'], this.selectedIds]]) {
+      const representatives = new Set();
+      for (const id of ids) {
+        const group = this.snapshot?.byId.get(id);
+        if (group?.geometry) representatives.add(group.ids[0]);
+      }
+      for (const layer of layers) {
+        this.map.setFilter(layer, ['all', this.rawFilter, idFilter(ids)]);
+        this.map.setFilter(layer + '-union', idFilter([...representatives]));
+      }
+    }
   }
   showPopup(properties, lngLat) {
     this.popup?.remove();
@@ -140,14 +187,15 @@ export class HistoryMap {
       link.setAttribute('aria-label', `Read about ${featureName(properties)} on Wikipedia (opens in a new tab)`);
       content.append(link);
     }
-    if (!properties.Name?.trim()) {
+    const noteText = selectionNote(properties);
+    if (noteText) {
       const note = document.createElement('p'); note.className = 'small';
-      note.textContent = 'Some region polygons intentionally have no name in the source dataset.';
+      note.textContent = noteText;
       content.append(note);
     }
     this.popup = new maplibregl.Popup({ focusAfterOpen: false, maxWidth: 'min(300px, calc(100vw - 32px))' }).setLngLat(lngLat).setDOMContent(content).addTo(this.map);
   }
-  clearSelection() { this.selectedId = -1; this.popup?.remove(); this.updateHighlights(); }
+  clearSelection() { this.selectedIds = []; this.popup?.remove(); this.updateHighlights(); }
   fit(extent) {
     if (extent) this.map.fitBounds([[extent.xmin, extent.ymin], [extent.xmax, extent.ymax]], { padding: 55, maxZoom: 6, duration: 0 });
   }

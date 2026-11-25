@@ -81,7 +81,7 @@
         <caption>How each export scope becomes a filter</caption>
         <thead><tr><th scope="col">Scope</th><th scope="col">Selection rule</th></tr></thead>
         <tbody>
-          <tr><td>Selected feature</td><td>Filter by the selected <code>OBJECTID</code>. Export one record, even when others share its Name and Year.</td></tr>
+          <tr><td>Map selection</td><td>Filter by the original OBJECTIDs in the selection. Named POLITY records with the same Name and Year are selected together. Other records are selected individually.</td></tr>
           <tr><td>Current search results</td><td>Use the submitted Name predicate and time scope. Include all matches, beyond the loaded search page.</td></tr>
           <tr><td>Year or year range</td><td>Use <code>Year = 117</code> or inclusive bounds such as <code>Year &gt;= -3400 AND Year &lt;= -1</code>. Include available snapshots within those bounds.</td></tr>
           <tr><td>Visible map extent</td><td>Combine the time predicate with intersection against the map rectangle captured when Prepare download is pressed. Keep each intersecting polygon whole.</td></tr>
@@ -171,7 +171,7 @@
     <section aria-labelledby="hosting">
       <h2 id="hosting">Hosting and data releases</h2>
       <p>PMTiles hosting needs byte-range responses (<code>206 Partial Content</code>) with correct <code>Content-Range</code>. Separate tile hosting also needs CORS. Do not gzip whole PMTiles files at the HTTP layer. See <a href="https://docs.protomaps.com/pmtiles/cloud-storage">PMTiles hosting documentation</a>. For local testing, open index.html with Live Server.</p>
-      <p>Match the tile manifest and feature service to the same release. Rebuild after source revisions, especially OBJECTID renumbering. The selected record's year check cannot detect every source change. This folder contains the runnable website; preparation scripts and review reports are maintained separately.</p>
+      <p>Match the tile manifest, polity display data, and feature service to the same release. To regenerate the display files, run <code>python scripts/build_polity_display.py path/to/source.geojson</code> with Shapely 2.1 installed. The script verifies the source hash against the PMTiles manifest and writes one file per snapshot in <code>data/polity-display/</code>. These files supply label positions, source record IDs, and merged display geometry where borders meet or overlap. Downloads use the original feature service geometry.</p>
     </section>
 
     <section aria-labelledby="implementation">
